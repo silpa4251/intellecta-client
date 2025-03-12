@@ -53,3 +53,4 @@ export default tseslint.config({
 })
 ```
 "# intellecta-client" 
+"# intellecta-client" 
