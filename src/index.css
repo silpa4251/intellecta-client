@@ -1,5 +1,5 @@
 @import "tailwindcss";
-@plugin "tailwindcss-animate";
+/* @plugin "tailwindcss-animate";
 @custom-variant dark (&:is(.dark *));
 
 :root {
@@ -119,6 +119,10 @@
   body {
     @apply bg-background text-foreground;
   }
+} */
+
+body::-webkit-scrollbar {
+  display: none; /* Hide the scrollbar */
 }
 
 .bg-overlay {
@@ -130,5 +134,4 @@
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
-
 }
