@@ -52,7 +52,7 @@ const Signup = () => {
               </div>
             </div>
             <div className="cursor-pointer mt-12 p-2 shadow-[2.0px_3.0px_8.0px_rgba(0,0,0,0.38)] text-center bg-white rounded-4xl font-semibold w-[350px]">
-              <button className=" text-base cursor-pointer">Let's Go</button>
+              <Link to='/welcome'><button className=" text-base cursor-pointer">Let's Go</button></Link>
             </div>
             <div className="flex gap-2 mt-4">
               <h4 className="font-medium">New here? Join us today by</h4>

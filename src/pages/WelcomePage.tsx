@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom"
-import WcNavbar from "../components/WcNavbar"
+import WcNavbar from "../components/Navbar/NavbarWelcome"
 
 const WelcomePage = () => {
   return (
@@ -26,9 +26,9 @@ const WelcomePage = () => {
                     </div>
                     <div className="flex justify-center flex-col items-center">
                         <Link to="/assessment">
-                        <button className="bg-[#F7D232] p-2 rounded-md text-lg shadow-md cursor-pointer font-semibold">Get Started</button>
+                        <button className="bg-[#F7D232] px-4 py-2 rounded-md text-base shadow-md cursor-pointer font-semibold">Get Started</button>
                         </Link>
-                        <p className="my-3">Intial assessment takes about 15 minutes</p>
+                        <p className="my-3">Initial assessment takes about 15 minutes</p>
                     </div>
                 </div>
                 <div>
