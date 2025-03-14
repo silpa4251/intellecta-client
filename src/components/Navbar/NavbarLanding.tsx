@@ -6,7 +6,7 @@ const LandingNavbar: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <nav className="bg-black/60 text-white py-4 px-6 md:px-12 flex justify-between items-center">      
+    <nav className="sticky top-0 w-full bg-gray-900 text-white py-3 px-6 md:px-12 flex justify-between items-center z-50">      
       {/* Logo Section */}
       <div className="ml-12 flex items-center text-white">
         <img src={logo} alt="Intellecta Logo" className="h-10 mr-3" /> 
@@ -17,11 +17,11 @@ const LandingNavbar: React.FC = () => {
       </div>
 
       {/* Desktop Navigation */}
-      <ul className="hidden md:flex gap-8 text-lg mr-12">
-        <li><a href="#home" className="hover:text-gray-400 font-semibold">Home</a></li>
-        <li><a href="#works" className="hover:text-gray-400 font-semibold">Quick Guide</a></li>
-        <li><a href="#about" className="hover:text-gray-400 font-semibold">About Us</a></li>
-        <li><a href="#footer" className="hover:text-gray-400 font-semibold">Contact Us</a></li>
+      <ul className="hidden md:flex gap-8 text-base mr-12">
+        <li><a href="#home" className="hover:text-gray-400 py-1 hover:border-b-2 border-white font-semibold">Home</a></li>
+        <li><a href="#works" className="hover:text-gray-400 py-1 hover:border-b-2 border-white font-semibold">Quick Guide</a></li>
+        <li><a href="#about" className="hover:text-gray-400 py-1 hover:border-b-2 border-white font-semibold">About Us</a></li>
+        <li><a href="#footer" className="hover:text-gray-400 py-1 hover:border-b-2 border-white font-semibold">Contact Us</a></li>
       </ul>
 
       {/* Mobile Menu Button */}
