@@ -6,7 +6,7 @@ const LandingNavbar: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <nav className="bg-black/75 text-white py-4 px-6 md:px-12 flex justify-between items-center">      
+    <nav className="bg-black/60 text-white py-4 px-6 md:px-12 flex justify-between items-center">      
       {/* Logo Section */}
       <div className="ml-12 flex items-center text-white">
         <img src={logo} alt="Intellecta Logo" className="h-10 mr-3" /> 
