@@ -10,17 +10,18 @@ const Signup = () => {
           initial={{ x: 350, opacity: 1 }}
           animate={{ x: 0, opacity: 1 }}
           transition={{ duration: 1, ease: "easeOut" }}
-          className="bg-[#FFCB3D] w-1/2 z-10 h-[625px] rounded-l-3xl p-10"
+          className="bg-[#FFCB3D] w-1/2 z-10 h-[625px] rounded-l-xl p-8"
         >
           <div className="flex gap-2 items-center">
-            <img src={IntellectaLogo} alt="" className="h-[45px]" />
+            <img src={IntellectaLogo} alt="" className="h-[35px]" />
             <div>
-              <h1 className="text-2xl font-semibold">iNTELLECTA</h1>
-              <h5 className="text-black/50">Learn, Grow, Success</h5>
+              <h1 className="text-xl font-semibold">iNTELLECTA</h1>
+              <h5 className="text-black/50 text-sm">Learn, Grow, Success</h5>
             </div>
           </div>
+
           <div>
-            <h2 className="text-3xl font-semibold text-center mt-5">
+            <h2 className="text-3xl font-semibold text-center mt-8">
               Transform the Way You Learn!
             </h2>
           </div>
@@ -94,7 +95,7 @@ const Signup = () => {
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="w-1/2 h-[625px]"
         >
-          <img src="/signup-bg.png" className="rounded-r-3xl" alt="" />
+          <img src="/signup-bg.png" className="rounded-r-xl" alt="" />
         </motion.div>
       </div>
     </div>

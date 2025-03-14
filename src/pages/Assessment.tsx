@@ -1,5 +1,5 @@
 import { useState } from "react";
-import WcNavbar from "../components/WcNavbar";
+import WcNavbar from "../components/Navbar/NavbarWelcome";
 import { IoCheckmarkOutline } from "react-icons/io5";
 
 const questions = [
