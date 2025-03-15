@@ -1,97 +1,110 @@
-import React, { useState } from 'react'
-import { FaChevronDown, FaChevronRight } from "react-icons/fa";
-
+import { useState } from "react";
+import { FaChevronRight } from "react-icons/fa";
 
 const CourseSidebar = () => {
-    const [showSkillLevel, setShowSkillLevel] = useState(false);
-    const [showDuration, setShowDuration] = useState(false);
-    const [showProgressStatus, setShowProgressStatus] = useState(false);
+  const [showSkillLevel, setShowSkillLevel] = useState(false);
+  const [showDuration, setShowDuration] = useState(false);
+  const [showProgressStatus, setShowProgressStatus] = useState(false);
+
   return (
-    <div className="absolute mt-1 space-y-5 min-w-56 min-h-[100vh] bg-gray-100 ">
-          <div className="flex justify-between border-b p-5">
-            <h3>Filters</h3>
-            <button>Clear all</button>
-          </div>
-          <div className="space-y-2">
-            <div
-              className="flex justify-between cursor-pointer  px-3 pb-2"
-              onClick={() => setShowSkillLevel(!showSkillLevel)}
-            >
-              <h3>Skill Level</h3>
-              <span>
-                {showSkillLevel ? <FaChevronDown /> : <FaChevronRight />}
-              </span>
-            </div>
-            {showSkillLevel && (
-              <div className="flex flex-col w-fit p-5">
-                <div className="space-x-4">
-                  <input type="checkbox" name="" id="" />
-                  <span>Easy</span>
-                </div>
-                <div className="space-x-4">
-                  <input type="checkbox" name="" id="" />
-                  <span>Intermediate</span>
-                </div>
-                <div className="space-x-4">
-                  <input type="checkbox" name="" id="" />
-                  <span>Difficult</span>
-                </div>
-              </div>
-            )}
-            <div
-              className="flex justify-between cursor-pointer border-t  px-3 py-2"
-              onClick={() => setShowDuration(!showDuration)}
-            >
-              <h3>Duration </h3>
-              <span>
-              {showDuration ? <FaChevronDown /> : <FaChevronRight />}
-              </span>
-            </div>
-            {showDuration && (
-              <div className="flex flex-col w-fit p-5">
-                <div className="space-x-4">
-                  <input type="checkbox" name="" id="" />
-                  <span>1 hour</span>
-                </div>
-                <div className="space-x-4">
-                  <input type="checkbox" name="" id="" />
-                  <span>2 hour</span>
-                </div>
-                <div className="space-x-4">
-                  <input type="checkbox" name="" id="" />
-                  <span>3 hour</span>
-                </div>
-              </div>
-            )}
-            <div
-              className="flex justify-between cursor-pointer  border px-3 py-2"
-              onClick={() => setShowProgressStatus(!showProgressStatus)}
-            >
-              <h3>Grade</h3>
-              <span>
-                {showProgressStatus ? <FaChevronDown /> : <FaChevronRight />}
+    <div className="absolute top-[72px] left-0 min-h-screen w-64 bg-white/10 backdrop-blur-md shadow-lg border-r border-white/20 text-white p-6">
+      <div className="flex justify-between items-center border-b border-white/20 pb-3">
+        <h3 className="text-lg font-semibold tracking-wide">Filters</h3>
+        <button className="text-cyan-400 text-sm hover:underline">
+          Clear all
+        </button>
+      </div>
 
-              </span>
-            </div>
-            {showProgressStatus && (
-              <div className="flex flex-col w-fit p-5">
-                <div className="space-x-4">
-                  <input type="checkbox" name="" id="" />
-                  <span>Grade 1</span>
-                </div>
-                <div className="space-x-4">
-                  <input type="checkbox" name="" id="" />
-                  <span>Grade 2</span>
-                </div>
-                <div className="space-x-4">
-                  <input type="checkbox" name="" id="" />
-                  <span>Grade 3</span>
-                </div>
-              </div>
-            )}
+      <div className="mt-6 space-y-4">
+        <div>
+          <div
+            className="flex justify-between items-center cursor-pointer px-2 py-2 rounded-lg hover:bg-white/10 transition-all duration-300"
+            onClick={() => setShowSkillLevel(!showSkillLevel)}
+          >
+            <h3 className="font-medium">Skill Level</h3>
+            <span
+              className={`${
+                showSkillLevel ? "rotate-90" : "rotate-0"
+              } transition-transform duration-300`}
+            >
+              <FaChevronRight />
+            </span>
           </div>
+          {showSkillLevel && (
+            <div className="flex flex-col space-y-2 pl-4 pt-2">
+              {["Easy", "Intermediate", "Difficult"].map((level) => (
+                <label
+                  key={level}
+                  className="flex items-center space-x-2 cursor-pointer hover:text-cyan-400 transition-all duration-300"
+                >
+                  <input type="checkbox" className="accent-cyan-400" />
+                  <span>{level}</span>
+                </label>
+              ))}
+            </div>
+          )}
         </div>
-  )
-}
 
-export default CourseSidebar
+        <div>
+          <div
+            className="flex justify-between items-center cursor-pointer px-2 py-2 rounded-lg hover:bg-white/10 transition-all duration-300"
+            onClick={() => setShowDuration(!showDuration)}
+          >
+            <h3 className="font-medium">Duration</h3>
+            <span
+              className={`${
+                showDuration ? "rotate-90" : "rotate-0"
+              } transition-transform duration-300`}
+            >
+              <FaChevronRight />
+            </span>
+          </div>
+          {showDuration && (
+            <div className="flex flex-col space-y-2 pl-4 pt-2">
+              {["1 hour", "2 hours", "3 hours"].map((time) => (
+                <label
+                  key={time}
+                  className="flex items-center space-x-2 cursor-pointer hover:text-cyan-400 transition-all duration-300"
+                >
+                  <input type="checkbox" className="accent-cyan-400" />
+                  <span>{time}</span>
+                </label>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <div>
+          <div
+            className="flex justify-between items-center cursor-pointer px-2 py-2 rounded-lg hover:bg-white/10 transition-all duration-300"
+            onClick={() => setShowProgressStatus(!showProgressStatus)}
+          >
+            <h3 className="font-medium">Grade</h3>
+            <span
+              className={`${
+                showProgressStatus ? "rotate-90" : "rotate-0"
+              } transition-transform duration-300`}
+            >
+              <FaChevronRight />
+            </span>
+          </div>
+          {showProgressStatus && (
+            <div className="flex flex-col space-y-2 pl-4 pt-2">
+              {["Grade 1", "Grade 2", "Grade 3"].map((grade) => (
+                <label
+                  key={grade}
+                  className="flex items-center space-x-2 cursor-pointer hover:text-cyan-400 transition-all duration-300"
+                >
+                  <input type="checkbox" className="accent-cyan-400" />
+                  <span>{grade}</span>
+                </label>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default CourseSidebar;
