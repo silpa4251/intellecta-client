@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import WcNavbar from "../../components/Navbar/NavbarWelcome";
 import CourseSidebar from "./CourseSidebar";
+import { CiHeart } from "react-icons/ci";
 
 const Courses = () => {
   const courses = [
@@ -123,6 +124,24 @@ const Courses = () => {
                 />
 
                 <div className="p-4">
+                
+                  <h2 className="text-lg font-semibold text-gray-900 mt-2">
+                    {item.title}
+                  </h2>
+
+                    <span className="text-gray-700 text-sm">
+                      {item.description}
+                    </span>
+                  <div className="flex items-center gap-2 mt-2">
+                    <img
+                      src={"/home-bg.png"}
+                      alt={item.author?.authorName}
+                      className="rounded-full h-7 w-7 border border-gray-300"
+                    />
+                    <span className="text-gray-700 text-sm">
+                      {item.author?.authorName}
+                    </span>
+                  </div>
                   <div className="flex items-center gap-1">
                     <span className="text-yellow-500 text-lg">
                       4.0 ⭐⭐⭐⭐☆
@@ -131,24 +150,15 @@ const Courses = () => {
                       (3)
                     </span>
                   </div>
-                  <h2 className="text-lg font-semibold text-gray-900 mt-2">
-                    {item.title}
-                  </h2>
+                  <div className="flex justify-between">
 
-                  <div className="flex items-center gap-2 mt-2">
-                    <img
-                      src={item.author?.authorName || "/home-bg.png"}
-                      alt={item.author?.authorName}
-                      className="rounded-full h-7 w-7 border border-gray-300"
-                    />
-                    <span className="text-gray-700 text-sm">
-                      {item.author?.authorName}
-                    </span>
-                  </div>
-
-                  <button className="w-full mt-4 py-2 text-sm font-medium text-blue-600 border border-blue-500 rounded-lg transition-all duration-300 hover:bg-blue-500 hover:text-white">
+                  <button className="w-[83%] mt-4 py-2 text-sm font-medium text-blue-600 border border-gray-500 rounded-lg transition-all duration-300 hover:bg-gray-800 hover:text-white">
                     Start Learning
                   </button>
+                  <button className="w-10 h-10 rounded-full mt-4 py-2 text-sm font-medium text-white border border-gray-500 transition-all duration-300 hover:bg-gray-500 hover:text-white">
+                    <CiHeart />
+                  </button>
+                  </div>
                 </div>
               </div>
             ))}
