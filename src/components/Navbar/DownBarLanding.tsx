@@ -178,7 +178,7 @@ const DownBarLanding: React.FC<DownBarLandingProps> = ({
                 onClick={() => setfn(false)}
               >
                 <p className="text-5xl">How it works</p>
-                <p className="text-2xl">
+                <p className="text-lg">
                   After registration and assesment,
                   <br /> students can learn and aquire skills out of their
                   school syllabus
@@ -195,10 +195,10 @@ const DownBarLanding: React.FC<DownBarLandingProps> = ({
               >
                 <p className="text-5xl">What are the things we offer</p>
                 {/* <p>content</p> */}
-                <ul className="text-2xl">
-                  <li>Personalised learning</li>
-                  <li>Interactive tutorials</li>
-                  <li>Smart assessment</li>
+                <ul className="text-lg">
+                  <li>- Personalised learning</li>
+                  <li>- Interactive tutorials</li>
+                  <li>- Smart assessment</li>
                 </ul>
               </a>
             </motion.p>
