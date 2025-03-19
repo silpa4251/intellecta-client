@@ -1,9 +1,14 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { GoChevronRight } from "react-icons/go";
 import { motion, AnimatePresence } from "framer-motion";
 import { CgClose } from "react-icons/cg";
 
-const CourseSidebar = ({ onClose, showsidebar }) => {
+type CourseSidebarProps = {
+  onClose: ()=> void,
+  showsidebar: boolean;
+}
+
+const CourseSidebar : React.FC<CourseSidebarProps> = ({ onClose, showsidebar }) => {
   const [showSkillLevel, setShowSkillLevel] = useState(false);
   const [showDuration, setShowDuration] = useState(false);
   const [showProgressStatus, setShowProgressStatus] = useState(false);
