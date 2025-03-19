@@ -5,6 +5,7 @@ import Signup from './pages/auth/Signup';
 import Login from './pages/auth/Login';
 import WelcomePage from './pages/WelcomePage';
 import Assessment from './pages/Assessment';
+import ProfilePage from './pages/Profile';
 import Home from './pages/Home/Home';
 import Courses from './pages/Courses/Courses';
 import Lessons from './pages/Courses/Lessons/Lessons';
@@ -24,6 +25,7 @@ function App() {
       <Route path='/lesson/:lessonTitle/:lessonId' element={<LessonDetails/>} />
       <Route path='/assessment' element={<Assessment/>} />
       <Route path='/login' element={<Login/>} />
+      <Route path='/profile' element={<ProfilePage/>} />
     </Routes>
     </>
   )
