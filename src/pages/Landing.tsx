@@ -63,9 +63,9 @@ const Landing: React.FC = () => {
   return (
     <>
     <Navbar/>
-    <div id="home" className="w-full h-screen flex items-center sm:justify-items-start text-white bg-overlay">
+    <div id="home" className="w-full h-screen flex items-center sm:justify-items-start text-white bg-overlay bg-[#081a37] md:px-36 ">
       {/* Content */}
-      <div className="text-center sm:text-left sm:px-28">
+      <div className="text-center sm:text-left ">
           <BlurText 
           text="Unlock Your Potential with AI Learning"
           className="text-3xl justify-center sm:text-5xl font-bold mb-4" 
@@ -79,20 +79,20 @@ const Landing: React.FC = () => {
           {/* Buttons */}
           <div className="flex gap-6 justify-center sm:justify-start">
           <Link to="/register">
-          <button className="bg-[#F7D232] hover:bg-yellow-500 text-black sm:justify-items-start font-semibold py-3 px-6 rounded-lg shadow-lg transition duration-300">
+          <button className="bg-[#F7D232] hover:bg-transparent hover:border-2 border-[#F7D232] hover:text-white text-black sm:justify-items-start font-semibold py-3 px-6 rounded-lg  ">
             Get Started
           </button>
           </Link>
-          <button className="border-2 border-[#F7D232] text-white font-semibold py-3 px-6 rounded-lg hover:bg-yellow-400 hover:text-black transition duration-300">
+          <button className="border-2 border-[#F7D232] text-white font-semibold py-3 px-6 rounded-lg hover:bg-[#F7D232] hover:text-black transition duration-300">
             <a href="#works">See More</a>
           </button>
         </div>
       </div>
     </div>
 
-    <div id="works" className="bg-[#0B1A36] py-20 text-white text-center bg-gradient-to-b from-[#081A37] to-[#3A6073]">
+    <div id="works" className="bg-[#0B1A36] py-20 text-white text-center bg-gradient-to-b from-[#081A37] to-[#3A6073] ">
       {/* Section Title */}
-      <div className="h-[600px]">
+      <div className="h-[600px]  ">
         <div className="mb-6">
           <div className="inline-block px-4 py-2 bg-white text-black rounded-lg font-semibold">
           ⚙️ How It Works
