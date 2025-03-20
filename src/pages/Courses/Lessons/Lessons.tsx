@@ -7,18 +7,22 @@ import { useEffect, useState } from "react";
 import { IoCheckmarkCircleOutline } from "react-icons/io5";
 import { courses } from "../../../data";
 import { useLessonStore } from "../../../store/useLessonStore";
+import { Lesson } from "../../../types";
+
+type Params = {
+  id: string;
+};
 
 const Lessons = () => {
-  const { id } = useParams();
+  const { id = "" } = useParams<Params>();
   const navigate = useNavigate();
   const course = courses.find((item) => item._id === id);
   const { lessonData, initializeLessons, getProgress } = useLessonStore();
 
   const realLesson = lessonData[id] || [];
   const progress = getProgress(id);
-  
 
-  const [selectLesson, setSelectLesson] = useState(null);
+  const [selectLesson, setSelectLesson] = useState<Lesson | null>(null);
 
   useEffect(() => {
     if (course && !lessonData[id]) {
@@ -26,9 +30,11 @@ const Lessons = () => {
     }
   }, [course, id, initializeLessons, lessonData]);
 
-  const completedCount = realLesson.filter((lesson) => lesson.completed).length;
+  const completedCount = realLesson.filter(
+    (lesson: Lesson) => lesson.completed
+  ).length;
 
-  const chooseLesson = (lesson) => {
+  const chooseLesson = (lesson: Lesson) => {
     const currentIndex = realLesson.findIndex((l) => l.id === lesson.id);
     if (currentIndex === 0 || realLesson[currentIndex - 1].completed) {
       if (!lesson.completed) {
@@ -41,19 +47,29 @@ const Lessons = () => {
 
   const handleLesson = () => {
     if (!selectLesson) {
-      const firstUncompleted = realLesson.find((lesson) => lesson.unlocked && !lesson.completed);
+      const firstUncompleted = realLesson.find(
+        (lesson) => lesson.unlocked && !lesson.completed
+      );
       if (firstUncompleted) {
-        navigate(`/lesson/${firstUncompleted.title.replace(/\s+/g, "-")}/${firstUncompleted.id}`);
+        navigate(
+          `/lesson/${firstUncompleted.title.replace(/\s+/g, "-")}/${
+            firstUncompleted.id
+          }`
+        );
       }
       return;
     }
 
-    navigate(`/lesson/${selectLesson.title.replace(/\s+/g, "-")}/${selectLesson.id}`);
+    navigate(
+      `/lesson/${selectLesson.title.replace(/\s+/g, "-")}/${selectLesson.id}`
+    );
   };
 
   useEffect(() => {
     if (realLesson.length > 0 && !selectLesson) {
-      const firstUncompleted = realLesson.find((lesson) => lesson.unlocked && !lesson.completed);
+      const firstUncompleted = realLesson.find(
+        (lesson) => lesson.unlocked && !lesson.completed
+      );
       if (firstUncompleted) {
         setSelectLesson(firstUncompleted);
       }
@@ -124,7 +140,7 @@ const Lessons = () => {
                   className={`flex items-center justify-between rounded-md gap-2 mb-4 px-4 py-4 ${
                     lesson.unlocked ? "cursor-pointer" : "cursor-not-allowed"
                   } shadow-md border ${
-                    selectLesson?.id === lesson.id 
+                    selectLesson?.id === lesson.id
                       ? "border-2 border-green-500"
                       : "border-2 border-gray-300"
                   }`}
@@ -151,14 +167,10 @@ const Lessons = () => {
             <div className="flex justify-end mt-5">
               <button
                 onClick={handleLesson}
-                className="cursor-pointer relative inline-flex items-center justify-center px-6 py-2 overflow-hidden font-semibold text-white transition duration-300 ease-out border border-green-500 rounded-lg shadow-md group hover:shadow-lg"
+                className={`cursor-pointer  px-6 py-2  font-semibold text-white transition duration-300 ease-out border ${selectLesson ? "bg-green-400" : "bg-gray-400"} border-green-500 rounded-lg shadow-md group hover:shadow-lg`}
                 disabled={progress >= 100}
               >
-                <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-green-500 via-green-400 to-green-500 opacity-20 group-hover:opacity-40 blur-sm"></span>
-                <span className="absolute inset-0 w-full h-full border border-green-500 rounded-lg group-hover:animate-pulse"></span>
-                <span className="relative z-10">
-                  {progress >= 100 ? "Completed" : "Continue"}
-                </span>
+                {progress >= 100 ? "Completed" : "Continue"}
               </button>
             </div>
           </div>

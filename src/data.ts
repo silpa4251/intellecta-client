@@ -6,11 +6,6 @@ export const courses = [
     category: "maths",
     image: "welcome-bg.png",
     difficulty: "beginner",
-    whatyouwilllearn: [
-      "Understand basic algebraic concepts",
-      "Solve linear equations confidently",
-      "Interpret and create simple graphs"
-    ],
     author: {
       authorName: "Angad",
       authorProficPic: "welcome-bg.png"

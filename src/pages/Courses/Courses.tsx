@@ -77,14 +77,11 @@ const Courses = () => {
                     </span>
                   </div>
                   <div className="flex justify-between items-center mt-4">
-                    <Link to={`/course/${item.title.replace(/\s+/g, "-")}/${item._id}`} className="w-[80%]">
+                    <Link to={`/course/${item.title.replace(/\s+/g, "-")}/${item._id}`} className="w-[100%]">
                       <button className="w-full cursor-pointer px-4 py-2 text-sm font-medium text-white bg-violet-600 hover:bg-violet-700 rounded-lg ">
                         Start Learning
                       </button>
                     </Link>
-                    <button className="w-9 h-9 flex items-center justify-center text-lg text-gray-600 border border-gray-300 rounded-full hover:bg-cyan-500 hover:text-white transition-all duration-300 shadow-sm hover:shadow-cyan-400/50">
-                      <CiHeart />
-                    </button>
                   </div>
                 </div>
               </div>
