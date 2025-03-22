@@ -8,6 +8,8 @@ import strawberry from "../../../../assets/game/strawberry.png";
 import grape from "../../../../assets/game/grape.png";
 import { RiResetRightFill } from "react-icons/ri";
 import WinScreen from "./WinScreen";
+import { IoMdClose } from "react-icons/io";
+import { Link } from "react-router-dom";
 
 const cardImages = [
   { src: apple, matched: false },
@@ -17,41 +19,43 @@ const cardImages = [
   { src: strawberry, matched: false },
   { src: grape, matched: false },
 ];
+type CardType = {
+  src: string;
+  matched: boolean;
+};
 
 const MemoryGame = () => {
-  const [cards, setCards] = useState([]);
-  const [choiceOne, setChoiceOne] = useState(null);
-  const [choiceTwo, setChoiceTwo] = useState(null);
-  const [disabled, setDisabled] = useState(false);
-  const [moves, setMoves] = useState(0);
-  const [isGameWon, setIsGameWon] = useState(false);
-  const [time, setTime] = useState(0);
-  const [gameStarted, setGameStarted] = useState(false);
+  const [cards, setCards] = useState<CardType[]>([]);
+  const [choiceOne, setChoiceOne] = useState<CardType | null>(null);
+  const [choiceTwo, setChoiceTwo] = useState<CardType | null>(null);
+  const [disabled, setDisabled] = useState<boolean>(false);
+  const [moves, setMoves] = useState<number>(0);
+  const [isGameWon, setIsGameWon] = useState<boolean>(false);
+  const [time, setTime] = useState<number>(0);
+  const [gameStarted, setGameStarted] = useState<boolean>(false);
 
   useEffect(() => {
-    let timer;
-    if (gameStarted) {
+    let timer: number;
+    if (gameStarted && !isGameWon) {
       timer = setInterval(() => setTime((t) => t + 1), 1000);
     }
     return () => clearInterval(timer);
-  }, [gameStarted]);
+  }, [gameStarted, isGameWon]);
 
   const shuffleCards = () => {
-    console.log("reset");
-    
     const shuffled = [...cardImages, ...cardImages]
       .sort(() => Math.random() - 0.5)
       .map((card, index) => ({ ...card, id: index }));
     setCards(shuffled);
     setMoves(0);
-    setTime(0)
+    setTime(0);
     setChoiceOne(null);
     setChoiceTwo(null);
     setGameStarted(false);
   };
 
   // Handle choice
-  const handleChoice = (card) => {
+  const handleChoice = (card: CardType) => {
     if (!gameStarted) setGameStarted(true);
     choiceOne ? setChoiceTwo(card) : setChoiceOne(card);
   };
@@ -90,6 +94,7 @@ const MemoryGame = () => {
   useEffect(() => {
     if (cards.length && cards.every((card) => card.matched)) {
       setIsGameWon(true);
+      setTime((prev) => prev);
     }
   }, [cards]);
 
@@ -103,17 +108,24 @@ const MemoryGame = () => {
   }, [cards, moves]);
 
   return (
-    <div className=" min-h-screen bg-gradient-to-br from-purple-300 via-pink-200 to-yellow-100 flex items-center justify-center p-4">
-      <div className="bg-white/80 backdrop-blur-md rounded-3xl shadow-xl p-6 max-w-3xl w-full border-4 border-purple-400">
-        <p className="absolute right-10 mt-2 text-lg text-blue-600">⏱️ Time: {time}s</p>
+    <div className="absolute left-0 top-0 w-screen min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex text-white  justify-center items-center p-4">
+      <Link to="/games/allgames">
+      <button className="cursor-pointer absolute top-5 left-5 text-2xl font-semibold">
+        <IoMdClose />
+      </button>
+      </Link>
+      <div className="bg-gray/80 h-fit mt-5 backdrop-blur-md rounded-3xl border-2 border-gray-600 shadow-md p-6 max-w-3xl w-full">
+        <p className="absolute right-10 mt-2 text-lg text-blue-600">
+          ⏱️ Time: {time}s
+        </p>
         <h1 className="text-3xl font-bold text-purple-700 mb-10 drop-shadow-sm ">
           Memory Match Game
         </h1>
 
-        <div className="grid grid-cols-4 gap-4 justify-items-center">
-          {cards.map((card) => (
+        <div className="grid grid-cols-4 gap-8 justify-items-center">
+          {cards.map((card, index) => (
             <Card
-              key={card.id}
+              key={index}
               card={card}
               handleChoice={handleChoice}
               flipped={card === choiceOne || card === choiceTwo || card.matched}

@@ -8,7 +8,6 @@ const axiosInstance = axios.create({
     },
     timeout: 10000,
 });
-console.log("API Base URL:", import.meta.env.VITE_API_BASE_URL);
 
 // axiosInstance.interceptors.request.use(
 //     (config) => {
