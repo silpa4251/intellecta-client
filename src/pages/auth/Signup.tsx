@@ -10,10 +10,13 @@ import axiosInstance from "../../utils/axiosInstance";
 import { userEndPoints } from "../../api/endPoints/userEndPoints";
 import { GoogleLogin } from "@react-oauth/google";
 
+
+  type Maybe<T> = T | null | undefined;
+
   // Updated type definition
   type RegisterFormData = {
   firstname: string;
-  lastname?: string | undefined; // Optional field
+  lastname?: Maybe<string>; // Optional field
   email: string;
   age: string;
   phone: string;

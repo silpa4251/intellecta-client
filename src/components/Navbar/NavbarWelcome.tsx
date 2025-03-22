@@ -2,10 +2,28 @@ import { useState, useEffect, useRef } from "react";
 import wcpagelogo from "../../assets/wcpage-logo.svg";
 import { MdLeaderboard, MdSettings } from "react-icons/md";
 import { GoSignOut } from "react-icons/go";
+import axiosInstance from "../../utils/axiosInstance";
+import { userEndPoints } from "../../api/endPoints/userEndPoints";
+import { useQuery } from "@tanstack/react-query";
+import student from "../../assets/Profile.jpg"
+
+
+const fetchUser = async () => {
+  const { data } = await axiosInstance.get(userEndPoints.USER.GET_PROFILE);
+  return data.data.user; 
+  console.log("data", data.data.user);
+};
+
 
 const NavbarWelcome = () => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const { data: user} = useQuery({
+    queryKey: ["user"],
+    queryFn: fetchUser,
+  });
+  console.log("object", user);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -19,34 +37,29 @@ const NavbarWelcome = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+
   return (
-    <div className="flex items-center justify-between bg-gray-900 px-28 py-3 relative">
+<nav className="flex items-center justify-between bg-gray-900 px-6 md:px-28 py-3 relative">
       {/* Logo Section */}
-      <div className="flex justify-end gap-2 items-center text-white">
-        <img src={wcpagelogo} alt="Logo" className="h-[45px]" />
+      <div className="flex items-center gap-2 md:gap-3 text-white">
+        <img src={wcpagelogo} alt="Logo" className="h-[30px] md:h-[40px]" />
         <div>
-          <h1 className="text-xl font-semibold">iNTELLECTA</h1>
-          <h5 className="text-white text-sm">Learn, Grow, Success</h5>
+          <h1 className="text-sm md:text-xl font-semibold">iNTELLECTA</h1>
+          <h5 className="text-gray-200 text-[10px] md:text-xs">Learn, Grow, Success</h5>
         </div>
       </div>
 
-      {/* <ul className="hidden md:flex gap-8 text-base mr-12 text-white">
-        <li><a href="#home" className="hover:text-gray-400 py-1 hover:border-b-2 border-white font-semibold">Home</a></li>
-        <li><a href="#works" className="hover:text-gray-400 py-1 hover:border-b-2 border-white font-semibold">Quick Guide</a></li>
-        <li><a href="#about" className="hover:text-gray-400 py-1 hover:border-b-2 border-white font-semibold">About Us</a></li>
-        <li><a href="#footer" className="hover:text-gray-400 py-1 hover:border-b-2 border-white font-semibold">Contact Us</a></li>
-      </ul> */}
-
       {/* Right Side: Leaderboard, Profile */}
       <div className="flex items-center gap-4 relative">
-        <span className="text-white text-2xl">
+        {/* Leaderboard Icon (Always Visible) */}
+        <span className="text-white text-2xl cursor-pointer">
           <MdLeaderboard />
         </span>
 
-        {/* Profile Image (Click to Toggle Dropdown) */}
+        {/* Profile Icon (Always Visible) */}
         <div className="relative" ref={dropdownRef}>
           <img
-            src="/login-bg.png"
+            src={user?.profilePic || student }
             className="w-8 h-8 rounded-full cursor-pointer"
             alt="User Profile"
             onClick={() => setIsOpen(!isOpen)}
@@ -54,16 +67,16 @@ const NavbarWelcome = () => {
 
           {/* Dropdown Menu */}
           {isOpen && (
-            <div className="absolute left-0 mt-2 w-44 bg-white rounded-lg shadow-lg overflow-hidden transition-all duration-200">
+            <div className="absolute right-0 mt-2 w-44 bg-white rounded-lg shadow-lg overflow-hidden transition-all duration-200 z-50">
               <ul className="py-2 text-gray-800">
                 <li>
-                  <a href="/profile" className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 font-semibold text-left">
-                  <MdSettings className="text-xl"/>Profile Settings
+                  <a href="/profile" className="flex items-center gap-2 px-4 py-2 font-semibold text-left">
+                    <MdSettings className="text-xl" /> Profile Settings
                   </a>
                 </li>
                 <li>
-                  <button className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 font-semibold text-left" onClick={() => alert("Logged Out")}>
-                  <GoSignOut className="text-xl"/>Sign Out
+                  <button className="flex items-center gap-2 px-4 py-2 font-semibold text-left w-full" onClick={() => alert("Logged Out")}>
+                    <GoSignOut className="text-xl" /> Sign Out
                   </button>
                 </li>
               </ul>
@@ -71,9 +84,10 @@ const NavbarWelcome = () => {
           )}
         </div>
 
-        <h4 className="text-white font-semibold">Jerry Hardy</h4>
+        {/* Username (Hidden on Mobile, Visible on Larger Screens) */}
+        <h5 className="hidden md:block text-white font-semibold">{user?.name}</h5>
       </div>
-    </div>
+    </nav>
   );
 };
 
