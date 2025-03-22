@@ -170,7 +170,7 @@ const Landing: React.FC = () => {
           </div>
 
           {/* Image with Abstract Shape */}
-          <div className="lg:w-1/2 relative">
+          <div className="lg:w-1/2 relative md:block hidden">
             {/* Background Blob Image */}
             <img
               src={blob}
@@ -199,7 +199,7 @@ const Landing: React.FC = () => {
         {/* Section_2 */}
         <div className="max-w-6xl mx-auto flex flex-col lg:flex-row items-center gap-10">
           {/* Image with Abstract Shape */}
-          <div className="lg:w-1/2 relative">
+          <div className="lg:w-1/2 relative md:block hidden">
             {/* Background Blob Image */}
             <img
               src={blob}
@@ -251,7 +251,7 @@ const Landing: React.FC = () => {
           </div>
 
           {/* Image with Abstract Shape */}
-          <div className="lg:w-1/2 relative">
+          <div className="lg:w-1/2 relative md:block hidden">
             {/* Background Blob Image */}
             <img
               src={blob}

@@ -92,13 +92,13 @@ const DownBarLanding: React.FC<DownBarLandingProps> = ({
       >
         {/* First Section */}
         <motion.div
-          className={`md:w-2/4  w-full flex flex-col justify-center items-start gap-6 `}
+          className={`md:w-2/4  w-full flex flex-col justify-center items-start gap-6  px-5`}
           variants={sectionVariants}
         >
           <motion.p variants={itemVariants}>
             <a
               href="#home"
-              className={`hover:text-gray-400 } text-7xl`}
+              className={`hover:text-gray-400 } md:text-7xl text-5xl ` }
               onClick={() => setfn(false)}
               onMouseOver={() => setHoverData("Home")}
               onMouseLeave={() => setHoverData("")}
@@ -110,10 +110,9 @@ const DownBarLanding: React.FC<DownBarLandingProps> = ({
           <motion.p variants={itemVariants}>
             <a
               href="#works"
-              className="hover:text-gray-400 text-7xl"
+              className="hover:text-gray-400 md:text-7xl text-5xl"
               onClick={() => setfn(false)}
               onMouseOver={() => setHoverData("Quick Guide")}
-              // onMouseLeave={() => setHoverData("")}
             >
               <span
                 className={`text-2xl mr-3 ${
@@ -128,10 +127,9 @@ const DownBarLanding: React.FC<DownBarLandingProps> = ({
           <motion.p variants={itemVariants}>
             <a
               href="#about"
-              className="hover:text-gray-400 text-7xl"
+              className="hover:text-gray-400 md:text-7xl text-5xl"
               onClick={() => setfn(false)}
               onMouseOver={() => setHoverData("About Us")}
-              // onMouseLeave={() => setHoverData("")}
             >
               <span
                 className={`text-2xl mr-3 ${
@@ -146,7 +144,7 @@ const DownBarLanding: React.FC<DownBarLandingProps> = ({
           <motion.p variants={itemVariants}>
             <a
               href="#footer"
-              className="hover:text-gray-400 text-7xl "
+              className="hover:text-gray-400 md:text-7xl text-5xl "
               onClick={() => setfn(false)}
               onMouseOver={() => setHoverData("Contact Us")}
               // onMouseLeave={() => setHoverData("")}
