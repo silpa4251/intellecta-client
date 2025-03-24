@@ -1,13 +1,61 @@
 import { Link } from "react-router-dom";
 import IntellectaLogo from "../../assets/Intellecta-logo.svg";
 import { motion } from "framer-motion";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../utils/axiosInstance";
-// import { userEndPoints } from "../../api/endPoints/userEndPoints";
+import { userEndPoints } from "../../api/endPoints/userEndPoints";
 import { GoogleLogin } from "@react-oauth/google";
 
-const Signup = () => {
+  // Updated type definition
+  type LoginFormData = {
+    email: string;
+    password: string;
+    };
+
+  // Updated validation schema
+  const validationSchema = yup.object().shape({
+    email: yup
+      .string()
+      .email("This is not a valid email format!")
+      .required("Email is required!"),
+    password: yup
+      .string()
+      .min(4, "Password should contain at least 4 characters.")
+      .max(10, "Password cannot exceed more than 10 characters")
+      .required("Password required"),
+  });
+
+const SignIn = () => {
   const navigate = useNavigate();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginFormData>({
+    resolver: yupResolver(validationSchema),
+  });
+
+  const onSubmit = async (values: LoginFormData) => {
+    try {
+      console.log("submitting", values);
+      const response = await axiosInstance.post(
+        userEndPoints.USER.LOGIN, 
+        values,
+        { headers: { "Content-Type": "application/json" } }
+      );
+      console.log("Login success:", response);
+      toast.success("Login Successfull 🎉");
+      navigate("/welcome");
+    } catch (error: any) {
+      console.error("Error during registration:", error);
+      const errorMessage = error.response?.data?.message || "Error logging user";
+      toast.error(errorMessage);
+    }
+  };
 
   return (
     <div className="bg-[#FFEDAC] w-full min-h-screen flex justify-center items-center p-4">
@@ -46,38 +94,44 @@ const Signup = () => {
       </div>
 
       {/* Login Form */}
-      <form className="flex flex-col items-center w-full mt-6">
-        <div className="flex flex-col gap-6 items-center w-full">
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col items-center w-full mt-4">
+        <div className="flex flex-col items-center w-full">
           
           {/* Email & Password Fields */}
-          <div className="flex flex-col gap-6 items-center w-full md:mt-8">
+          <div className="flex flex-col gap-5 items-center w-full md:mt-8">
             <input
               type="text"
               className="border-b w-full md:w-[400px] border-b-black/50 pl-2 pb-2 outline-none"
               placeholder="Email"
+              {...register("email")}
             />
+            {errors.email && (
+              <p className="text-red-500 text-xs">{errors.email.message}</p>
+            )}
             <input
               type="password"
               className="border-b w-full md:w-[400px] border-b-black/50 pl-2 pb-2 outline-none"
               placeholder="Enter Password"
+              {...register("password")}
             />
+            {errors.password && (
+              <p className="text-red-500 text-xs">{errors.password.message}</p>
+            )}
           </div>
         </div>
 
         <div className="cursor-pointer mt-8 md:mt-12 p-2 shadow-[2px_3px_8px_rgba(0,0,0,0.38)] text-center bg-white rounded-4xl font-semibold w-full md:w-[300px]">
-          <Link to='/welcome'>
             <button className="text-base cursor-pointer">Let's Go</button>
-          </Link>
         </div>
 
-        <div className="flex gap-2 mt-4">
+        <div className="flex gap-2 mt-2">
           <h4 className="font-medium">New here? Join us today by</h4>
           <Link to="/register">
             <span className="font-medium text-blue-700">Sign up</span>
           </Link>
         </div>
 
-        <h3 className="font-semibold mt-4">- OR -</h3>
+        <h3 className="font-semibold mt-2">- OR -</h3>
 
         {/* Google Login Button */}
         <div className="mt-2">
@@ -86,9 +140,6 @@ const Signup = () => {
                   const post = await axiosInstance.post("/user/google-login", credentialResponse);
                   const user = post.data.data;
                   console.log("post user", user);
-                  localStorage.setItem("loggedInUser", JSON.stringify(user));
-                  localStorage.setItem("secretToken", JSON.stringify(user.token));
-                  localStorage.setItem("role", "User");
                   navigate("/home");
                 }}
                 onError={() => console.log("Login Failed")}
@@ -99,7 +150,7 @@ const Signup = () => {
               />
         </div>
 
-        <h4 className="font-medium pt-4 text-center">
+        <h4 className="font-medium pt-2 text-center">
           Your Smart Learning Journey Starts Here!
         </h4>
       </form>
@@ -110,4 +161,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default SignIn;

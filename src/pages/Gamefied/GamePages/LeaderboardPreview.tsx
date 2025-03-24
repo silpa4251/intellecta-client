@@ -1,4 +1,3 @@
-import { FaTrophy } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 const LeaderboardPreview = () => {
@@ -33,7 +32,7 @@ const LeaderboardPreview = () => {
           <tbody>
             {topPlayers.map((player, index) => (
               <tr
-                key={player.rank}>
+                key={index}>
                 <td className="py-3 px-2 align-middle ">#{player.rank}</td>
 
                 <td className="py-3 px-2 align-middle">
@@ -67,6 +66,14 @@ const LeaderboardPreview = () => {
             ))}
           </tbody>
         </table>
+        <div className="mt-6 flex justify-end">
+          <Link
+            to="/games/leaderboard"
+            className="text-indigo-400 hover:text-indigo-300 transition font-medium"
+          >
+            View Full Leaderboard &rarr;
+          </Link>
+        </div>
       </div>
     </div>
   );
