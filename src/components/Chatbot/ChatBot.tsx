@@ -117,7 +117,7 @@ interface Message {
   fromBot: boolean;
 }
 
-const socket: Socket = io("http://localhost:4010");
+const socket: Socket = io("http://localhost:5004");
 
 const ChatBot = () => {
   const [messages, setMessages] = useState<Message[]>([]);
