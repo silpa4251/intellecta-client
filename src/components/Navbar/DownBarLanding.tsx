@@ -238,34 +238,6 @@ const DownBarLanding: React.FC<DownBarLandingProps> = ({
               </a>
             </motion.p>
           )}
-          {/* )} */}
-          {/* <motion.p variants={itemVariants}>
-              <a
-                href="#"
-                className="hover:text-gray-400"
-                onClick={() => setfn(false)}
-              >
-                Quick Guide
-              </a>
-            </motion.p>
-            <motion.p variants={itemVariants}>
-              <a
-                href="#"
-                className="hover:text-gray-400"
-                onClick={() => setfn(false)}
-              >
-                About Us
-              </a>
-            </motion.p>
-            <motion.p variants={itemVariants}>
-              <a
-                href="#"
-                className="hover:text-gray-400"
-                onClick={() => setfn(false)}
-              >
-                Contact Us
-              </a>
-            </motion.p> */}
         </motion.div>
           
       </motion.div>
