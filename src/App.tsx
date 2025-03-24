@@ -18,10 +18,12 @@ import TicTacToe from './pages/Gamefied/Games/Tictactoe/TicTacToe';
 import GameHome from './pages/Gamefied/GamePages/GameHome';
 import GamesLayout from './pages/Gamefied/GameLayout';
 import RockPaperScissors from './pages/Gamefied/Games/RockPaperScissors/RockPaperScissors';
+import ChatBot from "./components/Chatbot/ChatBot";
 
 function App() {
   return (
     <>
+    <ChatBot />
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/register" element={<Signup />} />

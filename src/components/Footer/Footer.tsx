@@ -22,7 +22,7 @@ const Footer: React.FC = () => {
         {/* Right Section - Subscription Form */}
         <div>
           <h3 className="text-lg font-medium">Don’t Miss Out—Subscribe Now</h3>
-          <div className="flex mt-4">
+          <div className="flex mt-4 px-5">
             <input
               type="email"
               placeholder="Enter your email address"
@@ -36,12 +36,12 @@ const Footer: React.FC = () => {
       </div>
 
       {/* Bottom Section - Links & Social Icons */}
-      <div className="mt-10 text-center border-t border-gray-700 flex justify-between items-center  pt-5 ">
+      <div className="mt-10 text-center border-t border-gray-700 flex justify-between items-center  pt-5 pl-5">
         <h2 className="text-xl font-bold">iNTELLECTA</h2>
         {/* <p className="text-gray-400 text-sm mt-1">© 2025 iNTELLECTA. All rights reserved.</p> */}
 
         {/* Navigation Links */}
-        <div className="flex justify-center gap-6  text-gray-200 text-sm">
+        <div className="md:flex justify-center gap-6  text-gray-200 text-sm hidden">
           <a href="#home" className="hover:text-white font-semibold">Home</a>
           <a href="#works" className="hover:text-white font-semibold">Quick Guide</a>
           <a href="#about" className="hover:text-white font-semibold">About Us</a>
@@ -49,7 +49,7 @@ const Footer: React.FC = () => {
         </div>
 
         {/* Social Icons */}
-        <div className="flex justify-center gap-6 text-lg">
+        <div className="flex justify-center gap-6 text-lg pr-5">
           <FaPhone className="hover:text-gray-400 cursor-pointer" />
           <FaFacebookF className="hover:text-gray-400 cursor-pointer" />
           <FaWhatsapp className="hover:text-gray-400 cursor-pointer" />

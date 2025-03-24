@@ -135,3 +135,6 @@ body::-webkit-scrollbar {
   background-position: center;
   background-attachment: fixed; */
 }
+.chatbot-message-div{
+  scrollbar-width: none;
+}
