@@ -92,13 +92,13 @@ const DownBarLanding: React.FC<DownBarLandingProps> = ({
       >
         {/* First Section */}
         <motion.div
-          className={`md:w-2/4  w-full flex flex-col justify-center items-start gap-6 `}
+          className={`md:w-2/4  w-full flex flex-col justify-center items-start gap-6  px-5`}
           variants={sectionVariants}
         >
           <motion.p variants={itemVariants}>
             <a
               href="#home"
-              className={`hover:text-gray-400 } text-7xl`}
+              className={`hover:text-gray-400 } md:text-7xl text-5xl ` }
               onClick={() => setfn(false)}
               onMouseOver={() => setHoverData("Home")}
               onMouseLeave={() => setHoverData("")}
@@ -110,10 +110,9 @@ const DownBarLanding: React.FC<DownBarLandingProps> = ({
           <motion.p variants={itemVariants}>
             <a
               href="#works"
-              className="hover:text-gray-400 text-7xl"
+              className="hover:text-gray-400 md:text-7xl text-5xl"
               onClick={() => setfn(false)}
               onMouseOver={() => setHoverData("Quick Guide")}
-              // onMouseLeave={() => setHoverData("")}
             >
               <span
                 className={`text-2xl mr-3 ${
@@ -128,10 +127,9 @@ const DownBarLanding: React.FC<DownBarLandingProps> = ({
           <motion.p variants={itemVariants}>
             <a
               href="#about"
-              className="hover:text-gray-400 text-7xl"
+              className="hover:text-gray-400 md:text-7xl text-5xl"
               onClick={() => setfn(false)}
               onMouseOver={() => setHoverData("About Us")}
-              // onMouseLeave={() => setHoverData("")}
             >
               <span
                 className={`text-2xl mr-3 ${
@@ -146,7 +144,7 @@ const DownBarLanding: React.FC<DownBarLandingProps> = ({
           <motion.p variants={itemVariants}>
             <a
               href="#footer"
-              className="hover:text-gray-400 text-7xl "
+              className="hover:text-gray-400 md:text-7xl text-5xl "
               onClick={() => setfn(false)}
               onMouseOver={() => setHoverData("Contact Us")}
               // onMouseLeave={() => setHoverData("")}
@@ -178,7 +176,7 @@ const DownBarLanding: React.FC<DownBarLandingProps> = ({
                 onClick={() => setfn(false)}
               >
                 <p className="text-5xl">How it works</p>
-                <p className="text-2xl">
+                <p className="text-lg">
                   After registration and assesment,
                   <br /> students can learn and aquire skills out of their
                   school syllabus
@@ -195,10 +193,10 @@ const DownBarLanding: React.FC<DownBarLandingProps> = ({
               >
                 <p className="text-5xl">What are the things we offer</p>
                 {/* <p>content</p> */}
-                <ul className="text-2xl">
-                  <li>Personalised learning</li>
-                  <li>Interactive tutorials</li>
-                  <li>Smart assessment</li>
+                <ul className="text-lg">
+                  <li>- Personalised learning</li>
+                  <li>- Interactive tutorials</li>
+                  <li>- Smart assessment</li>
                 </ul>
               </a>
             </motion.p>
@@ -240,34 +238,6 @@ const DownBarLanding: React.FC<DownBarLandingProps> = ({
               </a>
             </motion.p>
           )}
-          {/* )} */}
-          {/* <motion.p variants={itemVariants}>
-              <a
-                href="#"
-                className="hover:text-gray-400"
-                onClick={() => setfn(false)}
-              >
-                Quick Guide
-              </a>
-            </motion.p>
-            <motion.p variants={itemVariants}>
-              <a
-                href="#"
-                className="hover:text-gray-400"
-                onClick={() => setfn(false)}
-              >
-                About Us
-              </a>
-            </motion.p>
-            <motion.p variants={itemVariants}>
-              <a
-                href="#"
-                className="hover:text-gray-400"
-                onClick={() => setfn(false)}
-              >
-                Contact Us
-              </a>
-            </motion.p> */}
         </motion.div>
           
       </motion.div>

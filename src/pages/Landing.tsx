@@ -21,6 +21,7 @@ import profile3 from "../assets/Review_3.jpg";
 import Footer from "../components/Footer/Footer";
 import Navbar from "../components/Navbar/NavbarLanding";
 import BlurText from "../components/TextAnimations/BlurText";
+import LandingImage from "../assets/LandingImages/landingFront.png"
 
 const Landing: React.FC = () => {
   const steps = [
@@ -63,12 +64,13 @@ const Landing: React.FC = () => {
   return (
     <>
     <Navbar/>
-    <div id="home" className="w-full h-screen flex items-center sm:justify-items-start text-white bg-overlay bg-[#081a37] md:px-36 ">
+    {/* landing page - 1 */}
+    <div id="home" className="w-full h-screen flex items-center justify-center sm:justify-items-start text-white bg-overlay bg-[#081a37] md:px-36 flex-wrap px-5 md:flex-nowrap">
       {/* Content */}
-      <div className="text-center sm:text-left ">
+      <div className="text-start sm:text-left ">
           <BlurText 
           text="Unlock Your Potential with AI Learning"
-          className="text-3xl justify-center sm:text-5xl font-bold mb-4" 
+          className="text-3xl   sm:text-5xl font-bold mb-4" 
           />
           <p className="text-lg sm:text-xl mb-6 max-w-2xl">
           Join Intellecta and experience AI-driven, personalized learning
@@ -88,13 +90,20 @@ const Landing: React.FC = () => {
           </button>
         </div>
       </div>
+      {/* image section */}
+      <div className=" mb-10">
+        <div className="w-full h-[400px] md:w-[500px] md:h-[600px] flex justify-end items-end ">
+        <img src={LandingImage} alt="load" className="w-full h-full object-cover" />
+        </div>
+      </div>
     </div>
 
+      {/* landing page - else */}
     <div id="works" className="bg-[#0B1A36] py-20 text-white text-center bg-gradient-to-b from-[#081A37] to-[#3A6073] ">
       {/* Section Title */}
-      <div className="h-[600px]  ">
-        <div className="mb-6">
-          <div className="inline-block px-4 py-2 bg-white text-black rounded-lg font-semibold">
+      <div className="h-[600px]   py-10  md:px-36  px-5 ">
+        <div className="mb-6  ">
+          <div className="inline-block px-4 py-1 bg-white text-black rounded-lg font-semibold shadow-2xl">
           ⚙️ How It Works
           </div>
           <h2 className="text-3xl font-bold mt-4">How To Get Started</h2>
@@ -117,7 +126,7 @@ const Landing: React.FC = () => {
           </div>
 
           {/* Navigation Arrows */}
-          <div className="absolute top-1/2 left-4 transform -translate-y-1/2 z-10">
+          {/* <div className="absolute top-1/2 left-4 transform -translate-y-1/2 z-10">
             <button
             data-glide-dir="<"
             className="bg-white text-black p-3 rounded-full shadow-md hover:bg-gray-200"
@@ -132,14 +141,15 @@ const Landing: React.FC = () => {
             >
             ▶
             </button>
-          </div>
+          </div> */}
         </div>
       </div>
+      {/* sliding-end */}
 
       <div id="about" className="relative text-white py-20 px-6 md:px-16 lg:px-24">
         {/* About Us */}
         <div className="mb-6">
-          <div className="inline-block px-4 py-2 bg-white text-black rounded-lg font-semibold">
+          <div className="inline-block px-4 py-1 bg-white text-black rounded-lg font-semibold shadow-2xl">
           ℹ️ About Us
           </div>
           <h2 className="text-3xl font-bold mt-4">What We Offer ?</h2>
@@ -160,7 +170,7 @@ const Landing: React.FC = () => {
           </div>
 
           {/* Image with Abstract Shape */}
-          <div className="lg:w-1/2 relative">
+          <div className="lg:w-1/2 relative md:block hidden">
             {/* Background Blob Image */}
             <img
               src={blob}
@@ -189,7 +199,7 @@ const Landing: React.FC = () => {
         {/* Section_2 */}
         <div className="max-w-6xl mx-auto flex flex-col lg:flex-row items-center gap-10">
           {/* Image with Abstract Shape */}
-          <div className="lg:w-1/2 relative">
+          <div className="lg:w-1/2 relative md:block hidden">
             {/* Background Blob Image */}
             <img
               src={blob}
@@ -241,7 +251,7 @@ const Landing: React.FC = () => {
           </div>
 
           {/* Image with Abstract Shape */}
-          <div className="lg:w-1/2 relative">
+          <div className="lg:w-1/2 relative md:block hidden">
             {/* Background Blob Image */}
             <img
               src={blob}
@@ -300,7 +310,7 @@ const Landing: React.FC = () => {
 
       <div className="py-20 px-4 md:py-24">
         <div className="mb-20">
-          <div className="inline-block px-4 py-2 bg-white text-black rounded-lg font-semibold">
+          <div className="inline-block px-4 py-1 bg-white text-black rounded-lg font-semibold">
           ⭐ Testimonials
           </div>
           <h2 className="text-3xl font-bold mt-4">Public Cheers For Us</h2>
