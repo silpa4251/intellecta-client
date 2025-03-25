@@ -140,7 +140,7 @@ const SignIn = () => {
                   const post = await axiosInstance.post("/user/google-login", credentialResponse);
                   const user = post.data.data;
                   console.log("post user", user);
-                  navigate("/home");
+                  navigate("/welcome");
                 }}
                 onError={() => console.log("Login Failed")}
                 theme="outline"   

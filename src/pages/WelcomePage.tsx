@@ -23,11 +23,11 @@ const WelcomePage = () => {
             <WcNavbar />
             <div className="flex flex-col items-center px-4 sm:px-6 lg:px-8">
                 <div className="text-center my-6 sm:my-20">
-                    <h1 className="text-xl sm:text-2xl md:text-3xl font-semibold">
+                    <h1 className="text-xl sm:text-2xl md:text-4xl font-semibold">
                         Welcome to iNTELLECTA, {user?.name}!
                     </h1>
                     <h5 className="text-xs mt-2 sm:text-base sm:mt-4">
-                        We&apos;re excited to help you learn in a way that works best for you.
+                        We&apos;re excited to help you, to learn in a way that works best for you.
                     </h5>
                 </div>
 
