@@ -5,7 +5,9 @@ import { GoSignOut } from "react-icons/go";
 import axiosInstance from "../../utils/axiosInstance";
 import { userEndPoints } from "../../api/endPoints/userEndPoints";
 import { useQuery } from "@tanstack/react-query";
-import student from "../../assets/Profile.jpg"
+import student from "../../assets/Profile.jpg";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 
 const fetchUser = async () => {
@@ -16,6 +18,7 @@ const fetchUser = async () => {
 
 
 const NavbarWelcome = () => {
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -36,6 +39,22 @@ const NavbarWelcome = () => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  const handlelogout = async () => {
+    try {
+      console.log("logging out");
+      const response = await axiosInstance.post(
+        userEndPoints.USER.LOGOUT, 
+      );
+      console.log("Logout success:", response);
+      toast.success("You are successfully logged out");
+      navigate("/");
+    } catch (error: any) {
+      console.error("Error during registration:", error);
+      const errorMessage = error.response?.data?.message || "Error logging user";
+      toast.error(errorMessage);
+    }
+  };
 
 
   return (
@@ -75,8 +94,8 @@ const NavbarWelcome = () => {
                   </a>
                 </li>
                 <li>
-                  <button className="flex items-center gap-2 px-4 py-2 font-semibold text-left w-full" onClick={() => alert("Logged Out")}>
-                    <GoSignOut className="text-xl" /> Sign Out
+                  <button className="flex items-center gap-2 px-4 py-2 font-semibold text-left cursor-pointer" onClick={handlelogout}>
+                    <GoSignOut className="text-xl"/> Sign Out
                   </button>
                 </li>
               </ul>
@@ -84,7 +103,6 @@ const NavbarWelcome = () => {
           )}
         </div>
 
-        {/* Username (Hidden on Mobile, Visible on Larger Screens) */}
         <h5 className="hidden md:block text-white font-semibold">{user?.name}</h5>
       </div>
     </nav>

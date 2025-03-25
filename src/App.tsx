@@ -6,6 +6,7 @@ import Login from './pages/auth/Login';
 import WelcomePage from './pages/WelcomePage';
 import Assessment from './pages/Assessment';
 import Home from './pages/Home/Home';
+import ProfilePage from './pages/Profile';
 import Courses from './pages/Courses/Courses';
 import Lessons from './pages/Courses/Lessons/Lessons';
 import LessonDetails from './pages/Courses/Lessons/LessonQuiz';
@@ -28,6 +29,7 @@ function App() {
         <Route path="/register" element={<Signup />} />
         <Route path="/welcome" element={<WelcomePage />} />
         <Route path="/home" element={<Home />} />
+        <Route path="/profile" element={<ProfilePage />} />
         <Route path="/courses/:category" element={<Courses />} />
         <Route path="/course/:courseTitle/:id" element={<Lessons />} />
         <Route path="/lesson/:lessonTitle/:lessonId"element={<LessonDetails />}/>

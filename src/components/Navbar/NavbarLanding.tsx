@@ -5,7 +5,6 @@ import DownBarLanding from "./DownBarLanding";
 
 const LandingNavbar: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-  console.log("menuOpen", menuOpen)
 
   return (
     <nav className={`sticky top-0 w-full ${!menuOpen ? "bg-[#081a37]" : "bg-[#081a37]"}  text-white py-5 md:px-36 px-5 flex justify-between items-center z-50 `}>      

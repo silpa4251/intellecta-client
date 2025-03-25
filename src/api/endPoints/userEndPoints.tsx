@@ -1,6 +1,7 @@
 export const userEndPoints =  {
     USER: {
         LOGIN: "/user/login",
+        LOGOUT: "/user/logout",
         REGISTER: "/user/register",
         GET_PROFILE: "/user/getuserbyid",
         // UPDATE_PASSWORD: "user/update-password",

@@ -103,7 +103,6 @@
 // export default ChatBot;
 
 
-"use client";
 
 import  { useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
@@ -126,9 +125,6 @@ const ChatBot = () => {
   const [loading, setLoading] = useState<boolean>(false); // Track bot response time
   const location = useLocation()
 
-  if(location.pathname === "/login" || location.pathname === "/register" || location.pathname.includes("game")){
-    return <></>
-  }
 
   useEffect(() => {
     const handleReply = (response: string) => {
@@ -150,6 +146,11 @@ const ChatBot = () => {
     setLoading(true); // Show loading indicator while waiting for response
     socket.emit("message", input);
   };
+
+  
+  if(location.pathname === "/login" || location.pathname === "/register" || location.pathname === "/" || location.pathname === "/profile" || location.pathname === "/assessment" || location.pathname.includes("game")){
+    return <></>
+  }
 
   return (
     <div className="fixed bottom-5 right-5 flex flex-col items-end z-50">

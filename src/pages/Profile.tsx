@@ -168,7 +168,7 @@ const ProfilePage: React.FC = () => {
               <input
                 type="text"
                 name="phone"
-                value={profile.phone || "Nil"}
+                value={profile.phone}
                 onChange={handleChange}
                 className="w-full py-2 px-2 border-gray-300 rounded-lg text-white"
               />
@@ -183,7 +183,7 @@ const ProfilePage: React.FC = () => {
               <input
                 type="text"
                 name="age"
-                value={profile.age || "Nil"}
+                value={profile.age || 0 }
                 onChange={handleChange}
                 className="w-full py-2 px-2 border-gray-300 rounded-lg text-white"
               />

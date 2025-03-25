@@ -20,9 +20,9 @@ const Footer: React.FC = () => {
         </div>
 
         {/* Right Section - Subscription Form */}
-        <div>
-          <h3 className="text-lg font-medium">Don’t Miss Out—Subscribe Now</h3>
-          <div className="flex mt-4 px-5">
+        <div className="w-full md:flex md:flex-col md:items-end">
+          <h3 className="text-lg font-medium md:mr-10">Don&apos;t Miss Out—Subscribe Now</h3>
+          <div className="flex mt-4 p-2 md:p-0">
             <input
               type="email"
               placeholder="Enter your email address"
