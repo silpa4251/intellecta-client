@@ -15,8 +15,6 @@ const WelcomePage = () => {
         queryKey: ["user"],
         queryFn: fetchUser,
     });
-    console.log("object", user);
-
 
     return (
         <div>
