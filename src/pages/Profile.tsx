@@ -6,6 +6,7 @@ import axiosInstance from "../utils/axiosInstance";
 import { userEndPoints } from "../api/endPoints/userEndPoints";
 import { toast } from "react-toastify";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import Loader from "../components/Loaders/Loader";
 
 const fetchUser = async () => {
   const { data } = await axiosInstance.get(userEndPoints.USER.GET_PROFILE);
@@ -27,7 +28,6 @@ const ProfilePage: React.FC = () => {
     queryKey: ["user"],
     queryFn: fetchUser,
   });
-  console.log("object", user);
 
   // Update profile state when user data is fetched
   React.useEffect(() => {
@@ -42,7 +42,13 @@ const ProfilePage: React.FC = () => {
     }
   }, [user]);
 
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen bg-[#081a37]">
+        <Loader />
+      </div>
+    );
+  }
   if (isError) return <p>Error loading profile</p>;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -101,7 +107,7 @@ const ProfilePage: React.FC = () => {
     <div className="flex justify-center items-center min-h-screen bg-[#081a37] p-4">
       <form
         onSubmit={handleSubmit}
-        className="flex flex-col w-full max-w-xl bg-[#081a37] border border-white shadow-[10px_10px_10px_rgba(0,0,0,0.3)] rounded-2xl p-4"
+        className="flex flex-col w-full max-w-xl bg-[#081a37] border border-white shadow-[10px_10px_10px_rgba(0,0,0,0.3)] rounded-3xl p-6"
       >
         <div className="flex justify-center w-full relative">
           <img
@@ -140,7 +146,7 @@ const ProfilePage: React.FC = () => {
                 name="name"
                 value={profile.name}
                 onChange={handleChange}
-                className="w-full py-2 px-2 border-gray-300 rounded-lg text-white"
+                className="w-full py-2 px-2 border border-gray-300 rounded-lg text-white"
               />
               <FaEdit className="text-gray-200 cursor-pointer" />
             </div>
@@ -155,7 +161,7 @@ const ProfilePage: React.FC = () => {
                 name="email"
                 value={profile.email}
                 onChange={handleChange}
-                className="w-full py-2 px-2 border-gray-300 rounded-lg text-white"
+                className="w-full py-2 px-2 border border-gray-300 rounded-lg text-white"
               />
               <FaEdit className="text-gray-200 cursor-pointer" />
             </div>
@@ -170,7 +176,7 @@ const ProfilePage: React.FC = () => {
                 name="phone"
                 value={profile.phone}
                 onChange={handleChange}
-                className="w-full py-2 px-2 border-gray-300 rounded-lg text-white"
+                className="w-full py-2 px-2 border border-gray-300 rounded-lg text-white"
               />
               <FaEdit className="text-gray-200 cursor-pointer" />
             </div>
@@ -185,7 +191,7 @@ const ProfilePage: React.FC = () => {
                 name="age"
                 value={profile.age || 0 }
                 onChange={handleChange}
-                className="w-full py-2 px-2 border-gray-300 rounded-lg text-white"
+                className="w-full py-2 px-2 border border-gray-300 rounded-lg text-white"
               />
               <FaEdit className="text-gray-200 cursor-pointer" />
             </div>

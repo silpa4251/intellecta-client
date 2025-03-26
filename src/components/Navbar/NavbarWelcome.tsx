@@ -8,25 +8,23 @@ import { useQuery } from "@tanstack/react-query";
 import student from "../../assets/Profile.jpg";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-
+import Loader from "../Loaders/Loader";
 
 const fetchUser = async () => {
   const { data } = await axiosInstance.get(userEndPoints.USER.GET_PROFILE);
-  return data.data.user; 
-  console.log("data", data.data.user);
+  return data.data.user;
 };
-
 
 const NavbarWelcome = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const { data: user} = useQuery({
+  const { data: user } = useQuery({
     queryKey: ["user"],
     queryFn: fetchUser,
   });
-  console.log("object", user);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -40,72 +38,96 @@ const NavbarWelcome = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handlelogout = async () => {
+  const handleLogout = async () => {
     try {
-      console.log("logging out");
-      const response = await axiosInstance.post(
-        userEndPoints.USER.LOGOUT, 
-      );
-      console.log("Logout success:", response);
+      console.log("Logging out");
+      await axiosInstance.post(userEndPoints.USER.LOGOUT);
       toast.success("You are successfully logged out");
       navigate("/");
     } catch (error: any) {
-      console.error("Error during registration:", error);
+      console.error("Error during logout:", error);
       const errorMessage = error.response?.data?.message || "Error logging user";
       toast.error(errorMessage);
     }
   };
 
+  const handleProfileClick = () => {
+    setLoading(true); 
+    setIsOpen(false); 
+    setTimeout(() => {
+      navigate("/profile");
+      setLoading(false);
+    }, 2000);
+  };
 
   return (
-<nav className="flex items-center justify-between bg-gray-900 px-6 md:px-28 py-3 relative">
-      {/* Logo Section */}
-      <div className="flex items-center gap-2 md:gap-3 text-white">
-        <img src={wcpagelogo} alt="Logo" className="h-[30px] md:h-[40px]" />
-        <div>
-          <h1 className="text-sm md:text-xl font-semibold">iNTELLECTA</h1>
-          <h5 className="text-gray-200 text-[10px] md:text-xs">Learn, Grow, Success</h5>
-        </div>
-      </div>
+    <>
+      {/* Full-Screen Loader */}
+      {loading && (
+        <div className="fixed inset-0 flex justify-center items-center bg-white z-50">
+          <Loader />
+        </div> 
+      )}
 
-      {/* Right Side: Leaderboard, Profile */}
-      <div className="flex items-center gap-4 relative">
-        {/* Leaderboard Icon (Always Visible) */}
-        <span className="text-white text-2xl cursor-pointer">
-          <MdLeaderboard />
-        </span>
-
-        {/* Profile Icon (Always Visible) */}
-        <div className="relative" ref={dropdownRef}>
-          <img
-            src={user?.profilePic || student }
-            className="w-8 h-8 rounded-full cursor-pointer"
-            alt="User Profile"
-            onClick={() => setIsOpen(!isOpen)}
-          />
-
-          {/* Dropdown Menu */}
-          {isOpen && (
-            <div className="absolute right-0 mt-2 w-44 bg-white rounded-lg shadow-lg overflow-hidden transition-all duration-200 z-50">
-              <ul className="py-2 text-gray-800">
-                <li>
-                  <a href="/profile" className="flex items-center gap-2 px-4 py-2 font-semibold text-left">
-                    <MdSettings className="text-xl" /> Profile Settings
-                  </a>
-                </li>
-                <li>
-                  <button className="flex items-center gap-2 px-4 py-2 font-semibold text-left cursor-pointer" onClick={handlelogout}>
-                    <GoSignOut className="text-xl"/> Sign Out
-                  </button>
-                </li>
-              </ul>
-            </div>
-          )}
+      <nav className="flex items-center justify-between bg-gray-900 px-6 md:px-28 py-3 relative">
+        {/* Logo Section */}
+        <div className="flex items-center gap-2 md:gap-3 text-white">
+          <img src={wcpagelogo} alt="Logo" className="h-[30px] md:h-[40px]" />
+          <div>
+            <h1 className="text-sm md:text-xl font-semibold">iNTELLECTA</h1>
+            <h5 className="text-gray-200 text-[10px] md:text-xs">Learn, Grow, Success</h5>
+          </div>
         </div>
 
-        <h5 className="hidden md:block text-white font-semibold">{user?.name}</h5>
-      </div>
-    </nav>
+        {/* Right Side: Leaderboard, Profile */}
+        <div className="flex items-center gap-4 relative">
+          {/* Leaderboard Icon */}
+          <span className="text-white text-2xl cursor-pointer">
+            <MdLeaderboard />
+          </span>
+
+          {/* Profile Icon & Dropdown */}
+          <div className="relative" ref={dropdownRef}>
+            <img
+              src={user?.profilePic || student}
+              className="w-8 h-8 rounded-full cursor-pointer"
+              alt="User Profile"
+              onClick={() => setIsOpen(!isOpen)}
+            />
+
+            {/* Dropdown Menu */}
+            {isOpen && (
+              <div className="absolute right-0 mt-2 w-44 bg-white rounded-lg shadow-lg overflow-hidden transition-all duration-200 z-50">
+                <ul className="py-2 text-gray-800">
+                  <li>
+                    <button
+                      className="flex items-center gap-2 px-4 py-2 font-semibold text-left cursor-pointer w-full"
+                      onClick={handleProfileClick}
+                      disabled={loading}
+                    >
+                      <MdSettings className="text-xl" />
+                      Profile Settings
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      className="flex items-center gap-2 px-4 py-2 font-semibold text-left cursor-pointer w-full"
+                      onClick={handleLogout}
+                    >
+                      <GoSignOut className="text-xl" />
+                      Sign Out
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            )}
+          </div>
+
+          {/* Username */}
+          <h5 className="hidden md:block text-white font-semibold">{user?.name}</h5>
+        </div>
+      </nav>
+    </>
   );
 };
 
