@@ -210,12 +210,12 @@ const Signup = () => {
           </form>
         </motion.div>
         <motion.div
-          initial={{ x: -350, opacity: 0 }}
+          initial={{ x: -350, opacity: 1 }}
           animate={{ x: 0, opacity: 1 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="hidden md:block w-1/2 h-full"
+          className="hidden md:block w-1/2 h-full z-10"
         >
-          <img src="/signup-bg.png" className="w-full h-full" alt="" />
+          <img src="/signup-bg.png" className=" w-full h-full" alt="" />
         </motion.div>
       </div>
     </div>

@@ -17,8 +17,8 @@ import MemoryGame from './pages/Gamefied/Games/MemoryGame/MemoryGame';
 import TicTacToe from './pages/Gamefied/Games/Tictactoe/TicTacToe';
 import GameHome from './pages/Gamefied/GamePages/GameHome';
 import GamesLayout from './pages/Gamefied/GameLayout';
-import RockPaperScissors from './pages/Gamefied/Games/RockPaperScissors/RockPaperScissors';
 import ChatBot from "./components/Chatbot/ChatBot";
+
 
 function App() {
   return (
@@ -42,7 +42,6 @@ function App() {
           <Route path="leaderboard" element={<GameLeaderboard />} />
           <Route path="memory_game" element={<MemoryGame />} />
           <Route path="tic_tac_toe" element={<TicTacToe />} />
-          <Route path="rock_paper_scissors" element={<RockPaperScissors />} />
         </Route>
       </Routes>
     </>
