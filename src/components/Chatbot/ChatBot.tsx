@@ -117,7 +117,7 @@ interface Message {
   fromBot: boolean;
 }
 
-const socket: Socket = io("http://localhost:4010");
+const socket: Socket = io("http://localhost:5004");
 
 const ChatBot = () => {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -126,9 +126,7 @@ const ChatBot = () => {
   const [loading, setLoading] = useState<boolean>(false); // Track bot response time
   const location = useLocation()
 
-  if(location.pathname === "/login" || location.pathname === "/register" || location.pathname.includes("game")){
-    return <></>
-  }
+
 
   useEffect(() => {
     const handleReply = (response: string) => {
@@ -150,6 +148,10 @@ const ChatBot = () => {
     setLoading(true); // Show loading indicator while waiting for response
     socket.emit("message", input);
   };
+
+  if(location.pathname === "/login" || location.pathname === "/register" || location.pathname.includes("game")){
+    return <></>
+  }
 
   return (
     <div className="fixed bottom-5 right-5 flex flex-col items-end z-50">

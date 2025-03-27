@@ -1,16 +1,39 @@
 import { Outlet } from "react-router-dom";
-import fakeProfile from "../../assets/Review_1.jpg";
 import { IoIosNotifications } from "react-icons/io";
 import GameSidebar from "./GamePages/GameSidebar";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useGameStore } from "../../store/useGameStore";
+import { useAuthStore } from "../../store/useAuthStore";
+import { useQuery } from "@tanstack/react-query";
+import axiosInstance from "../../utils/axiosInstance";
+import { userEndPoints } from "../../api/endPoints/userEndPoints";
 
 const GamesLayout = () => {
-  const { fetchGames } = useGameStore();
+  const { fetchGames, fetchLeaderboard, games } = useGameStore();
+  const { setUser, user } = useAuthStore();
+
+  useQuery({
+    queryKey: ["user"],
+    queryFn: async () => {
+      const { data } = await axiosInstance.get(userEndPoints.USER.GET_PROFILE);
+      setUser(data.data.user);
+      return data.data.user;
+    },
+  });
 
   useEffect(() => {
     fetchGames();
+    fetchLeaderboard();
   }, []);
+
+  useEffect(() => {
+    fetchLeaderboard();
+  }, [user]);
+
+  const [searchVal, setSearchVal] = useState("");
+  const searchedGames = games.filter((game) =>
+    game.name.toLowerCase().includes(searchVal.toLocaleLowerCase())
+  );
 
   return (
     <div className="min-h-screen bg-gradient-to-l from-[#0b2672] to-[#111827]">
@@ -21,6 +44,8 @@ const GamesLayout = () => {
           </div>
           <input
             type="text"
+            value={searchVal}
+            onChange={(e) => setSearchVal(e.target.value)}
             placeholder="Search games"
             className="rounded-3xl pl-4 outline-0 h-10 my-auto
             shadow-md
@@ -30,6 +55,16 @@ const GamesLayout = () => {
             backdrop-blur-sm"
           />
         </div>
+        {searchVal && (
+  <div className="absolute top-16 left-62 bg-gray-800 bg-opacity-80 backdrop-blur-md text-white p-4 rounded-lg shadow-lg">
+    {searchedGames.map((item) => (
+      <div key={item.name} className="py-2 px-3 hover:bg-gray-700 rounded-md transition">
+        {item.name}
+      </div>
+    ))}
+  </div>
+)}
+
         <div className="flex items-center gap-5">
           <div className="rounded-full h-8 w-8 p-2 bg-sky-800 flex items-center justify-center">
             <span className="text-xl">
@@ -41,10 +76,15 @@ const GamesLayout = () => {
             <span className="text-sm">4500</span>
           </div>
           <div>
-            <img src={fakeProfile} alt="" className="w-10 h-10 rounded-full" />
+            <img
+              src={user?.profilePic || "/home-bg.png"}
+              alt=""
+              className="w-10 h-10 rounded-full"
+            />
           </div>
         </div>
       </nav>
+
       <div className="flex">
         <GameSidebar />
         <div className="w-full ml-20 min-h-full ">
