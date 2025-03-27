@@ -11,20 +11,34 @@ type Game = {
   createdAt: Date;
 };
 
+interface LeaderboardEntry {
+  userId: string
+  bestScore:  null,
+  totalTimePlayed: number,
+  gamesPlayed: number,
+  totalScore:number,
+  lastPlayedGame: string,
+  lastPlayedDate: Date | null
+  user: {
+    name:string,
+    profilePic:string
+  }
+}
+
 type GameStore = {
   progress: Record<string, any>;
   games: Game[];
-  loading: boolean;
-  selectedGame: Game | null;
-  fetchGames: () => Promise<void>;
-  setSelectedGame: (game: Game) => void;
+  loading:boolean;
   updateProgress: (data: Record<string, any>) => void;
+  leaderboard:LeaderboardEntry[] | null;
+  fetchLeaderboard: () => Promise<void>;
+  fetchGames:()=> Promise<void>;
+
 };
 
 export const useGameStore = create<GameStore>((set) => ({
   games: [],
   loading: false,
-  selectedGame: null,
   progress: {},
 
   fetchGames: async () => {
@@ -38,7 +52,11 @@ export const useGameStore = create<GameStore>((set) => ({
     }
   },
 
-  setSelectedGame: (game: Game) => set({ selectedGame: game }),
+  leaderboard:null,
+  fetchLeaderboard: async()=> {
+    const res = await axios.get("http://localhost:5002/api/games/users/leaderboard")
+    set({leaderboard: res.data.leaderboard})
+  },
 
   updateProgress: (data: Record<string, any>) =>
     set((state) => ({

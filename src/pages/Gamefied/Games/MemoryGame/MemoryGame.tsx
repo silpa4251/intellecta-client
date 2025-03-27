@@ -35,12 +35,14 @@ const MemoryGame = () => {
   const [gameStarted, setGameStarted] = useState<boolean>(false);
 
   useEffect(() => {
-    let timer: number;
+    let timer: ReturnType<typeof setInterval>;
+  
     if (gameStarted && !isGameWon) {
       timer = setInterval(() => setTime((t) => t + 1), 1000);
     }
     return () => clearInterval(timer);
   }, [gameStarted, isGameWon]);
+
 
   const shuffleCards = () => {
     const shuffled = [...cardImages, ...cardImages]
@@ -114,7 +116,7 @@ const MemoryGame = () => {
         <IoMdClose />
       </button>
       </Link>
-      <div className="bg-gray/80 h-fit mt-5 backdrop-blur-md rounded-3xl border-2 border-gray-600 shadow-md p-6 max-w-3xl w-full">
+      <div className="bg-gray-900/80 h-fit mt-5 backdrop-blur-md rounded-3xl border-2 border-gray-400 shadow-md p-6 max-w-3xl w-full">
         <p className="absolute right-10 mt-2 text-lg text-blue-600">
           ⏱️ Time: {time}s
         </p>
