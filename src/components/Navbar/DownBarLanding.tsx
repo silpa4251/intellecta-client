@@ -59,8 +59,6 @@ const DownBarLanding: React.FC<DownBarLandingProps> = ({
   };
 
   const [hoverData, setHoverData] = useState<string>("");
-  console.log("hoverdata", hoverData);
-
   // const dataArr = [
   //   {
   //     head: "How it works",

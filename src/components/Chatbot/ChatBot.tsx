@@ -103,7 +103,6 @@
 // export default ChatBot;
 
 
-"use client";
 
 import  { useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
@@ -127,7 +126,6 @@ const ChatBot = () => {
   const location = useLocation()
 
 
-
   useEffect(() => {
     const handleReply = (response: string) => {
       setLoading(false); // Hide loading animation when response comes
@@ -149,7 +147,8 @@ const ChatBot = () => {
     socket.emit("message", input);
   };
 
-  if(location.pathname === "/login" || location.pathname === "/register" || location.pathname.includes("game")){
+  
+  if(location.pathname === "/login" || location.pathname === "/register" || location.pathname === "/" || location.pathname === "/profile" || location.pathname === "/assessment" || location.pathname.includes("game")){
     return <></>
   }
 
