@@ -20,12 +20,13 @@ import TicTacToe from './pages/Gamefied/Games/Tictactoe/TicTacToe';
 import GameHome from './pages/Gamefied/GamePages/GameHome';
 import GamesLayout from './pages/Gamefied/GameLayout';
 import ChatBot from "./components/Chatbot/ChatBot";
-
+import GeographyQuiz from './pages/Gamefied/Games/GeographyQuiz/GeographyQuiz';
+import WordBuilder from './pages/Gamefied/Games/WordBuilder/WordBuilder';
 
 function App() {
   return (
     <>
-    <ChatBot />
+      <ChatBot />
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/register" element={<Signup />} />
@@ -35,17 +36,22 @@ function App() {
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/courses/:category" element={<Courses />} />
         <Route path="/course/:courseTitle/:id" element={<Lessons />} />
-        <Route path="/lesson/:lessonTitle/:lessonId"element={<LessonDetails />}/>
+        <Route
+          path="/lesson/:lessonTitle/:lessonId"
+          element={<LessonDetails />}
+        />
         <Route path="/assessment" element={<Assessment />} />
         <Route path="/assessment-results" element={<AssessmentResults />} />
         <Route path="/login" element={<Login />} />
         <Route path="/games" element={<GamesLayout />}>
           <Route index element={<GameHome />} />
-          <Route path="profile" element={<GameProfile />} />
+          <Route path="myprofile" element={<GameProfile />} />
           <Route path="allgames" element={<AllGames />} />
           <Route path="leaderboard" element={<GameLeaderboard />} />
           <Route path="memory_game" element={<MemoryGame />} />
+          <Route path="word_builder" element={<WordBuilder />} />
           <Route path="tic_tac_toe" element={<TicTacToe />} />
+          <Route path="geography_quiz" element={<GeographyQuiz />} />
         </Route>
       </Routes>
     </>

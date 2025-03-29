@@ -2,9 +2,8 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { IoMdClose } from "react-icons/io";
-import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
 import { useAuthStore } from "../../../../store/useAuthStore";
+import { useGameStore } from "../../../../store/useGameStore";
 
 const initialBoard = Array(9).fill(null);
 const winningCombos = [
@@ -20,6 +19,7 @@ const winningCombos = [
 
 const TicTacToe = () => {
   const { user } = useAuthStore();
+  const { submitGameSession } = useGameStore();
 
   const [board, setBoard] = useState<string[]>(initialBoard);
   const [isXTurn, setIsXTurn] = useState<boolean>(true);
@@ -30,7 +30,7 @@ const TicTacToe = () => {
   const [mode, setMode] = useState<"AI" | "PVP" | null>(null);
   const [startTime, setStartTime] = useState<number | null>(null);
 
-  const checkWinner = (newBoard: string[]): string | null => {
+  const checkWinner = (newBoard: (string | null)[])=> {
     for (let combo of winningCombos) {
       const [a, b, c] = combo;
       if (
@@ -42,10 +42,10 @@ const TicTacToe = () => {
         return newBoard[a];
       }
     }
-    return newBoard.includes("") ? null : "Draw";
+    return newBoard.includes(null) ? null : "Draw";
   };
 
-  const handleClick = (index: number) => {
+  const handleClick = async(index: number) => {
     if (board[index] || winner) return;
     if (!startTime) setStartTime(Date.now());
 
@@ -62,7 +62,12 @@ const TicTacToe = () => {
       if (result === "X") setXScore((prev) => prev + 1);
       if (result === "O") setOScore((prev) => prev + 1);
       if (mode === "AI" && result === "X") {
-        awardMutate({ points: 50, timeTaken });
+        await submitGameSession({ 
+          userId: user?._id || "",
+          gameSlug:"tic_tac_toe",
+          score: 50,
+          timeTaken
+        });
       }
     } else {
       const nextTurnIsX = !isXTurn;
@@ -73,7 +78,7 @@ const TicTacToe = () => {
     }
   };
 
-  const aiMove = (currentBoard: string[]) => {
+  const aiMove = async(currentBoard: string[]) => {
     const emptyIndices: number[] = currentBoard
       .map((val, idx) => (val === null ? idx : -1))
       .filter((val) => val !== -1);
@@ -91,6 +96,13 @@ const TicTacToe = () => {
       const timeTaken = startTime
         ? Math.floor((Date.now() - startTime) / 1000)
         : 0;
+        await submitGameSession({ 
+          userId: user?._id || "",
+          gameSlug:"tic_tac_toe",
+          score: 50,
+          timeTaken
+        });
+
       setWinner(result);
       if (result === "O") setOScore((prev) => prev + 1);
     } else {
@@ -113,30 +125,7 @@ const TicTacToe = () => {
     setStartTime(Date.now());
   };
 
-  const { mutate: awardMutate } = useMutation({
-    mutationFn: async ({
-      points,
-      timeTaken,
-    }: {
-      points: number;
-      timeTaken: number;
-    }) => {
-      const res = await axios.post(
-        `http://localhost:5002/api/games/game-session`,
-        {
-          userId: user?._id,
-          gameSlug: "tic_tac_toe",
-          score: points,
-          timeTaken,
-          completed: true,
-        },
-        {
-          withCredentials: true,
-        }
-      );
-      return res.data;
-    },
-  });
+  
 
   const renderWinningLine = () => {
     if (winningCombo.length === 0) return null;
