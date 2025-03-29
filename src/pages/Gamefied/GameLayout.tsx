@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { IoIosNotifications } from "react-icons/io";
 // import GameSidebar from "./GamePages/GameSidebar";
 import { useEffect, useState } from "react";
@@ -7,12 +7,13 @@ import { useAuthStore } from "../../store/useAuthStore";
 import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "../../utils/axiosInstance";
 import { userEndPoints } from "../../api/endPoints/userEndPoints";
-// import GameEyeLid from "../Gamefied/gameNav/GameEyeLid";
+import axios from "axios";
 import DockLid from "./gameNav/DockLid";
 
 const GamesLayout = () => {
   const { fetchGames, fetchLeaderboard, games } = useGameStore();
   const { setUser, user } = useAuthStore();
+  const navigate = useNavigate()
 
   useQuery({
     queryKey: ["user"],
@@ -21,6 +22,18 @@ const GamesLayout = () => {
       setUser(data.data.user);
       return data.data.user;
     },
+  });
+
+  const { data: userstats } = useQuery({
+    queryKey: ["fetchUserleaderboard"],
+    queryFn: async () => {
+      const res = await axios.get(
+        "http://localhost:5002/api/games/userbyid/leaderboard",
+        { withCredentials: true }
+      );
+      return res.data?.leaderboard || {};
+    },
+    enabled: !!user,
   });
 
   useEffect(() => {
@@ -36,6 +49,12 @@ const GamesLayout = () => {
   const searchedGames = games.filter((game) =>
     game.name.toLowerCase().includes(searchVal.toLocaleLowerCase())
   );
+
+  const handleGame =(slug:string)=> {
+    navigate(`/games/${slug}`)
+    setSearchVal("")
+  }
+  
 
   return (
     <div className="min-h-screen bg-gradient-to-l from-[#0b2672] to-[#111827]">
@@ -60,12 +79,13 @@ const GamesLayout = () => {
         {searchVal && (
           <div className="absolute top-16 left-62 bg-gray-800 bg-opacity-80 backdrop-blur-md text-white p-4 rounded-lg shadow-lg">
             {searchedGames.map((item) => (
-              <div
-                key={item.name}
-                className="py-2 px-3 hover:bg-gray-700 rounded-md transition"
-              >
-                {item.name}
-              </div>
+                <div
+                onClick={()=> handleGame(item.slug)}
+                  key={item.name}
+                  className="py-2 px-3 z-50 hover:bg-gray-700 rounded-md transition"
+                >
+                  {item.name}
+                </div>
             ))}
           </div>
         )}
@@ -77,8 +97,12 @@ const GamesLayout = () => {
             </span>
           </div>
           <div className="rounded-3xl min-w-20 space-x-2 px-3 py-1 bg-sky-800">
-            <span className="text-sm border-r border-r-gray-400 pr-1">$ </span>
-            <span className="text-sm">4500</span>
+            <span className="text-sm text-green-300 border-r border-r-gray-400 pr-1">
+              ${" "}
+            </span>
+            <span className="text-sm font-semibold">
+              {userstats?.totalScore || 0}
+            </span>
           </div>
           <div>
             <img
