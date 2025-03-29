@@ -23,11 +23,10 @@ import ChatBot from "./components/Chatbot/ChatBot";
 import GeographyQuiz from './pages/Gamefied/Games/GeographyQuiz/GeographyQuiz';
 import WordBuilder from './pages/Gamefied/Games/WordBuilder/WordBuilder';
 
-
 function App() {
   return (
     <>
-    <ChatBot />
+      <ChatBot />
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/register" element={<Signup />} />
@@ -37,7 +36,10 @@ function App() {
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/courses/:category" element={<Courses />} />
         <Route path="/course/:courseTitle/:id" element={<Lessons />} />
-        <Route path="/lesson/:lessonTitle/:lessonId"element={<LessonDetails />}/>
+        <Route
+          path="/lesson/:lessonTitle/:lessonId"
+          element={<LessonDetails />}
+        />
         <Route path="/assessment" element={<Assessment />} />
         <Route path="/assessment-results" element={<AssessmentResults />} />
         <Route path="/login" element={<Login />} />
