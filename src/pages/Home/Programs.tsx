@@ -65,15 +65,11 @@ const bottomFourPrograms = [
   },
 ];
 
-type ProgramsProp = {
-  programRef: React.RefObject<HTMLDivElement | null>;
-};
 
-const Programs: React.FC<ProgramsProp> = ({ programRef }) => {
+const Programs: React.FC = () => {
   return (
     <div
       className="flex flex-wrap space-x-10 space-y-10 mx-28 my-10"
-      ref={programRef}
     >
       <div className="max-w-xs flex-1 space-y-1 min-w-[300px]">
         <h2 className="text-3xl font-semibold">Our Programs For Your Kids</h2>

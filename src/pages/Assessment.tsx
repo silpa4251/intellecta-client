@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import WcNavbar from "../components/Navbar/NavbarWelcome";
 import { IoCheckmarkOutline } from "react-icons/io5";
+import { RxCross1 } from "react-icons/rx";
 import axiosInstance from "../utils/axiosInstance";
-import { assesmentEndPoints } from "../api/endPoints/assessmentEndPoints";
 import { toast } from "react-toastify";
 import axios from "axios";
 import SpinningLoader from "../components/Loaders/SpinningLoader";
+import { useNavigate } from "react-router-dom";
 
 // Define an interface for the question structure
 interface AssessmentQuestion {
@@ -18,12 +19,13 @@ interface AssessmentQuestion {
 }
 
 const Assessment = () => {
+  const navigate = useNavigate();
   const [questions, setQuestions] = useState<AssessmentQuestion[]>([]);
   const [currentStep, setCurrentStep] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedAnswers, setSelectedAnswers] = useState<{[key: string]: string}>({});
 
-  // Fetch assessment questions on component mount
   useEffect(() => {
     const fetchAssessmentQuestions = async () => {
       try {
@@ -32,7 +34,6 @@ const Assessment = () => {
         const response = await axiosInstance.get(import.meta.env.VITE_ASSESSMENT_URL, { withCredentials: true});
         console.log('Assessment Questions Response:', response.data.questions);
 
-        // Transform backend questions to match our component's expected structure
         const transformedQuestions = response.data.questions.map((q: any) => ({
           _id: q._id,
           subject: q.subject,
@@ -41,9 +42,7 @@ const Assessment = () => {
           correctAnswer: q.correctAnswer,
           difficulty: q.difficulty,
         }));
-
         setQuestions(transformedQuestions);
-        
         console.log('Transformed Questions:', transformedQuestions);
       } catch (error) {
         console.error('Error fetching assessment questions:', error);
@@ -62,10 +61,16 @@ const Assessment = () => {
     }
   };
 
+  const handleBack = () => {
+    if (currentStep > 0) {
+      setCurrentStep(currentStep - 1);
+    }
+  };
+
   const handleOptionSelect = (questionId: string, selectedOption: string) => {
     setSelectedAnswers(prev => ({
       ...prev,
-      [questionId]: selectedOption
+      [questionId]: selectedOption,
     }));
 
     console.log('Selected Answers:', {
@@ -81,6 +86,7 @@ const Assessment = () => {
         toast.error('Please answer all questions before submitting');
         return;
       }
+      setIsSubmitting(true);
 
       const submissionData = {
         answers: questions.map(question => ({
@@ -90,16 +96,19 @@ const Assessment = () => {
       };
 
       const response = await axios.post("http://localhost:5001/api/assessment/evaluate",submissionData,{withCredentials: true});
-
+      setIsSubmitting(false);
       console.log('Assessment Evaluation Response:', response.data);
       toast.success('Assessment submitted successfully!');
+      navigate("/assessment-results", { state: { resultData: response.data } });
       
-      // Optionally, navigate to results page or show detailed results
     } catch (error) {
       console.error('Assessment submission error:', error);
+      setIsSubmitting(false);
       toast.error('Failed to submit assessment');
     }
   };
+
+  const isNextDisabled = !selectedAnswers[questions[currentStep]?._id];
 
   if (isLoading) {
     return (
@@ -126,6 +135,15 @@ const Assessment = () => {
   return (
     <>
       <WcNavbar />
+      {isSubmitting && (
+        <div className="fixed inset-0 bg-white bg-opacity-90 flex flex-col justify-center items-center z-50">
+          <SpinningLoader />
+          <p className="mt-14 text-xl font-semibold text-gray-800">
+            Evaluating your results. Please wait...!
+          </p>
+        </div>
+      )}
+      
       <div className="max-w-full px-4 pb-4 md:mx-20 lg:mx-36">
         <h2 className="text-xl md:text-2xl font-bold mt-8 text-center">Your Initial Assessment</h2>
         <div className="flex flex-col sm:flex-row items-center mt-4 md:mt-8 gap-4 md:gap-16">
@@ -141,7 +159,7 @@ const Assessment = () => {
                   index <= currentStep ? "bg-green-500 border-green-500" : "border-gray-400 bg-white"
                 }`}
               >
-                {index <= currentStep && <IoCheckmarkOutline className="text-white text-lg sm:text-2xl" />}
+                {index <= currentStep ? <IoCheckmarkOutline className="text-white text-lg sm:text-2xl" /> : <RxCross1 className="text-white text-lg sm:text-2xl"/>}
               </div>
             ))}
           </div>
@@ -179,21 +197,34 @@ const Assessment = () => {
             ))}
           </div>
         </div>
-        <div className="flex justify-end sm:gap-5 mt-4 md:mt-8">
+        <div className="flex justify-between gap-2 sm:gap-5 mt-4 md:mt-8">
+        <button
+            className="bg-red-500 p-2 rounded-md cursor-pointer text-base sm:text-lg font-semibold w-[120px] sm:w-[150px] shadow-md mb-2 text-black"
+            onClick={handleBack}
+            disabled={currentStep === 0}
+          >
+            BACK
+          </button>
           {currentStep === questions.length - 1 ? (
             <button
-              className="bg-green-500 p-2 rounded-md cursor-pointer text-base sm:text-lg font-semibold w-[120px] sm:w-[150px] shadow-md mb-2 text-white"
+            className={`p-2 rounded-md cursor-pointer text-base sm:text-lg font-semibold w-[120px] sm:w-[150px] shadow-md mb-2 ${
+              isNextDisabled ? 'bg-gray-400 text-white hover:cursor-not-allowed' : 'bg-green-500'
+            }`}
               onClick={handleSubmitAssessment}
+              disabled={isSubmitting}
             >
-              SUBMIT
+              {isSubmitting ? <SpinningLoader /> : " SUBMIT" }
             </button>
           ) : (
             <button
-              className="bg-[#F7D232] p-2 rounded-md cursor-pointer text-base sm:text-lg font-semibold w-[120px] sm:w-[150px] shadow-md mb-2"
-              onClick={handleNext}
-            >
-              NEXT
-            </button>
+            className={`p-2 rounded-md cursor-pointer text-base sm:text-lg font-semibold w-[120px] sm:w-[150px] shadow-md mb-2 ${
+              isNextDisabled ? 'bg-gray-400 text-white hover:cursor-not-allowed' : 'bg-[#F7D232]'
+            }`}
+            onClick={handleNext}
+            disabled={isNextDisabled}
+          >
+            NEXT
+          </button>
           )}
         </div>
       </div>

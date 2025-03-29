@@ -5,7 +5,9 @@ import Signup from './pages/auth/Signup';
 import Login from './pages/auth/Login';
 import WelcomePage from './pages/WelcomePage';
 import Assessment from './pages/Assessment';
+import AssessmentResults from './pages/AssessmentResults';
 import Home from './pages/Home/Home';
+import Programs from './pages/Home/Programs';
 import ProfilePage from './pages/Profile';
 import Courses from './pages/Courses/Courses';
 import Lessons from './pages/Courses/Lessons/Lessons';
@@ -31,11 +33,13 @@ function App() {
         <Route path="/register" element={<Signup />} />
         <Route path="/welcome" element={<WelcomePage />} />
         <Route path="/home" element={<Home />} />
+        <Route path="/courses" element={<Programs />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/courses/:category" element={<Courses />} />
         <Route path="/course/:courseTitle/:id" element={<Lessons />} />
         <Route path="/lesson/:lessonTitle/:lessonId"element={<LessonDetails />}/>
         <Route path="/assessment" element={<Assessment />} />
+        <Route path="/assessment-results" element={<AssessmentResults />} />
         <Route path="/login" element={<Login />} />
         <Route path="/games" element={<GamesLayout />}>
           <Route index element={<GameHome />} />
