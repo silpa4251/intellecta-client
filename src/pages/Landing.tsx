@@ -65,12 +65,12 @@ const Landing: React.FC = () => {
     <>
     <Navbar/>
     {/* landing page - 1 */}
-    <div id="home" className="w-full h-screen flex items-center justify-center sm:justify-items-start text-white bg-overlay bg-[#081a37] md:px-36 flex-wrap px-5 md:flex-nowrap">
+    <div id="home" className="w-full h-screen flex flex-wrap-reverse md:flex-nowrap items-center justify-center text-white bg-overlay bg-[#081a37] px-5 md:px-36">
       {/* Content */}
-      <div className="text-start sm:text-left ">
+      <div className="text-center sm:text-left md:mb-16">
           <BlurText 
           text="Unlock Your Potential with AI Learning"
-          className="text-3xl   sm:text-5xl font-bold mb-4" 
+          className="text-3xl justify-center md:justify-start sm:text-5xl font-bold mb-6 flex" 
           />
           <p className="text-lg sm:text-xl mb-6 max-w-2xl">
           Join Intellecta and experience AI-driven, personalized learning
@@ -91,17 +91,15 @@ const Landing: React.FC = () => {
         </div>
       </div>
       {/* image section */}
-      <div className=" mb-10">
-        <div className="w-full h-[400px] md:w-[500px] md:h-[600px] flex justify-end items-end ">
+        <div className="w-full h-[400px] md:w-[500px] md:h-[600px] flex justify-end items-center mb-8 md:mb-36">
         <img src={LandingImage} alt="load" className="w-full h-full object-cover" />
         </div>
-      </div>
     </div>
 
       {/* landing page - else */}
     <div id="works" className="bg-[#0B1A36] py-20 text-white text-center bg-gradient-to-b from-[#081A37] to-[#3A6073] ">
       {/* Section Title */}
-      <div className="h-[600px]   py-10  md:px-36  px-5 ">
+      <div className="h-[600px] py-5 md:px-36 px-5 ">
         <div className="mb-6  ">
           <div className="inline-block px-4 py-1 bg-white text-black rounded-lg font-semibold shadow-2xl">
           ⚙️ How It Works
@@ -146,7 +144,7 @@ const Landing: React.FC = () => {
       </div>
       {/* sliding-end */}
 
-      <div id="about" className="relative text-white py-20 px-6 md:px-16 lg:px-24">
+      <div id="about" className="relative text-white py-24 px-6 md:px-16 lg:px-24">
         {/* About Us */}
         <div className="mb-6">
           <div className="inline-block px-4 py-1 bg-white text-black rounded-lg font-semibold shadow-2xl">
@@ -209,7 +207,7 @@ const Landing: React.FC = () => {
 
             {/* Foreground Image (Above the Blob) */}
             <img
-              src={studentImage2} // Replace with the actual image
+              src={studentImage2} 
               alt="Happy Student"
               className="absolute top-1/2 left-1/2 transform -translate-x-[120px] -translate-y-[130px] -rotate-12 w-[225px] h-[225px] object-cover rounded-lg"
             />
@@ -261,7 +259,7 @@ const Landing: React.FC = () => {
 
             {/* Foreground Image (Above the Blob) */}
             <img
-              src={studentImage3} // Replace with the actual image
+              src={studentImage3}
               alt="Happy Student"
               className="absolute top-1/2 left-1/2 transform -translate-x-[120px] -translate-y-[130px] -rotate-12 w-[225px] h-[225px] object-cover rounded-lg"
             />
@@ -275,7 +273,7 @@ const Landing: React.FC = () => {
         <div className="hidden lg:block absolute right-56 bottom-32 w-10 h-10 border-2 border-yellow-300 rotate-45 animate-spin"></div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-6 flex flex-wrap justify-center gap-8">
+      <div className="max-w-6xl mx-auto px-6 flex flex-wrap justify-center gap-4 md:gap-8">
         
         {/* Card 1 */}
         <div className="w-40 h-40 bg-[#FFFFC1] rounded-lg flex flex-col justify-center items-center shadow-lg">
@@ -317,7 +315,7 @@ const Landing: React.FC = () => {
         </div>
 
         {/* Testimonials Container */}
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 px-4">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 px-4">
         
         {/* Testimonial 1 */}
         <div className="relative p-6 bg-white rounded-lg shadow-lg pt-10 pb-10">

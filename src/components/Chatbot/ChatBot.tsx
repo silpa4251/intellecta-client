@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
 import { motion } from "framer-motion";
 import { SendHorizonal, X } from "lucide-react";
@@ -40,13 +40,9 @@ const ChatBot = () => {
     socket.emit("message", input);
   };
 
-  if (
-    location.pathname === "/login" ||
-    location.pathname === "/register" ||
-    location.pathname.includes("game") ||
-    location.pathname === "/"
-  ) {
-    return <></>;
+  
+  if(location.pathname === "/login" || location.pathname === "/register" || location.pathname === "/" || location.pathname === "/profile" || location.pathname === "/assessment" || location.pathname.includes("game")){
+    return <></>
   }
 
   return (
