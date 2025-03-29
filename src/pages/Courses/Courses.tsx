@@ -3,7 +3,6 @@ import WcNavbar from "../../components/Navbar/NavbarWelcome";
 import CourseSidebar from "./CourseSidebar";
 import { VscSettings } from "react-icons/vsc";
 
-import { CiHeart } from "react-icons/ci";
 import { useState } from "react";
 import { courses } from "../../data";
 
