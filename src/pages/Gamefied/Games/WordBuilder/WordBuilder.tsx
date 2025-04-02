@@ -4,7 +4,8 @@ import { toast } from "react-toastify";
 import { IoMdClose } from "react-icons/io";
 import { Link } from "react-router-dom";
 
-const words = ["apple", "banana", "cherry", "orange", "grape", "mango"];
+const words = ["apple", "banana", "cherry", "orange", "grape", "mango", "strawberry", "pineapple", "blueberry", "watermelon", "peach", "kiwi", "papaya", "pomegranate", "pear", "blackberry", "raspberry", "coconut", "fig", "guava"];
+
 
 const shuffleWord = (word: string) => {
   return word
@@ -28,30 +29,28 @@ export default function WordBuilder() {
   }, []);
 
   const newRound = () => {
-    if (round > 10) {
-      setGameOver(true);
-      return;
-    }
-    const word = words[Math.floor(Math.random() * words.length)];
-    setCurrentWord(word);
-    setShuffledWord(shuffleWord(word));
-    setInput("");
-    setMessage("");
+    setRound((prevRound) => {
+      if (prevRound >= 10) { 
+        setGameOver(true);
+        return prevRound;
+      }
+      const word = words[Math.floor(Math.random() * words.length)];
+      setCurrentWord(word);
+      setShuffledWord(shuffleWord(word));
+      setInput("");
+      setMessage("");
+      return prevRound;
+    });
   };
-
+  
   const checkAnswer = () => {
     if(input === "") return
-    if (input.toLowerCase() === currentWord.toLowerCase() && input !== "") {
-      toast.success("Correct",{
-        position: "bottom-center",
-        autoClose:1000
-      })
+    if (input.toLowerCase() === currentWord.toLowerCase()) {
+      setMessage("Correct")
       setScore((prev) => Math.max(0, prev + 10));
     } else {
-        toast.error("Incorrect",{
-            position: "bottom-center",
-            autoClose:1000
-          })
+      setMessage("Incorrect")
+
       setScore((prev) => Math.max(0, prev - 5));
     }
     setRound((prev) => prev + 1);
@@ -118,7 +117,7 @@ export default function WordBuilder() {
           {/* Message Feedback */}
           <p
             className={`mt-6 text-3xl font-bold ${
-              message.includes("✅") ? "text-green-400" : "text-red-500"
+              message.includes("Correct") ? "text-green-400" : "text-red-500"
             } drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]`}
           >
             {message}

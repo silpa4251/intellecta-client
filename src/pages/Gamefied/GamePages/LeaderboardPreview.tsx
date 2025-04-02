@@ -40,8 +40,8 @@ const LeaderboardPreview: React.FC<LeaderboardProps> = ({leaderboard}) => {
         <div className="flex-grow h-px bg-white/30"></div>
       </div>
 
-      <div className="mt-10  bg-[#0f1f4c]  p-5 rounded-xl shadow-lg">
-        <table className="w-full text-sm text-white/90 table-auto">
+      <div className="mt-10 w-full overflow-x-auto bg-[#0f1f4c] p-5 rounded-xl shadow-lg">
+        <table className="w-[200%] md:w-full text-sm text-white/90 table-auto">
           <thead>
             <tr className="border-b border-white/20">
               <th className="pb-3 text-left w-1/12">Rank</th>
@@ -75,15 +75,15 @@ const LeaderboardPreview: React.FC<LeaderboardProps> = ({leaderboard}) => {
             ))}
           </tbody>
         </table>
-        <div className="mt-6 flex justify-end">
+      </div>
+        <div className="md:mt-6 mt-2 flex justify-end">
           <Link
             to="/games/leaderboard"
-            className="text-indigo-400 hover:text-indigo-300 transition font-medium"
+            className="text-indigo-400 hover:text-indigo-300 transition font-medium text-sm"
           >
             View Full Leaderboard &rarr;
           </Link>
         </div>
-      </div>
     </div>
   );
 };

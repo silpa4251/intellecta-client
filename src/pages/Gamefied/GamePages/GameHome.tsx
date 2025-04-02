@@ -12,6 +12,7 @@ const GameHome = () => {
   const { games, leaderboard, showPlayNow, setShowPlayNow } = useGameStore();
   const { user } = useAuthStore();
   const navigate = useNavigate();
+  
   const { data: recentgame } = useQuery({
     queryKey: ["recentgame"],
     queryFn: async () => {
@@ -32,8 +33,8 @@ const GameHome = () => {
 
   return (
     <>
-      <div className="p-5 mx-28">
-        <div className="flex justify-between  mt-10">
+      <div className="p-5 md:mx-28">
+        <div className="flex flex-col md:flex-row md:justify-between  mt-10">
           <div className="max-w-md space-y-3">
             <h3 className="text-violet-800 text-lg font-bold">
               EXPLORE OUR GAMES
@@ -60,17 +61,17 @@ const GameHome = () => {
             <img
               src={GameController}
               alt="Game Controller"
-              className="max-w-xl relative bottom-16 transition-transform duration-700  ease-in-out hover:rotate-12 hover:scale-90"
+              className="hidden md:block max-w-xl relative bottom-16 transition-transform duration-700  ease-in-out hover:rotate-12 hover:scale-90"
             />
           </div>
         </div>
         {recentgame && (
           <div>
-            <h2 className="text-white text-lg font-medium mb-4">
+            <h2 className="md:mt-0 mt-8 text-white text-lg font-medium mb-4">
               Recently Played
             </h2>
             <div>
-              <div className="absolute mt-10 ml-10 z-10 space-y-2">
+              <div className="absolute mt-10 md:ml-10 ml-3 z-10 space-y-2">
                 <h1 className="text-3xl text-white font-semibold">Let's Go</h1>
                 <p className="text-white">
                   Hope you had fun! Ready for another round?
@@ -111,7 +112,7 @@ const GameHome = () => {
             <p className="text-white mr-2 cursor-pointer">view all</p>
           </div>
           <div className="">
-            <div className="grid grid-cols-3 gap-8">
+            <div className="grid grid-cols-2 md:grid-cols-3 md:gap-8 gap-5">
               {games?.map((item) => (
                 <div onClick={() => startGame(item.slug)}>
                   <img
