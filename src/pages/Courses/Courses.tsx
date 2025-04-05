@@ -23,13 +23,13 @@ const Courses = () => {
     }
   }
   const { category } = useParams();
-console.log("object", category);
+  console.log("object", category);
 
-const fetchCourses = async () =>{
+  const fetchCourses = async () =>{
   const response = await axios.get(`http://localhost:5005/api/courses/subject/${category}`);
   console.log("fetch courses", response.data.data);
   return response.data.data;
-}
+  }
 
   const { data: courses=[], isLoading, error } = useQuery<Course[]>({
     queryKey: ['courses', category],
@@ -96,8 +96,8 @@ const fetchCourses = async () =>{
                   />
                 </Link>
 
-                <div className="p-4 space-y-3">
-                  <h2 className="text-lg font-semibold text-gray-900">
+                <div className="p-4 space-y-2">
+                  <h2 className="text-base text-center font-semibold text-gray-900">
                     {item.title}
                   </h2>
                   <p className="text-gray-700 text-sm line-clamp-2">
