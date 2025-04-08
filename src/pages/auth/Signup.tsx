@@ -195,7 +195,7 @@ const Signup = () => {
                   localStorage.setItem("loggedInUser", JSON.stringify(user));
                   localStorage.setItem("secretToken", JSON.stringify(user.token));
                   localStorage.setItem("role", "User");
-                  navigate("/home");
+                  navigate("/welcome");
                 }}
                 onError={() => console.log("Login Failed")}
                 theme="outline"   

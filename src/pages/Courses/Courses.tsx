@@ -1,10 +1,18 @@
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import WcNavbar from "../../components/Navbar/NavbarWelcome";
 import CourseSidebar from "./CourseSidebar";
 import { VscSettings } from "react-icons/vsc";
-
 import { useState } from "react";
-import { courses } from "../../data";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import SpinningLoader from "../../components/Loaders/SpinningLoader";
+
+
+interface Course {
+  _id: string;
+  title: string;
+  description: string;
+}
 
 const Courses = () => {
   const [showsidebar, setShowsidebar] = useState(false)
@@ -13,6 +21,37 @@ const Courses = () => {
     if(showsidebar){
       setShowsidebar(false)
     }
+  }
+  const { category } = useParams();
+  console.log("object", category);
+
+  const fetchCourses = async () =>{
+  const response = await axios.get(`http://localhost:5005/api/courses/subject/${category}`);
+  console.log("fetch courses", response.data.data);
+  return response.data.data;
+  }
+
+  const { data: courses=[], isLoading, error } = useQuery<Course[]>({
+    queryKey: ['courses', category],
+    queryFn: fetchCourses,
+    enabled: !!category
+  });
+
+  if (isLoading) {
+    return (
+      <div className="fixed inset-0 bg-white bg-opacity-90 flex flex-col justify-center items-center z-50">
+      <SpinningLoader />
+      <p className="mt-14 text-xl font-semibold text-gray-800">Loading your Courses. Please wait...!</p>
+    </div>     
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p>Error loading courses: {error.message}</p>
+      </div>
+    );
   }
 
   return (
@@ -24,7 +63,7 @@ const Courses = () => {
           <div className="flex justify-between items-center ">
             <div>
               <h2 className="text-2xl font-bold tracking-wide">Courses</h2>
-              <p className="text-gray-600">Showing 10 of 25 results</p>
+              {/* <p className="text-gray-600">Showing 10 of 25 results</p> */}
             </div>
             <div className="flex items-center space-x-4">
               <input
@@ -43,7 +82,7 @@ const Courses = () => {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
-            {courses.map((item) => (
+            {courses.map((item:Course ) => (
               <div
                 key={item._id}
                 className="relative flex flex-col w-full max-w-xs bg-white/10 backdrop-blur-lg rounded-2xl overflow-hidden border border-gray-200 shadow-md hover:shadow-lg transition-shadow duration-300 hover:shadow-blue-400/40"
@@ -57,24 +96,15 @@ const Courses = () => {
                   />
                 </Link>
 
-                <div className="p-4 space-y-3">
-                  <h2 className="text-lg font-semibold text-gray-900">
+                <div className="p-4 space-y-2">
+                  <h2 className="text-base text-center font-semibold text-gray-900">
                     {item.title}
                   </h2>
                   <p className="text-gray-700 text-sm line-clamp-2">
                     {item.description}
                   </p>
 
-                  <div className="flex items-center gap-2 mt-2">
-                    <img
-                      src={"/home-bg.png"}
-                      alt={item.author?.authorName}
-                      className="rounded-full h-8 w-8 border border-white/40 object-cover"
-                    />
-                    <span className="text-gray-800 text-sm">
-                      By {item.author?.authorName}
-                    </span>
-                  </div>
+
                   <div className="flex justify-between items-center mt-4">
                     <Link to={`/course/${item.title.replace(/\s+/g, "-")}/${item._id}`} className="w-[100%]">
                       <button className="w-full cursor-pointer px-4 py-2 text-sm font-medium text-white bg-violet-600 hover:bg-violet-700 rounded-lg ">

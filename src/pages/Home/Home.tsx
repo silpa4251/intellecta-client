@@ -100,7 +100,7 @@ const Home = () => {
   return (
     <div>
       <WcNavbar />
-      <div className="flex flex-col lg:flex-row justify-center items-center mx-4 sm:mx-8 md:mx-16 lg:mx-32 sm:mt-12 lg:mt-16 gap-8 h-auto">
+      <div className="flex flex-col lg:flex-row justify-center items-center mx-4 sm:mx-8 md:mx-16 lg:mx-32 sm:mt-12 lg:mt-24 gap-8 h-auto">
         
         {/* Left Section */}
         <div className="flex flex-col-reverse lg:flex-row items-center justify-center lg:gap-8 lg:w-2/3 ">

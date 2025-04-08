@@ -15,15 +15,17 @@ export type QuizQuestion = {
     answer: string;
   };
   
-  export type Lesson = {
-    id: string;
-    courseId: string;
+  export interface Lesson {
+    _id: string;
     title: string;
-    unlocked: boolean;
-    completed: boolean;
-    duration: number;
-    quiz: QuizQuestion[];
-  };
+    type: "video" | "article" | "quiz" | "exercise"; 
+    url?: string; 
+    content: string;
+    duration?: number; 
+    tags: string[];
+    resources?: string[];
+    completed?: boolean;
+  }
 
   export type Course = {
     _id: string;
