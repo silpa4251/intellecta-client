@@ -22,6 +22,12 @@ import GamesLayout from './pages/Gamefied/GameLayout';
 import ChatBot from "./components/Chatbot/ChatBot";
 import GeographyQuiz from './pages/Gamefied/Games/GeographyQuiz/GeographyQuiz';
 import WordBuilder from './pages/Gamefied/Games/WordBuilder/WordBuilder';
+import AdminLayout from './pages/admin/AdminLayout';
+import Admindashboard from './pages/admin/Admindashboard';
+import AdminStudents from './pages/admin/AdminStudents';
+import AdminTeachers from './pages/admin/AdminTeachers';
+import AdminCoursesPage from './pages/admin/AdminCourses';
+import AddCourse from './pages/admin/AddCourse';
 
 
 function App() {
@@ -50,6 +56,13 @@ function App() {
           <Route path="word_builder" element={<WordBuilder />} />
           <Route path="tic_tac_toe" element={<TicTacToe />} />
           <Route path="geography_quiz" element={<GeographyQuiz />} />
+        </Route>
+        <Route path='/admin' element={<AdminLayout/>}>
+          <Route index element={<Admindashboard/>}/>
+          <Route path="students" element={<AdminStudents/>}/>
+          <Route path="teachers" element={<AdminTeachers/>}/>
+          <Route path="courses" element={<AdminCoursesPage/>}/>
+          <Route path="addCourse" element={<AddCourse/>}/>
         </Route>
       </Routes>
     </>
