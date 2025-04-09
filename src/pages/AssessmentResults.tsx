@@ -90,7 +90,7 @@ const AssessmentResults: React.FC = () => {
               <ul className="text-gray-700 list-decimal list-inside">
                 {aiResponse.learningPaths.map((path: any, index: number) => (
                   <li key={index} className="mt-2">
-                    <span className="font-semibold text-blue-600">{path.subject}</span> - {path.learningGoals}
+                    <span className="font-semibold text-blue-600">{path.subject}</span> - {path.learningGoals[0]}
                   </li>
                 ))}
               </ul>

@@ -23,10 +23,10 @@ const CourseSidebar : React.FC<CourseSidebarProps> = ({ onClose, showsidebar }) 
           exit={{ x: "100%" }}
           transition={{ duration: 0.5, ease: "easeInOut" }}
           onClick={(e)=> e.stopPropagation()}
-          className="absolute top-[72px] right-0 z-50 min-h-screen w-80 bg-white shadow-xl border-l border-gray-200 p-6 rounded-l-2xl  backdrop-blur-lg"
+          className="absolute top-[72px] right-0 z-50 min-h-screen w-64 bg-white shadow-xl border-l border-gray-200 p-5 backdrop-blur-lg"
         >
-          <div className="flex justify-between items-center border-b border-gray-200 pb-4">
-            <h3 className="text-xl font-semibold tracking-wide text-gray-800">
+          <div className="flex justify-between items-center border-b border-gray-200 pb-3">
+            <h3 className="text-lg font-semibold tracking-wide text-gray-800">
               Filters
             </h3>
             <button
@@ -37,8 +37,8 @@ const CourseSidebar : React.FC<CourseSidebarProps> = ({ onClose, showsidebar }) 
             </button>
           </div>
 
-          <div className="mt-6 space-y-6">
-            <div>
+          <div className="mt-3 space-y-2">
+            {/* <div> */}
               <div
                 className="flex justify-between items-center cursor-pointer px-2 py-2 rounded-lg hover:bg-gray-100 transition-all duration-200"
                 onClick={() => setShowSkillLevel(!showSkillLevel)}
@@ -56,26 +56,26 @@ const CourseSidebar : React.FC<CourseSidebarProps> = ({ onClose, showsidebar }) 
               </div>
 
               {showSkillLevel && (
-                <div className="flex flex-col space-y-2 pl-4 pt-3">
+                <div className="flex flex-col space-y-2 p-2">
                   {["Easy", "Intermediate", "Difficult"].map((level) => (
                     <label
                       key={level}
-                      className="flex items-center space-x-3 cursor-pointer group"
+                      className="flex items-center space-x-2 cursor-pointer group"
                     >
                       <input
                         type="checkbox"
                         className="h-4 w-4 rounded border-gray-300 text-cyan-600 focus:ring-cyan-500 transition-all"
                       />
-                      <span className="text-gray-700 group-hover:text-cyan-600 transition-colors">
+                      <span className="text-black text-sm group-hover:text-cyan-600 transition-colors">
                         {level}
                       </span>
                     </label>
                   ))}
                 </div>
               )}
-            </div>
+            {/* </div> */}
 
-            <div>
+            {/* <div className="bg-amber-950"> */}
               <div
                 className="flex justify-between items-center cursor-pointer px-2 py-2 rounded-lg hover:bg-gray-100 transition-all duration-200"
                 onClick={() => setShowDuration(!showDuration)}
@@ -93,26 +93,26 @@ const CourseSidebar : React.FC<CourseSidebarProps> = ({ onClose, showsidebar }) 
               </div>
 
               {showDuration && (
-                <div className="flex flex-col space-y-2 pl-4 pt-3">
+                <div className="flex flex-col space-y-2 p-2">
                   {["1 hour", "2 hours", "3 hours"].map((time) => (
                     <label
                       key={time}
-                      className="flex items-center space-x-3 cursor-pointer group"
+                      className="flex items-center space-x-2 cursor-pointer group"
                     >
                       <input
                         type="checkbox"
                         className="h-4 w-4 rounded border-gray-300 text-cyan-600 focus:ring-cyan-500 transition-all"
                       />
-                      <span className="text-gray-700 group-hover:text-cyan-600 transition-colors">
+                      <span className="text-black text-sm group-hover:text-cyan-600 transition-colors">
                         {time}
                       </span>
                     </label>
                   ))}
                 </div>
               )}
-            </div>
+            {/* </div> */}
 
-            <div>
+            {/* <div> */}
               <div
                 className="flex justify-between items-center cursor-pointer px-2 py-2 rounded-lg hover:bg-gray-100 transition-all duration-200"
                 onClick={() => setShowProgressStatus(!showProgressStatus)}
@@ -130,24 +130,24 @@ const CourseSidebar : React.FC<CourseSidebarProps> = ({ onClose, showsidebar }) 
               </div>
 
               {showProgressStatus && (
-                <div className="flex flex-col space-y-2 pl-4 pt-3">
+                <div className="flex flex-col space-y-2 p-2">
                   {["Grade 1", "Grade 2", "Grade 3"].map((grade) => (
                     <label
                       key={grade}
-                      className="flex items-center space-x-3 cursor-pointer group"
+                      className="flex items-center space-x-2 cursor-pointer group"
                     >
                       <input
                         type="checkbox"
                         className="h-4 w-4 rounded border-gray-300 text-cyan-600 focus:ring-cyan-500 transition-all"
                       />
-                      <span className="text-gray-700 group-hover:text-cyan-600 transition-colors">
+                      <span className="text-black text-sm group-hover:text-cyan-600 transition-colors">
                         {grade}
                       </span>
                     </label>
                   ))}
                 </div>
               )}
-            </div>
+            {/* </div> */}
           </div>
         </motion.div>
       )}

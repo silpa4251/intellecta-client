@@ -1,6 +1,6 @@
 import { Outlet, useNavigate } from "react-router-dom";
 import { IoIosNotifications } from "react-icons/io";
-import GameSidebar from "./GamePages/GameSidebar";
+// import GameSidebar from "./GamePages/GameSidebar";
 import { useEffect, useState } from "react";
 import { useGameStore } from "../../store/useGameStore";
 import { useAuthStore } from "../../store/useAuthStore";
@@ -8,11 +8,12 @@ import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "../../utils/axiosInstance";
 import { userEndPoints } from "../../api/endPoints/userEndPoints";
 import axios from "axios";
+import DockLid from "./gameNav/DockLid";
 
 const GamesLayout = () => {
   const { fetchGames, fetchLeaderboard, games } = useGameStore();
   const { setUser, user } = useAuthStore();
-  const navigate= useNavigate()
+  const navigate = useNavigate()
 
   useQuery({
     queryKey: ["user"],
@@ -114,10 +115,14 @@ const GamesLayout = () => {
       </nav>
 
       <div className="flex">
-        <GameSidebar />
+        {/* <GameSidebar /> */}
         <div className="w-full ml-20 min-h-full ">
           <Outlet />
         </div>
+      </div>
+      <div className="w-full  flex justify-center ">
+        {/* <GameEyeLid /> */}
+        <DockLid />
       </div>
     </div>
   );
