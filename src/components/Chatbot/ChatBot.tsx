@@ -41,7 +41,7 @@ const ChatBot = () => {
   };
 
   
-  if(location.pathname === "/login" || location.pathname === "/register" || location.pathname === "/" || location.pathname === "/profile" || location.pathname === "/assessment" || location.pathname === "/assessment-results" || location.pathname.includes("game")){
+  if(location.pathname === "/login" || location.pathname === "/register" || location.pathname === "/" || location.pathname === "/profile" || location.pathname === "/assessment" || location.pathname === "/assessment-results" || location.pathname.includes("game") ||location.pathname.includes("/admin")){
     return <></>
   }
 
