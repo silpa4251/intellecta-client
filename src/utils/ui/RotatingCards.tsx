@@ -1,6 +1,13 @@
 import styled from "styled-components";
 
-const RotatingCard = ({ badge, badges }) => {
+interface RotatingCardProps {
+  badge:string,
+  badges: {
+    trophysrc:string
+  }
+}
+
+const RotatingCard :React.FC<RotatingCardProps> = ({ badge, badges }) => {
   return (
     <StyledWrapper>
       <div className="e-card playing">

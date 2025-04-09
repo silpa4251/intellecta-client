@@ -168,15 +168,15 @@ const Assessment = () => {
         <div className="shadow-lg border px-5 pb-5 rounded-xl mt-4 md:mt-10">
           <h2 className="font-bold text-lg sm:text-2xl md:p-2">Q.{currentStep + 1}</h2>
           <div className="flex justify-center flex-col items-center">
-            <h3 className="font-semibold text-base sm:text-lg mt-3 md:mt-0">
+            <h3 className="font-semibold text-base sm:text-xl mt-3 md:mt-0">
               {questions[currentStep].text}
             </h3>
           </div>
-          <div className="flex flex-wrap max-w-full md:max-w-3xl justify-center mx-auto items-center gap-4 md:gap-5 mt-5">
+          <div className="flex flex-wrap max-w-full md:max-w-4xl justify-center mx-auto items-center gap-4 md:gap-5 mt-5">
             {questions[currentStep].options.map((option, index) => (
               <div
                 key={index}
-                className={`w-full sm:w-[300px] flex justify-between items-center border px-2 py-3 rounded-md shadow-md cursor-pointer ${
+                className={`w-full sm:w-[400px] flex justify-between items-center border px-2 py-3 rounded-md shadow-md cursor-pointer ${
                   selectedAnswers[questions[currentStep]._id] === option 
                     ? 'border-green-500 bg-green-50' 
                     : 'border-gray-400'
