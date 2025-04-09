@@ -22,6 +22,7 @@ import GamesLayout from './pages/Gamefied/GameLayout';
 import ChatBot from "./components/Chatbot/ChatBot";
 import GeographyQuiz from './pages/Gamefied/Games/GeographyQuiz/GeographyQuiz';
 import WordBuilder from './pages/Gamefied/Games/WordBuilder/WordBuilder';
+import  NumberNinja  from './pages/Gamefied/Games/NumberNinja/NumberNija';
 
 function App() {
   return (
@@ -52,6 +53,7 @@ function App() {
           <Route path="word_builder" element={<WordBuilder />} />
           <Route path="tic_tac_toe" element={<TicTacToe />} />
           <Route path="geography_quiz" element={<GeographyQuiz />} />
+          <Route path="number_ninja" element={<NumberNinja />} />
         </Route>
       </Routes>
     </>

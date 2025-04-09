@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useAuthStore } from "../../../../store/useAuthStore";
-import { toast } from "react-toastify";
 import SpinningLoader from "../../../../components/Loaders/SpinningLoader";
 import { Link } from "react-router-dom";
 import { IoMdClose } from "react-icons/io";
+import { useGameStore } from "../../../../store/useGameStore";
 
 interface Question {
   question: string;
@@ -22,6 +22,7 @@ export default function GeographyQuiz() {
   const [quizFinished, setQuizFinished] = useState(false);
   const [startTime, setStartTime] = useState<number | null>(null);
   const { user } = useAuthStore();
+  const { submitGameSession } = useGameStore();
 
   const { data, refetch, isLoading, isFetching } = useQuery({
     queryKey: ["fetchGeographyQuestion"],
@@ -58,7 +59,12 @@ export default function GeographyQuiz() {
       const timeTaken = startTime
         ? Math.floor((Date.now() - startTime) / 1000)
         : 0;
-      awardMutate({ points: score, timeTaken });
+         submitGameSession({
+          userId: user?._id || "",
+          gameSlug: "word_builder",
+          score: score * 10,
+          timeTaken,
+        });
       setStartTime(null);
       setTimeout(() => {
         setScore(0);
@@ -92,33 +98,6 @@ export default function GeographyQuiz() {
     }, 1000);
   };
 
-  const { mutate: awardMutate } = useMutation({
-    mutationFn: async ({
-      points,
-      timeTaken,
-    }: {
-      points: number;
-      timeTaken: number;
-    }) => {
-      const res = await axios.post(
-        `http://localhost:5002/api/games/game-session`,
-        {
-          userId: user?._id,
-          gameSlug: "geography_quiz",
-          score: points,
-          timeTaken,
-          completed: true,
-        },
-        {
-          withCredentials: true,
-        }
-      );
-      return res.data;
-    },
-    onSuccess: () => {
-      toast.success("Score updated successfully");
-    },
-  });
 
   return (
     <div className="absolute left-0 top-0 w-screen min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white p-4">

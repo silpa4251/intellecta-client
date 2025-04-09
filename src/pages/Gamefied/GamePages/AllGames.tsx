@@ -1,15 +1,18 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useGameStore } from "../../../store/useGameStore";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import GameFooter from "./GameFooter";
 import PlayNow from "../Games/PlayNow";
+import { showToast } from "./GameHome";
+import { useAuthStore } from "../../../store/useAuthStore";
 
 const AllGames = () => {
   const [currentGameIndex, setCurrentGameIndex] = useState(0);
   const [progress, setProgress] = useState(0);
-  const { games ,showPlayNow,setShowPlayNow} = useGameStore();
-  const navigate = useNavigate()
+  const { games, showPlayNow, setShowPlayNow } = useGameStore();
+  const navigate = useNavigate();
+  const { user } = useAuthStore();
 
   useEffect(() => {
     const progressInterval = setInterval(() => {
@@ -39,13 +42,17 @@ const AllGames = () => {
     setProgress(0);
   };
 
-  const startGame =(slug: string)=> {
+  const startGame = (slug: string) => {
+    if (!user) {
+      showToast();
+      return;
+    }
     setShowPlayNow(true);
     setTimeout(() => {
-      navigate(`/games/${slug}/`);
       setShowPlayNow(false);
+      navigate(`/games/${slug}/`);
     }, 2000);
-  }
+  };
 
   return (
     <>
@@ -59,26 +66,35 @@ const AllGames = () => {
             transition={{ duration: 0.5, ease: "easeInOut" }}
             className="w-[100%]"
           >
-          <Link to={`/games/${games[currentGameIndex]?.slug}`}>
-            <div className="z-10 absolute md:mt-24 mt-5 md:ml-5 md:max-w-sm max-w-[280px] p-5 space-y-5 text-white  rounded-xl">
+            <div
+              onClick={() => {
+                if (!user) {
+                  showToast();
+                } else {
+                  navigate(`/games/${games[currentGameIndex]?.slug}`);
+                }
+              }}
+              className="z-10 absolute md:mt-24 mt-5 md:ml-5 md:max-w-sm max-w-[280px] p-5 space-y-5 text-white  rounded-xl"
+            >
               <h2 className="text-4xl font-semibold">
                 {games[currentGameIndex]?.name}
               </h2>
-              <p className="text-sm font-medium">{games[currentGameIndex]?.description}</p>
-                <button className="bg-white text-black font-medium cursor-pointer py-2 px-8 rounded-xl shadow-lg transition-transform hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                  Play Now
-                </button>
+              <p className="text-sm font-medium">
+                {games[currentGameIndex]?.description}
+              </p>
+              <button className="bg-white text-black font-medium cursor-pointer py-2 px-8 rounded-xl shadow-lg transition-transform hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                Play Now
+              </button>
             </div>
             <img
               src={games[currentGameIndex]?.thumbnailImg}
               alt={`Game ${games[currentGameIndex]?.name}`}
               className="h-full w-full object-cover rounded-2xl opacity-50 md:opacity-70 z-0 transition-all duration-700 shadow-[0_2.8px_2.2px_rgba(0,_0,_0,_0.034),_0_6.7px_5.3px_rgba(0,_0,_0,_0.048),_0_12.5px_10px_rgba(0,_0,_0,_0.06),_0_22.3px_17.9px_rgba(0,_0,_0,_0.072),_0_41.8px_33.4px_rgba(0,_0,_0,_0.086),_0_100px_80px_rgba(0,_0,_0,_0.12)]"
-              />
-              </Link>
+            />
           </motion.div>
 
           <div className="w-[30%] flex flex-col gap-0  rounded-2xl">
-            {games?.slice(0, 5).map((item, index) => (
+            {games?.slice(0, 4).map((item, index) => (
               <div
                 onClick={() => handleDotClick(index)}
                 className={`${
@@ -99,7 +115,9 @@ const AllGames = () => {
                   alt="Game "
                   className="md:h-[65px] h-14 w-24 object-cover rounded-2xl hover:scale-105 transition duration-200 cursor-pointer shadow-[0_2.8px_2.2px_rgba(0,_0,_0,_0.034),_0_6.7px_5.3px_rgba(0,_0,_0,_0.048),_0_12.5px_10px_rgba(0,_0,_0,_0.06),_0_22.3px_17.9px_rgba(0,_0,_0,_0.072),_0_41.8px_33.4px_rgba(0,_0,_0,_0.086),_0_100px_80px_rgba(0,_0,_0,_0.12)]"
                 />
-                <h2 className="hidden md:block text-white text-lg">{item.name}</h2>
+                <h2 className="hidden md:block text-white text-lg">
+                  {item.name}
+                </h2>
               </div>
             ))}
           </div>
@@ -110,10 +128,10 @@ const AllGames = () => {
           </h2>
           <div className="grid md:grid-cols-3 grid-cols-2 md:gap-8 gap-4">
             {games?.map((item) => (
-              <div onClick={()=> startGame(item.slug)}>
+              <div onClick={() => startGame(item.slug)}>
                 <img
                   src={item.thumbnailImg}
-                  alt=""
+                  alt="game"
                   className="h-60 w-[380px] object-cover rounded-2xl cursor-pointer shadow-[0_2.8px_2.2px_rgba(0,_0,_0,_0.034),_0_6.7px_5.3px_rgba(0,_0,_0,_0.048),_0_12.5px_10px_rgba(0,_0,_0,_0.06),_0_22.3px_17.9px_rgba(0,_0,_0,_0.072),_0_41.8px_33.4px_rgba(0,_0,_0,_0.086),_0_100px_80px_rgba(0,_0,_0,_0.12)]"
                 />
                 <h3 className="text-white text-lg ml-2 my-2">{item.name}</h3>
@@ -122,9 +140,8 @@ const AllGames = () => {
           </div>
         </div>
       </div>
-      {showPlayNow && <PlayNow isVisible={showPlayNow}/>}
+      {showPlayNow && <PlayNow isVisible={showPlayNow} />}
       <GameFooter />
-
     </>
   );
 };

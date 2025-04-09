@@ -7,28 +7,53 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuthStore } from "../../../store/useAuthStore";
 import PlayNow from "../Games/PlayNow";
+import { toast } from "react-toastify";
+
+export const showToast = () => {
+  toast.warn(
+    <div>
+      Please login to continue{" "}
+      <Link className="underline text-blue-500" to="/login">
+        Login
+      </Link>
+    </div>,
+    { position: "top-right" }
+  );
+};
 
 const GameHome = () => {
-  const { games, leaderboard, showPlayNow, setShowPlayNow } = useGameStore();
+  const {
+    games,
+    leaderboard,
+    showPlayNow,
+    setShowPlayNow,
+    leaderboardLoading,
+  } = useGameStore();
   const { user } = useAuthStore();
   const navigate = useNavigate();
-  
+
   const { data: recentgame } = useQuery({
     queryKey: ["recentgame"],
     queryFn: async () => {
-      const res = await axios.get("http://localhost:5002/api/games/latest/recent-game",{ withCredentials: true });
-      console.log(res.data.game);
-      return res.data?.game;
+      const res = await axios.get(
+        "http://localhost:5002/api/games/latest/recent-game",
+        { withCredentials: true }
+      );
+      const games = res.data.games;
+      return res.data.games[games.length - 1];
     },
     enabled: !!user,
   });
 
   const startGame = (slug: string) => {
+    if (!user) {
+      showToast();
+      return
+    }
     setShowPlayNow(true);
-    setTimeout(() => {
-      navigate(`/games/${slug}/`);
-      setShowPlayNow(false);
-    }, 2000);
+    setShowPlayNow(false);
+    navigate(`/games/${slug}/`);
+    setTimeout(() => {}, 2000);
   };
 
   return (
@@ -127,7 +152,10 @@ const GameHome = () => {
           </div>
         </div>
         {showPlayNow && <PlayNow isVisible={showPlayNow} />}
-        <LeaderboardPreview leaderboard={leaderboard} />
+        <LeaderboardPreview
+          leaderboard={leaderboard}
+          leaderboardLoading={leaderboardLoading}
+        />
       </div>
       <GameFooter />
     </>

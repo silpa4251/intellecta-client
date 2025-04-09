@@ -1,4 +1,4 @@
-import { Outlet, useNavigate } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { IoIosNotifications } from "react-icons/io";
 // import GameSidebar from "./GamePages/GameSidebar";
 import { useEffect, useState } from "react";
@@ -10,11 +10,23 @@ import { userEndPoints } from "../../api/endPoints/userEndPoints";
 import axios from "axios";
 import DockLid from "./gameNav/DockLid";
 import violetemerald from "../../assets/game/violet-emerald.png";
+import "./Games.css";
 
 const GamesLayout = () => {
   const { fetchGames, fetchLeaderboard, games } = useGameStore();
   const { setUser, user } = useAuthStore();
   const navigate = useNavigate();
+  const { pathname } = useLocation();
+
+  const pathsToHide = [
+    "/games/memory_game",
+    "/games/word_builder",
+    "/games/tic_tac_toe",
+    "/games/number_ninja",
+  ];
+  const shouldHideComponent = pathsToHide.some((path) =>
+    pathname.includes(path)
+  );
 
   useQuery({
     queryKey: ["user"],
@@ -61,7 +73,9 @@ const GamesLayout = () => {
       <nav className="flex justify-between md:mx-40 mx-4 py-4 text-white ">
         <div className="flex gap-10">
           <div className="flex items-center gap-2">
-            <h1 className="font-semibold text-xl">Intellecta</h1>
+            <Link to="/games">
+              <h1 className="font-semibold text-xl">Intellecta</h1>
+            </Link>
           </div>
           <input
             type="text"
@@ -77,12 +91,12 @@ const GamesLayout = () => {
           />
         </div>
         {searchVal && (
-          <div className="absolute top-16 left-62 bg-gray-800 bg-opacity-80 backdrop-blur-md text-white p-4 rounded-lg shadow-lg">
+          <div className="absolute z-50 top-16 left-72 bg-gray-600 bg-opacity-80 backdrop-blur-md text-white rounded-lg shadow-lg">
             {searchedGames.map((item) => (
               <div
                 onClick={() => handleGame(item.slug)}
                 key={item.name}
-                className="py-2 px-3 z-50 hover:bg-gray-700 rounded-md transition"
+                className="py-2 px-3  hover:bg-gray-700 rounded-md transition"
               >
                 {item.name}
               </div>
@@ -91,24 +105,21 @@ const GamesLayout = () => {
         )}
 
         <div className="flex items-center gap-2 md:gap-5">
-          <div className="hidden rounded-full h-10 w-10 p-2 bg-sky-800 md:flex items-center justify-center">
-            <span className="text-xl">
-              <IoIosNotifications />
-            </span>
-          </div>
           <div className="flex items-center rounded-3xl space-x-2 px-3 py-1 bg-sky-800">
             <img src={violetemerald} alt="" className="h-8" />
             <span className="text-base font-semibold">
               {userstats?.totalScore || 0}
             </span>
           </div>
-          <div>
-            <img
-              src={user?.profilePic || "/home-bg.png"}
-              alt=""
-              className="w-10 h-10 rounded-full bg-white"
-            />
-          </div>
+          <Link to="/games/myprofile">
+            <div>
+              <img
+                src={user?.profilePic || "/home-bg.png"}
+                alt=""
+                className="w-10 h-10 object-contain cursor-pointer rounded-full bg-white"
+              />
+            </div>
+          </Link>
         </div>
       </nav>
 
@@ -118,10 +129,12 @@ const GamesLayout = () => {
           <Outlet />
         </div>
       </div>
-      <div className="w-full  flex justify-center ">
-        {/* <GameEyeLid /> */}
-        <DockLid />
-      </div>
+      {!shouldHideComponent && (
+        <div className="w-full  flex justify-center ">
+          {/* <GameEyeLid /> */}
+          <DockLid />
+        </div>
+      )}
     </div>
   );
 };
