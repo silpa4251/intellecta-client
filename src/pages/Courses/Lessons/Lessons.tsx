@@ -1,7 +1,7 @@
 import { AiOutlineMenuFold } from "react-icons/ai";
 import { useNavigate, useParams } from "react-router-dom";
 import NavbarWelcome from "../../../components/Navbar/NavbarWelcome";
-import { MdLockOutline } from "react-icons/md";
+// import { MdLockOutline } from "react-icons/md";
 import { FaPlay } from "react-icons/fa";
 import CircularProgress from "../../../utils/ui/Progress";
 import { useState } from "react";
@@ -47,15 +47,13 @@ const Lessons = () => {
     ? Math.round((completedCount / realLesson.length) * 100) 
     : 0;
 
-  const chooseLesson = (lesson: Lesson, index: number) => {
-    // Only allow clicking on the first lesson if it's not completed
-    if (index === 0 && !lesson.completed) {
-      setSelectLesson(lesson);
-      const sanitizedTitle = lesson.title.replace(/[^a-zA-Z0-9\s-]/g, "").replace(/\s+/g, "-");
-      navigate(`/lesson/${sanitizedTitle}/${lesson._id}`, {
-        state: { courseTitle, courseId: id },
-      });
-    }
+  const chooseLesson = (lesson: Lesson) => {
+    // Allow clicking on any lesson regardless of completion status or position
+    setSelectLesson(lesson);
+    const sanitizedTitle = lesson.title.replace(/[^a-zA-Z0-9\s-]/g, "").replace(/\s+/g, "-");
+    navigate(`/lesson/${sanitizedTitle}/${lesson._id}`, {
+      state: { courseTitle, courseId: id },
+    });
   };
 
   if (isLoading) {
@@ -106,46 +104,60 @@ const Lessons = () => {
         </div>
 
         <div className="flex justify-between px-32 gap-10 mt-10">
-          <div className="w-1/3 space-y-5">
-            <div className="space-y-2">
-              <h3 className="pb-2 border-b border-b-gray-300">SECTION</h3>
-              <div className="flex justify-between mt-4">
-                <div className="max-w-xs">
-                  <h2 className="font-semibold text-2xl">{data.course.title}</h2>
-                  <p>{data.course.description}</p>
-                </div>
-                <CircularProgress percentage={progress} />
+        <div className="w-1/3 space-y-5">
+          <div className="space-y-2">
+            <h3 className="pb-2 border-b border-b-gray-300 font-bold">COURSE</h3>
+            <div className="flex justify-between mt-4">
+              <div className="max-w-xs mt-4">
+                <h3 className="font-semibold text-2xl">{data.course.title}</h3>
+                <p>{data.course.description}</p>
               </div>
-            </div>
-            <div className="space-y-2">
-              <h3 className="pb-2 border-b border-b-gray-300">CONTENT</h3>
+              <div className="mt-6">
+                <CircularProgress  percentage={progress}/></div>
             </div>
           </div>
+
+          <div className="space-y-4 mt-6">
+            <h3 className="pb-2 border-b border-b-gray-300 font-bold">CONTENT</h3>
+          </div>
+          <div className="w-full mt-10">
+          <video
+            className="h-auto w-full "
+            // controls
+            autoPlay
+            muted
+            loop
+            playsInline
+          >
+            <source src="/366278579992174595.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+        </video>
+          </div>
+        </div>
+
           <div className="w-2/3">
-            <h3 className="pb-2 border-b border-b-gray-300">Lessons</h3>
+            <h3 className="pb-2 border-b border-b-gray-300 font-bold">LESSONS</h3>
             <div className="mt-5">
               {realLesson.map((lesson, index) => (
                 <div
                   key={lesson._id}
-                  onClick={() => chooseLesson(lesson, index)}
-                  className={`flex items-center justify-between font-semibold rounded-md gap-2 mb-4 px-4 py-4 shadow-md border ${
-                    index === 0 
-                      ? `cursor-pointer ${selectLesson?._id === lesson._id ? "border-2 border-green-500" : "border-2 border-gray-300"}`
-                      : "cursor-not-allowed border-2 border-gray-300 opacity-75"
+                  onClick={() => chooseLesson(lesson)}
+                  className={`flex items-center justify-between font-semibold rounded-md gap-2 mb-4 px-4 py-4 shadow-md border cursor-pointer ${
+                    selectLesson?._id === lesson._id 
+                      ? "border-2 border-green-500" 
+                      : "border-2 border-gray-300"
                   }`}
                 >
                   <div className="flex gap-2">
-                    <span>0{index + 1}</span>
+                    <span>{index + 1}.</span>
                     <h3>{lesson.title}</h3>
                   </div>
                   {lesson.completed ? (
                     <span className="text-green-500 text-2xl">
                       <IoCheckmarkCircleOutline />
                     </span>
-                  ) : index === 0 ? (
-                    <span><FaPlay /></span>
                   ) : (
-                    <span><MdLockOutline /></span>
+                    <span><FaPlay /></span>
                   )}
                 </div>
               ))}
