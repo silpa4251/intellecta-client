@@ -49,7 +49,7 @@ const SignIn = () => {
       );
       console.log("Login success:", response);
       toast.success("Login Successfull 🎉");
-      navigate("/welcome");
+      navigate("/home");
     } catch (error: any) {
       console.error("Error during registration:", error);
       const errorMessage = error.response?.data?.message || "Error logging user";
@@ -140,7 +140,7 @@ const SignIn = () => {
                   const post = await axiosInstance.post("/user/google-login", credentialResponse);
                   const user = post.data.data;
                   console.log("post user", user);
-                  navigate("/welcome");
+                  navigate("/home");
                 }}
                 onError={() => console.log("Login Failed")}
                 theme="outline"   

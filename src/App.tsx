@@ -11,7 +11,7 @@ import Programs from "./pages/Home/Programs";
 import ProfilePage from "./pages/Profile";
 import Courses from "./pages/Courses/Courses";
 import Lessons from "./pages/Courses/Lessons/Lessons";
-import LessonDetails from "./pages/Courses/Lessons/LessonQuiz";
+// import LessonDetails from "./pages/Courses/Lessons/LessonQuiz";
 import GameProfile from "./pages/Gamefied/GamePages/GameProfile";
 import AllGames from "./pages/Gamefied/GamePages/AllGames";
 import GameLeaderboard from "./pages/Gamefied/GamePages/GameLeaderboard";
@@ -23,6 +23,16 @@ import ChatBot from "./components/Chatbot/ChatBot";
 import GeographyQuiz from "./pages/Gamefied/Games/GeographyQuiz/GeographyQuiz";
 import WordBuilder from "./pages/Gamefied/Games/WordBuilder/WordBuilder";
 import UserDashLayout from "./pages/userDash.tsx/UserDashLayout";
+
+
+import AdminLayout from './pages/admin/AdminLayout';
+import Admindashboard from './pages/admin/Admindashboard';
+import AdminStudents from './pages/admin/AdminStudents';
+import AdminTeachers from './pages/admin/AdminTeachers';
+import AdminCoursesPage from './pages/admin/AdminCourses';
+import AddCourse from './pages/admin/AddCourse';
+
+import LessonContent from './pages/Courses/Lessons/LessonContent';
 
 function App() {
   return (
@@ -37,10 +47,11 @@ function App() {
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/courses/:category" element={<Courses />} />
         <Route path="/course/:courseTitle/:id" element={<Lessons />} />
-        <Route
+        <Route path="/lesson/:lessonTitle/:lessonId" element={<LessonContent />} />
+        {/* <Route
           path="/lesson/:lessonTitle/:lessonId"
           element={<LessonDetails />}
-        />
+        /> */}
         <Route path="/assessment" element={<Assessment />} />
         <Route path="/assessment-results" element={<AssessmentResults />} />
         <Route path="/login" element={<Login />} />
@@ -56,6 +67,13 @@ function App() {
         </Route>
         {/* user dash  */}
         <Route path="/userdash" element={<UserDashLayout />}></Route>
+        <Route path='/admin' element={<AdminLayout/>}>
+          <Route index element={<Admindashboard/>}/>
+          <Route path="students" element={<AdminStudents/>}/>
+          <Route path="teachers" element={<AdminTeachers/>}/>
+          <Route path="courses" element={<AdminCoursesPage/>}/>
+          <Route path="addCourse" element={<AddCourse/>}/>
+        </Route>
       </Routes>
     </>
   );

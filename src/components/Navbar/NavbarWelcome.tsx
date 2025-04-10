@@ -8,7 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import student from "../../assets/Profile.jpg";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import Loader from "../Loaders/Loader";
+import SpinningLoader from "../Loaders/SpinningLoader";
 
 const fetchUser = async () => {
   const { data } = await axiosInstance.get(userEndPoints.USER.GET_PROFILE);
@@ -57,16 +57,19 @@ const NavbarWelcome = () => {
     setTimeout(() => {
       navigate("/profile");
       setLoading(false);
-    }, 2000);
+    }, 1500);
   };
 
   return (
     <>
       {/* Full-Screen Loader */}
       {loading && (
-        <div className="fixed inset-0 flex justify-center items-center bg-white z-50">
-          <Loader />
-        </div> 
+        <div className="fixed inset-0 bg-white bg-opacity-90 flex flex-col justify-center items-center z-50">
+        <SpinningLoader />
+        <p className="mt-14 text-xl font-semibold text-gray-800">
+          Loading your profile. Please wait...!
+        </p>
+      </div>
       )}
 
       <nav className="flex items-center justify-between bg-gray-900 px-6 md:px-28 py-3 relative">
