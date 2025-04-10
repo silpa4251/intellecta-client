@@ -1,27 +1,28 @@
-import { Route, Routes } from 'react-router-dom';
-import './App.css';
-import Landing from './pages/Landing';
-import Signup from './pages/auth/Signup';
-import Login from './pages/auth/Login';
-import WelcomePage from './pages/WelcomePage';
-import Assessment from './pages/Assessment';
-import AssessmentResults from './pages/AssessmentResults';
-import Home from './pages/Home/Home';
-import Programs from './pages/Home/Programs';
-import ProfilePage from './pages/Profile';
-import Courses from './pages/Courses/Courses';
-import Lessons from './pages/Courses/Lessons/Lessons';
-import LessonDetails from './pages/Courses/Lessons/LessonQuiz';
-import GameProfile from './pages/Gamefied/GamePages/GameProfile';
-import AllGames from './pages/Gamefied/GamePages/AllGames';
-import GameLeaderboard from './pages/Gamefied/GamePages/GameLeaderboard';
-import MemoryGame from './pages/Gamefied/Games/MemoryGame/MemoryGame';
-import TicTacToe from './pages/Gamefied/Games/Tictactoe/TicTacToe';
-import GameHome from './pages/Gamefied/GamePages/GameHome';
-import GamesLayout from './pages/Gamefied/GameLayout';
+import { Route, Routes } from "react-router-dom";
+import "./App.css";
+import Landing from "./pages/Landing";
+import Signup from "./pages/auth/Signup";
+import Login from "./pages/auth/Login";
+import WelcomePage from "./pages/WelcomePage";
+import Assessment from "./pages/Assessment";
+import AssessmentResults from "./pages/AssessmentResults";
+import Home from "./pages/Home/Home";
+import Programs from "./pages/Home/Programs";
+import ProfilePage from "./pages/Profile";
+import Courses from "./pages/Courses/Courses";
+import Lessons from "./pages/Courses/Lessons/Lessons";
+import LessonDetails from "./pages/Courses/Lessons/LessonQuiz";
+import GameProfile from "./pages/Gamefied/GamePages/GameProfile";
+import AllGames from "./pages/Gamefied/GamePages/AllGames";
+import GameLeaderboard from "./pages/Gamefied/GamePages/GameLeaderboard";
+import MemoryGame from "./pages/Gamefied/Games/MemoryGame/MemoryGame";
+import TicTacToe from "./pages/Gamefied/Games/Tictactoe/TicTacToe";
+import GameHome from "./pages/Gamefied/GamePages/GameHome";
+import GamesLayout from "./pages/Gamefied/GameLayout";
 import ChatBot from "./components/Chatbot/ChatBot";
-import GeographyQuiz from './pages/Gamefied/Games/GeographyQuiz/GeographyQuiz';
-import WordBuilder from './pages/Gamefied/Games/WordBuilder/WordBuilder';
+import GeographyQuiz from "./pages/Gamefied/Games/GeographyQuiz/GeographyQuiz";
+import WordBuilder from "./pages/Gamefied/Games/WordBuilder/WordBuilder";
+import UserDashLayout from "./pages/userDash.tsx/UserDashLayout";
 
 function App() {
   return (
@@ -53,6 +54,8 @@ function App() {
           <Route path="tic_tac_toe" element={<TicTacToe />} />
           <Route path="geography_quiz" element={<GeographyQuiz />} />
         </Route>
+        {/* user dash  */}
+        <Route path="/userdash" element={<UserDashLayout />}></Route>
       </Routes>
     </>
   );
