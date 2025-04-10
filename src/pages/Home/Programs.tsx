@@ -7,11 +7,12 @@ import {
   MdScience,
 } from "react-icons/md";
 import { Link } from "react-router-dom";
+import NavbarWelcome from "../../components/Navbar/NavbarWelcome";
 
 const topThreePrograms = [
   {
     id: 1,
-    icon: <MdMenuBook className="text-3xl text-gray-700" />,
+    icon: <MdMenuBook className="text-3xl text-gray-900" />,
     title: "Reading & Writing",
     category:"english",
     description:
@@ -19,104 +20,87 @@ const topThreePrograms = [
   },
   {
     id: 2,
-    icon: <MdCalculate className="text-3xl text-gray-700" />,
+    icon: <MdCalculate className="text-3xl text-gray-900" />,
     title: "Maths & Logics",
     category:"maths",
     description: "Master math through quizzes and real-world problem-solving.",
-  },
-  {
-    id: 3,
-    icon: <MdMenuBook className="text-3xl text-gray-700" />,
-    title: "Reading & Writing",
-    category:"english",
-    description:
-      "Boost literacy with storytelling, writing, and guided reading.",
   },
 ];
 
 const bottomFourPrograms = [
   {
-    id: 4,
-    icon: <MdScience className="text-3xl text-gray-700" />,
+    id: 3,
+    icon: <MdScience className="text-3xl text-gray-900" />,
     title: "Science & Exploration",
     category:"science",
     description: "Explore science through hands-on experiments and discovery.",
   },
   {
-    id: 5,
-    icon: <MdCode className="text-3xl text-gray-700" />,
+    id: 4,
+    icon: <MdCode className="text-3xl text-gray-900" />,
     title: "Coding for Kids",
     category:"coding",
     description: "Learn programming with resources.",
   },
   {
-    id: 6,
-    icon: <MdPublic className="text-3xl text-gray-700" />,
-    title: "History & Cultures",
-    category:"history",
-    description: "Explore history and cultures through interactive stories.",
-  },
-  {
-    id: 7,
-    icon: <MdPublic className="text-3xl text-gray-700" />,
+    id: 5,
+    icon: <MdPublic className="text-3xl text-gray-900" />,
     title: "History & Cultures",
     category:"history",
     description: "Explore history and cultures through interactive stories.",
   },
 ];
 
-type ProgramsProp = {
-  programRef: React.RefObject<HTMLDivElement | null>;
-};
 
-const Programs: React.FC<ProgramsProp> = ({ programRef }) => {
+const Programs: React.FC = () => {
   return (
-    <div
-      className="flex flex-wrap space-x-10 space-y-10 mx-28 my-10"
-      ref={programRef}
-    >
-      <div className="max-w-xs flex-1 space-y-1 min-w-[300px]">
-        <h2 className="text-3xl font-semibold">Our Programs For Your Kids</h2>
-        <p className="font-medium text-gray-600">
-          Engaging educational programs designed to foster creativity and
-          critical thinking in children. Each course offers interactive lessons,
-          hands-on activities, and expert guidance to help your child develop
-          essential skills for the future.
-        </p>
-        <button className="cursor-pointer bg-[#F7D232] px-4 py-2 rounded-md font-semibold shadow-md mt-4">
-          Select One
-        </button>
-      </div>
+    <>
+    <NavbarWelcome />
+    <div className="mx-4 sm:mx-8 md:mx-16 lg:mx-60 my-6">
+      {/* Top Grid: 3 columns */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10 p-2">
+        <div className="max-w-xs flex flex-col space-y-4 min-w-[250px] sm:min-w-[275px] p-2">
+          <h2 className="text-xl sm:text-2xl font-bold">Our Programs For Your Kids</h2>
+          <p className="font-medium text-gray-800 text-sm sm:text-base">
+            Engaging educational programs designed to foster creativity and
+            critical thinking in children. Each course offers interactive lessons,
+            hands-on activities, and expert guidance to help your child develop
+            essential skills for the future.
+          </p>
+          <button className="flex justify-center items-center cursor-pointer bg-[#F7D232] px-3 py-1.5 sm:px-4 sm:py-2 rounded-md font-semibold shadow-md text-base">
+            Select One ⇩
+          </button>
+        </div>
 
-      {topThreePrograms.map((program) => (
-        <Link to={`/courses/${program.category}`}>
-          <div
-            key={program.id}
-            className="w-[275px] h-[275px] bg-white border cursor-pointer hover:border-yellow-400 hover:border-2 border-[#F7D232] p-5 rounded-2xl shadow-md flex flex-col justify-center items-center"
-          >
-            <div className="w-16 h-16 flex items-center justify-center bg-[#FFF7D1] rounded-full mb-4">
-              {program.icon}
-            </div>
-            <h3 className="text-lg font-bold text-center">{program.title}</h3>
-            <p className="text-sm text-center text-gray-600">
-              {program.description}
-            </p>
-          </div>
-        </Link>
-      ))}
-
-      <div className="space-x-13 flex">
-        {bottomFourPrograms.map((program) => (
-          <Link to={`/courses/${program.category}`}>
+        {topThreePrograms.slice(0, 2).map((program) => (
+          <Link to={`/courses/${program.category}`} key={program.id}>
             <div
-              key={program.id}
-              className="w-[275px] h-[275px] bg-white border cursor-pointer hover:border-yellow-400 hover:border-2 border-[#F7D232] p-5 rounded-2xl shadow-md flex flex-col justify-center items-center"
+              className="w-full max-w-[320px] h-[300px] bg-white border cursor-pointer hover:border-yellow-400 hover:border-2 border-[#F7D232] p-5 rounded-2xl shadow-md flex flex-col justify-center items-center"
             >
-              <div className="w-16 h-16 flex items-center justify-center bg-[#FFF7D1] rounded-full mb-4">
+              <div className="w-16 sm:w-20 h-16 sm:h-20 flex items-center justify-center bg-[#FFF7D1] rounded-full mb-4">
                 {program.icon}
               </div>
-              <h3 className="text-lg font-bold text-center">{program.title}</h3>
-              <p className="text-sm text-center text-gray-600">
+              <h3 className="text-base sm:text-lg font-semibold text-center">{program.title}</h3>
+              <p className="text-xs sm:text-sm text-center text-gray-600">
+                {program.description}
+              </p>
+            </div>
+          </Link>
+        ))}
+      </div>
+
+      {/* Bottom Grid: 3 columns */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 p-2 gap-8 mt-4 sm:mt-2 sm:gap-10">
+        {bottomFourPrograms.slice(0, 3).map((program) => (
+          <Link to={`/courses/${program.category}`} key={program.id}>
+            <div
+              className="w-full max-w-[320px] h-[300px] bg-white border cursor-pointer hover:border-yellow-400 hover:border-2 border-[#F7D232] p-5 rounded-2xl shadow-md flex flex-col justify-center items-center"
+            >
+              <div className="w-16 sm:w-20 h-16 sm:h-20 flex items-center justify-center bg-[#FFF7D1] rounded-full mb-4">
+                {program.icon}
+              </div>
+              <h3 className="text-base sm:text-lg font-semibold text-center">{program.title}</h3>
+              <p className="text-xs sm:text-sm text-center text-gray-600">
                 {program.description}
               </p>
             </div>
@@ -124,6 +108,7 @@ const Programs: React.FC<ProgramsProp> = ({ programRef }) => {
         ))}
       </div>
     </div>
+    </>
   );
 };
 

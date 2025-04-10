@@ -6,7 +6,7 @@ import axiosInstance from "../utils/axiosInstance";
 import { userEndPoints } from "../api/endPoints/userEndPoints";
 import { toast } from "react-toastify";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import Loader from "../components/Loaders/Loader";
+import SpinningLoader from "../components/Loaders/SpinningLoader";
 
 const fetchUser = async () => {
   const { data } = await axiosInstance.get(userEndPoints.USER.GET_PROFILE);
@@ -45,7 +45,7 @@ const ProfilePage: React.FC = () => {
   if (isLoading) {
     return (
       <div className="flex justify-center items-center min-h-screen bg-[#081a37]">
-        <Loader />
+        <SpinningLoader />
       </div>
     );
   }

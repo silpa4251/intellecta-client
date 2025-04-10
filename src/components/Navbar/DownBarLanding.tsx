@@ -82,7 +82,7 @@ const DownBarLanding: React.FC<DownBarLandingProps> = ({
   return (
     <AnimatePresence>
       <motion.div
-        className="absolute top-16 left-0 w-full bg-[#081a37] text-white flex py-6 space-y-4 shadow-md h-[95vh] md:px-36 "
+        className="absolute top-16 left-0 w-full bg-[#343e48] text-white flex py-6 space-y-4 shadow-md h-[95vh] md:px-36 "
         initial="hidden"
         animate="visible"
         exit="hidden"

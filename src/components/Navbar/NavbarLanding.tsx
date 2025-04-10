@@ -7,7 +7,7 @@ const LandingNavbar: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <nav className={`sticky top-0 w-full ${!menuOpen ? "bg-[#081a37]" : "bg-[#081a37]"}  text-white py-5 md:px-36 px-5 flex justify-between items-center z-50 `}>      
+    <nav className={`sticky top-0 w-full ${!menuOpen ? "bg-[#081a37]" : "bg-[#343e48]"}  text-white py-5 md:px-36 px-5 flex justify-between items-center z-50 `}>      
       {/* Logo Section */}
      <div className="flex  w-full justify-between items-center">
      <div className=" flex items-center text-white">

@@ -70,7 +70,7 @@ const LeaderboardPreview: React.FC<LeaderboardProps> = ({leaderboard}) => {
 
                 <td className="py-3 px-2 align-middle">{formatTime(data.totalTimePlayed)}</td>
                 <td className="py-3 px-2 align-middle">{data.lastPlayedDate && new Date(data.lastPlayedDate).toLocaleDateString()}</td>
-                <td className=" py-3 px-2 text-right align-middle">{data.bestScore}</td>
+                <td className=" py-3 px-2 text-right align-middle">{data.totalScore}</td>
               </tr>
             ))}
           </tbody>
