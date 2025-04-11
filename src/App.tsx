@@ -11,7 +11,6 @@ import Programs from './pages/Home/Programs';
 import ProfilePage from './pages/Profile';
 import Courses from './pages/Courses/Courses';
 import Lessons from './pages/Courses/Lessons/Lessons';
-// import LessonDetails from './pages/Courses/Lessons/LessonQuiz';
 import GameProfile from './pages/Gamefied/GamePages/GameProfile';
 import AllGames from './pages/Gamefied/GamePages/AllGames';
 import GameLeaderboard from './pages/Gamefied/GamePages/GameLeaderboard';
@@ -31,6 +30,7 @@ import AdminCoursesPage from './pages/admin/AdminCourses';
 import AddCourse from './pages/admin/AddCourse';
 
 import LessonContent from './pages/Courses/Lessons/LessonContent';
+import LessonQuiz from './pages/Courses/Lessons/LessonQuiz';
 
 function App() {
   return (
@@ -46,11 +46,8 @@ function App() {
         <Route path="/courses/:category" element={<Courses />} />
         <Route path="/course/:courseTitle/:id" element={<Lessons />} />
         <Route path="/lesson/:lessonTitle/:lessonId" element={<LessonContent />} />
-        {/* <Route
-          path="/lesson/:lessonTitle/:lessonId"
-          element={<LessonDetails />}
-        /> */}
         <Route path="/assessment" element={<Assessment />} />
+        <Route path="/course/quiz/:courseId" element={<LessonQuiz/>}/>
         <Route path="/assessment-results" element={<AssessmentResults />} />
         <Route path="/login" element={<Login />} />
         <Route path="/games" element={<GamesLayout />}>

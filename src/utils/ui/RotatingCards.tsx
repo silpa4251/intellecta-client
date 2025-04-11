@@ -8,6 +8,8 @@ interface RotatingCardProps {
 }
 
 const RotatingCard :React.FC<RotatingCardProps> = ({ badge, badges }) => {
+  console.log(badges);
+  
   return (
     <StyledWrapper>
       <div className="e-card playing">

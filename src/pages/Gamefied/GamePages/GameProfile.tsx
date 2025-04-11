@@ -35,7 +35,7 @@ const GameProfile = () => {
   });
 
   const badgeTrophies = [
-    { id: 1, badge: "Beginner", trophysrc: beginnerTrophy },
+    { id: 1, badge: "Beginner", trophysrc: beginnerTrophy , desc: "🏅 Beginner: Played your first game!"},
     { id: 2, badge: "Gamer", trophysrc: gamerTrophy },
     { id: 3, badge: "Marathoner", trophysrc: marathonerTrophy },
     { id: 4, badge: "Pro Player", trophysrc: proplayerTrophy },
@@ -139,16 +139,18 @@ const GameProfile = () => {
               </div>
             </div>
           </div>
-          {userstats?.badges.map((badge, index) => {
-            const filtered = badgeTrophies.find(
-              (trophy) => trophy.badge === badge
-            );
-            return (
-              <div key={index} className="flex ">
-                {filtered && <RotatingCard badges={filtered} badge={badge} />}
-              </div>
-            );
-          })}
+          <div className="grid grid-cols-3 h-fit gap-4">
+            {userstats?.badges.map((badge: any, index:number) => {
+              const filtered = badgeTrophies.find(
+                (trophy) => trophy.badge === badge
+              );
+              return (
+                <div key={index} className="b">
+                  {filtered && <RotatingCard badges={filtered} badge={badge} />}
+                </div>
+              );
+            })}
+          </div>
         </>
       ) : (
         <div className="flex items-center justify-center w-full mt-20">

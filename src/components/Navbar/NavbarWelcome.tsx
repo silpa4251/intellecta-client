@@ -7,7 +7,7 @@ import { userEndPoints } from "../../api/endPoints/userEndPoints";
 import { useQuery } from "@tanstack/react-query";
 import student from "../../assets/Profile.jpg";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import SpinningLoader from "../Loaders/SpinningLoader";
 
 const fetchUser = async () => {
@@ -29,7 +29,10 @@ const NavbarWelcome = () => {
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setIsOpen(false);
       }
     };
@@ -46,14 +49,15 @@ const NavbarWelcome = () => {
       navigate("/");
     } catch (error: any) {
       console.error("Error during logout:", error);
-      const errorMessage = error.response?.data?.message || "Error logging user";
+      const errorMessage =
+        error.response?.data?.message || "Error logging user";
       toast.error(errorMessage);
     }
   };
 
   const handleProfileClick = () => {
-    setLoading(true); 
-    setIsOpen(false); 
+    setLoading(true);
+    setIsOpen(false);
     setTimeout(() => {
       navigate("/profile");
       setLoading(false);
@@ -64,60 +68,87 @@ const NavbarWelcome = () => {
     <>
       {/* Full-Screen Loader */}
       {loading && (
-        <div className="fixed inset-0 bg-white bg-opacity-90 flex flex-col justify-center items-center z-50">
-        <SpinningLoader />
-        <p className="mt-14 text-xl font-semibold text-gray-800">
-          Loading your profile. Please wait...!
-        </p>
-      </div>
+        <div className="fixed inset-0 bg-gradient-to-br from-[#041336] to-[#031532] bg-opacity-95 flex flex-col justify-center items-center z-50 backdrop-blur-sm">
+          <SpinningLoader />
+          <p className="mt-12 text-base font-medium text-slate-200 tracking-wide animate-pulse">
+            Loading your profile. Please wait...
+          </p>
+        </div>
       )}
 
-      <nav className="flex items-center justify-between bg-gray-900 px-6 md:px-28 py-3 relative">
+      {/* Navbar */}
+      <nav className="flex items-center justify-between bg-[#031532]/90 backdrop-blur-lg border-b border-slate-800 px-4 md:px-16 py-3 shadow-xl relative z-40">
         {/* Logo Section */}
-        <div className="flex items-center gap-2 md:gap-3 text-white">
-          <img src={wcpagelogo} alt="Logo" className="h-[30px] md:h-[40px]" />
-          <div>
-            <h1 className="text-sm md:text-xl font-semibold">iNTELLECTA</h1>
-            <h5 className="text-gray-200 text-[10px] md:text-xs">Learn, Grow, Success</h5>
+        <div className="flex items-center gap-2 text-white">
+          <img src={wcpagelogo} alt="Logo" className="h-[26px] md:h-[32px]" />
+          <div className="leading-tight">
+            <h1 className="text-sm md:text-lg font-semibold text-blue-100 tracking-wide">
+              iNTELLECTA
+            </h1>
+            <h5 className="text-slate-400 text-[10px] md:text-xs">
+              Learn. Grow. Succeed.
+            </h5>
           </div>
         </div>
 
-        {/* Right Side: Leaderboard, Profile */}
-        <div className="flex items-center gap-4 relative">
-          {/* Leaderboard Icon */}
-          <span className="text-white text-2xl cursor-pointer">
-            <MdLeaderboard />
-          </span>
+        {/* Center Nav Links */}
+        <div className="hidden md:flex space-x-8 text-slate-300 font-medium text-sm">
+          <Link
+            to="/home"
+            className="relative group text-slate-200 hover:text-blue-400 transition-all ease-in duration-300"
+          >
+            Home
+            <span className="absolute left-0 -bottom-1 w-0 h-0.5 bg-blue-400 transition-all group-hover:w-full"></span>
+          </Link>
 
-          {/* Profile Icon & Dropdown */}
+          <Link
+            to="/courses"
+            className="relative group text-slate-200 hover:text-blue-400 transition-all ease-in duration-300"
+          >
+            Courses
+            <span className="absolute left-0 -bottom-1 w-0 h-0.5 bg-blue-400 transition-all group-hover:w-full"></span>
+          </Link>
+
+          <Link
+            to="/games"
+            className="relative group text-slate-200 hover:text-blue-400 transition-all ease-in duration-300"
+          >
+            Games
+            <span className="absolute left-0 -bottom-1 w-0 h-0.5 bg-blue-400 transition-all group-hover:w-full"></span>
+          </Link>
+        </div>
+
+        {/* Right Section */}
+        <div className="flex items-center gap-4">
+          {/* Profile */}
           <div className="relative" ref={dropdownRef}>
             <img
               src={user?.profilePic || student}
-              className="w-8 h-8 rounded-full cursor-pointer"
-              alt="User Profile"
+              className="w-9 h-9 rounded-full border-2 border-slate-600 cursor-pointer hover:ring-2 hover:ring-blue-500 transition-all duration-200"
+              alt="User"
               onClick={() => setIsOpen(!isOpen)}
             />
 
-            {/* Dropdown Menu */}
+            {/* Dropdown */}
             {isOpen && (
-              <div className="absolute right-0 mt-2 w-44 bg-white rounded-lg shadow-lg overflow-hidden transition-all duration-200 z-50">
-                <ul className="py-2 text-gray-800">
+              <div className="absolute right-0 mt-2 w-44 bg-[#0f172a]/95 backdrop-blur-md border border-slate-700 rounded-lg shadow-xl z-50 transition-all duration-200">
+                <ul className="py-2 text-sm text-slate-200">
                   <li>
                     <button
-                      className="flex items-center gap-2 px-4 py-2 font-semibold text-left cursor-pointer w-full"
+                      className="flex items-center gap-2 px-4 py-2 w-full hover:bg-slate-800 transition"
                       onClick={handleProfileClick}
                       disabled={loading}
                     >
-                      <MdSettings className="text-xl" />
+                      <MdSettings className="text-lg" />
                       Profile Settings
                     </button>
                   </li>
                   <li>
                     <button
-                      className="flex items-center gap-2 px-4 py-2 font-semibold text-left cursor-pointer w-full"
+                      className="flex items-center gap-2 px-4 py-2 w-full hover:bg-red-600/20 text-red-300 hover:text-white transition"
                       onClick={handleLogout}
                     >
-                      <GoSignOut className="text-xl" />
+                      <GoSignOut className="text-lg" />
                       Sign Out
                     </button>
                   </li>
@@ -127,7 +158,9 @@ const NavbarWelcome = () => {
           </div>
 
           {/* Username */}
-          <h5 className="hidden md:block text-white font-semibold">{user?.name}</h5>
+          <h5 className="hidden md:block text-sm text-slate-300 font-medium">
+            {user?.name}
+          </h5>
         </div>
       </nav>
     </>

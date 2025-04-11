@@ -249,8 +249,6 @@ const TicTacToe = () => {
           {winner === "Draw" ? "It's a Draw!" : `${winner} Wins!`}
         </motion.div>
       )}
-      {winner && <GameWinner gameName={"Tic Tac Toe"} gameScore={50}/>}
-
       <button
         onClick={resetGame}
         className="mt-4 bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-xl shadow-lg"
