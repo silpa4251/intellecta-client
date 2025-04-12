@@ -131,7 +131,7 @@ const CourseSidebar : React.FC<CourseSidebarProps> = ({ onClose, showsidebar }) 
 
               {showProgressStatus && (
                 <div className="flex flex-col space-y-2 p-2">
-                  {["Grade 1", "Grade 2", "Grade 3"].map((grade) => (
+                  {["Grade 1", "Grade 2", "Grade 3","Grade 4", "Grade 5", "Grade 6","Grade 7", "Grade 8", "Grade 9", "Grade 10"].map((grade) => (
                     <label
                       key={grade}
                       className="flex items-center space-x-2 cursor-pointer group"
