@@ -1,4 +1,4 @@
-import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { useParams, useNavigate, useLocation, Link } from "react-router-dom";
 import NavbarWelcome from "../../../components/Navbar/NavbarWelcome";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
@@ -222,14 +222,12 @@ const LessonContent = () => {
               <div className="mb-6">
                 <h2 className="text-xl font-semibold mb-2">Quiz</h2>
                 <div className="bg-white p-4 rounded-lg shadow-md">
-                  <a
-                    href={lessonData.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <Link
+                    to={`/course/quiz/${courseId}`}
                     className="text-blue-600 hover:underline text-sm block"
                   >
                     Take the Quiz
-                  </a>
+                  </Link>
                 </div>
               </div>
             )}

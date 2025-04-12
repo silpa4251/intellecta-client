@@ -1,4 +1,4 @@
-import { Outlet, useNavigate } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { IoIosNotifications } from "react-icons/io";
 // import GameSidebar from "./GamePages/GameSidebar";
 import { useEffect, useState } from "react";
@@ -9,11 +9,24 @@ import axiosInstance from "../../utils/axiosInstance";
 import { userEndPoints } from "../../api/endPoints/userEndPoints";
 import axios from "axios";
 import DockLid from "./gameNav/DockLid";
+import violetemerald from "../../assets/game/violet-emerald.png";
+import "./Games.css";
 
 const GamesLayout = () => {
   const { fetchGames, fetchLeaderboard, games } = useGameStore();
   const { setUser, user } = useAuthStore();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+
+  const pathsToHide = [
+    "/games/memory_game",
+    "/games/word_builder",
+    "/games/tic_tac_toe",
+    "/games/number_ninja",
+  ];
+  const shouldHideComponent = pathsToHide.some((path) =>
+    pathname.includes(path)
+  );
 
   useQuery({
     queryKey: ["user"],
@@ -50,25 +63,26 @@ const GamesLayout = () => {
     game.name.toLowerCase().includes(searchVal.toLocaleLowerCase())
   );
 
-  const handleGame =(slug:string)=> {
-    navigate(`/games/${slug}`)
-    setSearchVal("")
-  }
-  
+  const handleGame = (slug: string) => {
+    navigate(`/games/${slug}`);
+    setSearchVal("");
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-l from-[#0b2672] to-[#111827]">
-      <nav className="flex justify-between px-10 py-4  ml-16 text-white ">
+      <nav className="flex justify-between md:mx-40 mx-4 py-4 text-white ">
         <div className="flex gap-10">
           <div className="flex items-center gap-2">
-            <h1 className="font-semibold text-xl">Intellecta</h1>
+            <Link to="/games">
+              <h1 className="font-semibold text-xl">Intellecta</h1>
+            </Link>
           </div>
           <input
             type="text"
             value={searchVal}
             onChange={(e) => setSearchVal(e.target.value)}
             placeholder="Search games"
-            className="rounded-3xl pl-4 outline-0 h-10 my-auto
+            className="hidden md:block rounded-3xl pl-4 outline-0 h-10 my-auto
             shadow-md
             placeholder-gray-400 text-white
             bg-white/10
@@ -77,53 +91,50 @@ const GamesLayout = () => {
           />
         </div>
         {searchVal && (
-          <div className="absolute top-16 left-62 bg-gray-800 bg-opacity-80 backdrop-blur-md text-white p-4 rounded-lg shadow-lg">
+          <div className="absolute z-50 top-16 left-72 bg-gray-600 bg-opacity-80 backdrop-blur-md text-white rounded-lg shadow-lg">
             {searchedGames.map((item) => (
-                <div
-                onClick={()=> handleGame(item.slug)}
-                  key={item.name}
-                  className="py-2 px-3 z-50 hover:bg-gray-700 rounded-md transition"
-                >
-                  {item.name}
-                </div>
+              <div
+                onClick={() => handleGame(item.slug)}
+                key={item.name}
+                className="py-2 px-3  hover:bg-gray-700 rounded-md transition"
+              >
+                {item.name}
+              </div>
             ))}
           </div>
         )}
 
-        <div className="flex items-center gap-5">
-          <div className="rounded-full h-8 w-8 p-2 bg-sky-800 flex items-center justify-center">
-            <span className="text-xl">
-              <IoIosNotifications />
-            </span>
-          </div>
-          <div className="rounded-3xl min-w-20 space-x-2 px-3 py-1 bg-sky-800">
-            <span className="text-sm text-green-300 border-r border-r-gray-400 pr-1">
-              ${" "}
-            </span>
-            <span className="text-sm font-semibold">
+        <div className="flex items-center gap-2 md:gap-5">
+          <div className="flex items-center rounded-3xl space-x-2 px-3 py-1 bg-sky-800">
+            <img src={violetemerald} alt="" className="h-8" />
+            <span className="text-base font-semibold">
               {userstats?.totalScore || 0}
             </span>
           </div>
-          <div>
-            <img
-              src={user?.profilePic || "/home-bg.png"}
-              alt=""
-              className="w-10 h-10 rounded-full"
-            />
-          </div>
+          <Link to="/games/myprofile">
+            <div>
+              <img
+                src={user?.profilePic || "/home-bg.png"}
+                alt=""
+                className="w-10 h-10 object-contain cursor-pointer rounded-full bg-white"
+              />
+            </div>
+          </Link>
         </div>
       </nav>
 
       <div className="flex">
         {/* <GameSidebar /> */}
-        <div className="w-full ml-20 min-h-full ">
+        <div className="w-full min-h-full md:px-10">
           <Outlet />
         </div>
       </div>
-      <div className="w-full  flex justify-center ">
-        {/* <GameEyeLid /> */}
-        <DockLid />
-      </div>
+      {!shouldHideComponent && (
+        <div className="w-full  flex justify-center ">
+          {/* <GameEyeLid /> */}
+          <DockLid />
+        </div>
+      )}
     </div>
   );
 };

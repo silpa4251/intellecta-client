@@ -19,8 +19,8 @@ const items = [
   },
   {
     icon: <MdLeaderboard />,
-    label: "Settings",
-    onClick: () => alert("Settings!"),
+    label: "Leaderboard",
+    onClick: () => alert("Leaderboard!"),
     href: "/games/leaderboard",
   },
   {
