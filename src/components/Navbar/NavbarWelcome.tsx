@@ -118,8 +118,13 @@ const NavbarWelcome = () => {
           </Link>
         </div>
 
+
         {/* Right Section */}
         <div className="flex items-center gap-4">
+          
+        <span className="text-slate-300 text-xl cursor-pointer hover:text-blue-400 transition">
+            <MdLeaderboard />
+          </span>
           {/* Profile */}
           <div className="relative" ref={dropdownRef}>
             <img

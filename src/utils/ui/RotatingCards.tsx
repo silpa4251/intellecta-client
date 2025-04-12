@@ -1,3 +1,4 @@
+import { useState } from "react";
 import styled from "styled-components";
 
 interface RotatingCardProps {
@@ -8,12 +9,11 @@ interface RotatingCardProps {
 }
 
 const RotatingCard :React.FC<RotatingCardProps> = ({ badge, badges }) => {
-  console.log(badges);
+  const [showTitle, setShowTitle] = useState(false)
   
   return (
     <StyledWrapper>
-      <div className="e-card playing">
-        <div className="image" />
+      <div className="e-card playing cursor-pointer" onMouseOver={()=> {setShowTitle(true)}} onMouseLeave={()=> setShowTitle(false)}>
         <div className="wave" />
         <div className="wave" />
         <div className="wave" />
@@ -22,10 +22,11 @@ const RotatingCard :React.FC<RotatingCardProps> = ({ badge, badges }) => {
             src={badges?.trophysrc}
             alt={badge}
             className="h-16 w-16 object-contain z-10"
-          />
+            />
           <h2 className="text-white">{badge}</h2>
         </div>
       </div>
+            {showTitle && <div className=" absolute z-50 "><p className=" p-1 mt-2 -ml-2 text-xs rounded-2xl bg-amber-400">{badges.desc}</p></div> }
     </StyledWrapper>
   );
 };

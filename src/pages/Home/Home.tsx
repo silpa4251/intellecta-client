@@ -89,6 +89,7 @@ import { useNavigate } from "react-router-dom";
 import { FaRobot } from "react-icons/fa6";
 import { IoGameController } from "react-icons/io5";
 import { RiGraduationCapFill } from "react-icons/ri";
+import ResuableButton from "../../utils/ui/ResuableButton";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -97,6 +98,12 @@ const Home = () => {
     navigate("/courses");
   };
 
+  const aa = ()=> {
+    alert("faros")
+  }
+  const bb = ()=> {
+    alert("nihal")
+  }
   return (
     <div>
       <WcNavbar />

@@ -35,11 +35,11 @@ const GameProfile = () => {
   });
 
   const badgeTrophies = [
-    { id: 1, badge: "Beginner", trophysrc: beginnerTrophy , desc: "🏅 Beginner: Played your first game!"},
-    { id: 2, badge: "Gamer", trophysrc: gamerTrophy },
-    { id: 3, badge: "Marathoner", trophysrc: marathonerTrophy },
-    { id: 4, badge: "Pro Player", trophysrc: proplayerTrophy },
-    { id: 5, badge: "Legend", trophysrc: legendTrophy },
+    { id: 1, badge: "Beginner", trophysrc: beginnerTrophy , desc: "Played your first game!"},
+    { id: 2, badge: "Gamer", trophysrc: gamerTrophy , desc: "Played 10 or more games!"},
+    { id: 3, badge: "Marathoner", trophysrc: marathonerTrophy, desc: "Played for over 1 hour in total!" },
+    { id: 4, badge: "Pro Player", trophysrc: proplayerTrophy , desc: "Scored over 100 points!"},
+    { id: 5, badge: "Legend", trophysrc: legendTrophy, desc: "Scored over 500 points!" },
   ];
 
   const { data: userRecentGames, isLoading } = useQuery({
