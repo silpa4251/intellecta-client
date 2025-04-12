@@ -26,7 +26,7 @@ interface QuizDataType {
 
 const LessonQuiz = () => {
   const { courseId } = useParams<Params>();
-  const queryClient= useQueryClient()
+  const queryClient = useQueryClient();
   const [showCompleted, setShowCompleted] = useState(false);
   const [quiz, setQuiz] = useState<QuizDataType[]>([]);
   const [currentStep, setCurrentStep] = useState(0);
@@ -39,15 +39,15 @@ const LessonQuiz = () => {
 
   const { mutate: postLessonQuiz, isPending } = useMutation({
     mutationKey: ["fetchlessonquiz"],
-    mutationFn: async (courseId : string) => {
+    mutationFn: async (courseId: string) => {
       const res = await axios.post(
         `http://localhost:5005/api/courses/generate-quiz`,
         courseId
       );
       return res.data;
     },
-    onSuccess: ()=> {
-      queryClient.invalidateQueries({queryKey: ["quizLesson"]})
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["quizLesson"] });
     },
     onError: (error) => {
       console.log(error);
@@ -108,7 +108,20 @@ const LessonQuiz = () => {
   return (
     <>
       <NavbarWelcome />
-        {isPending ?  <button className="bg-blue-600 animate-pulse">Generating QUestins</button> : quiz.length === 0 && <button onClick={()=> postLessonQuiz(courseId || "")} className="cursor-pointer bg-orange-500 p-5 text-3xl">Generate Questions</button>}
+      {isPending ? (
+        <button className="bg-blue-600 animate-pulse">
+          Generating Questions
+        </button>
+      ) : (
+        quiz.length === 0 && (
+          <button
+            onClick={() => postLessonQuiz(courseId || "")}
+            className="cursor-pointer bg-orange-500 p-5 text-3xl"
+          >
+            Generate Questions
+          </button>
+        )
+      )}
 
       <div className="min-h-[80vh] flex flex-col justify-between  px-6 py-8 relative overflow-hidden">
         {isLoading ? (
