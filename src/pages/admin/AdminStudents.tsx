@@ -114,8 +114,8 @@ const AdminStudents = () => {
                   key={student.id + index}
                   className={`transition-colors duration-200 ${
                     index % 2 === 0
-                      ? "bg-[#BBD2CB] text-[#4F4F4F] hover:bg-[#ffffff] hover:text-[#4F4F4F]"
-                      : "bg-[#ffffff] text-[#4F4F4F] hover:bg-[#BBD2CB] hover:text-[#4F4F4F]"
+                      ? "bg-[#BBD2CB] text-[#4F4F4F] "
+                      : "bg-[#ffffff] text-[#4F4F4F] "
                   }`}
                 >
                   <td className="p-4">

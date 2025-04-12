@@ -25,7 +25,6 @@ import WordBuilder from './pages/Gamefied/Games/WordBuilder/WordBuilder';
 import AdminLayout from './pages/admin/AdminLayout';
 import Admindashboard from './pages/admin/Admindashboard';
 import AdminStudents from './pages/admin/AdminStudents';
-import AdminTeachers from './pages/admin/AdminTeachers';
 import AdminCoursesPage from './pages/admin/AdminCourses';
 import AddCourse from './pages/admin/AddCourse';
 
@@ -65,7 +64,6 @@ function App() {
         <Route path='/admin' element={<AdminLayout/>}>
           <Route index element={<Admindashboard/>}/>
           <Route path="students" element={<AdminStudents/>}/>
-          <Route path="teachers" element={<AdminTeachers/>}/>
           <Route path="courses" element={<AdminCoursesPage/>}/>
           <Route path="addCourse" element={<AddCourse/>}/>
         </Route>

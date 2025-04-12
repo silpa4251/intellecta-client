@@ -14,8 +14,6 @@ const AdminLayout = () => {
         return "Dashboard";
       case "/admin/students":
         return "Students";
-      case "/admin/teachers":
-        return "Teachers";
       case "/admin/courses":
         return "Courses";
       default:
