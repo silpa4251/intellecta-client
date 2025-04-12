@@ -86,9 +86,11 @@ const Lessons = () => {
         <div className="flex justify-between py-4 px-8 border-b border-b-gray-300">
           <div className="flex items-center gap-5">
             <span className="text-2xl">
-              <AiOutlineMenuFold />
+              <AiOutlineMenuFold 
+              onClick={() => navigate(-1)}
+              />
             </span>
-            <h3>{data.course.title}</h3>
+            <h3 className="font-semibold">{data.course.title}</h3>
           </div>
           <div className="flex items-center gap-5">
             <span className="font-medium">

@@ -28,7 +28,7 @@ const Courses = () => {
   console.log("object", category);
 
   const fetchCourses = async () =>{
-  const response = await axios.get(`http://localhost:5005/api/courses/subject/${category}`);
+  const response = await axios.get(`http://localhost:5005/api/courses/subject/${category}`,{withCredentials: true});
   console.log("fetch courses", response.data.data);
   return response.data.data;
   }

@@ -7,6 +7,7 @@ import { userEndPoints } from "../api/endPoints/userEndPoints";
 import { toast } from "react-toastify";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import SpinningLoader from "../components/Loaders/SpinningLoader";
+import NavbarWelcome from "../components/Navbar/NavbarWelcome";
 
 const fetchUser = async () => {
   const { data } = await axiosInstance.get(userEndPoints.USER.GET_PROFILE);
@@ -104,7 +105,9 @@ const ProfilePage: React.FC = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-[#081a37] p-4">
+    <>
+    <NavbarWelcome/>
+    <div className="flex justify-center items-center min-h-screen bg-white p-4">
       <form
         onSubmit={handleSubmit}
         className="flex flex-col w-full max-w-xl bg-[#081a37] border border-white shadow-[10px_10px_10px_rgba(0,0,0,0.3)] rounded-3xl p-6"
@@ -222,7 +225,9 @@ const ProfilePage: React.FC = () => {
         </div>
       </form>
     </div>
+    </>
   );
 };
+
 
 export default ProfilePage;

@@ -7,7 +7,7 @@ import { Lesson } from "../../../types";
 import ReactPlayer from "react-player";
 import { IoCheckmarkCircleOutline } from "react-icons/io5";
 import { FaPlay } from "react-icons/fa";
-
+import { useState } from "react";
 
 type Params = {
   lessonId: string;
@@ -57,6 +57,22 @@ const LessonContent = () => {
     );
   };
 
+  const getVideoCount = (lesson: Lesson) => {
+    let videoCount = 0;
+    // Check if url is a video
+    if (lesson.url && isVideoResource(lesson.url)) {
+      videoCount += 1;
+    }
+    // Count videos in resources
+    if (lesson.resources && lesson.resources.length > 0) {
+      videoCount += lesson.resources.filter((resource) => isVideoResource(resource)).length;
+    }
+    return videoCount;
+  };
+
+  // State for toggling sections
+  const [activeTab, setActiveTab] = useState<string | null>(null);
+
   if (isLoading || courseLoading) {
     return (
       <div className="fixed inset-0 bg-white bg-opacity-90 flex flex-col justify-center items-center z-50">
@@ -83,6 +99,10 @@ const LessonContent = () => {
   }
 
   const lessons = courseData.lessons || [];
+
+  // Dummy data for Notes and Additional Resources (replace with actual API data if available)
+  const notesContent = lessonData.notes || "No materials available"; // Assuming 'notes' field exists
+  const additionalResources = lessonData.resources || []; // Using existing resources field
 
   return (
     <>
@@ -113,12 +133,12 @@ const LessonContent = () => {
                 >
                   <div className="flex items-center gap-2">
                     <span className="text-green-500">
-                      {lesson.completed ? <IoCheckmarkCircleOutline/> : <FaPlay/>}
+                      {lesson.completed ? <IoCheckmarkCircleOutline /> : <FaPlay />}
                     </span>
                     <span className="text-sm">{lesson.title}</span>
                   </div>
-                  <span className="text-xs text-gray-500">
-                    {lesson.duration || "N/A"}
+                  <span className="text-xs text-gray-700">
+                    {getVideoCount(lesson)}
                   </span>
                 </div>
                 {lessonIndex < lessons.length - 1 && (
@@ -145,7 +165,7 @@ const LessonContent = () => {
               </div>
             )}
 
-            {lessonData.type === "video" && lessonData.url && (
+            {lessonData.url && (
               <div className="mb-6">
                 <h2 className="text-xl font-semibold mb-2">Watch & Learn</h2>
                 <div className="relative w-full" style={{ paddingTop: "56.25%" }}>
@@ -163,7 +183,7 @@ const LessonContent = () => {
               </div>
             )}
 
-            {lessonData.resources && lessonData.resources.length > 0 && (
+            {/* {lessonData.resources && lessonData.resources.length > 0 && (
               <div className="mb-6">
                 <h2 className="text-xl font-semibold mb-2">Explore More</h2>
                 <div className="space-y-4">
@@ -196,7 +216,7 @@ const LessonContent = () => {
                   ))}
                 </div>
               </div>
-            )}
+            )} */}
 
             {lessonData.type === "quiz" && lessonData.url && (
               <div className="mb-6">
@@ -234,6 +254,84 @@ const LessonContent = () => {
               <p className="text-gray-600 text-sm text-center">
                 No content available for this lesson yet.
               </p>
+            )}
+
+            {/* Buttons Section */}
+            <div className="flex space-x-4 mb-6 mt-6">
+              <button
+                className={`px-4 py-2 rounded-lg ${
+                  activeTab === "notes" ? "bg-blue-500 text-white font-semibold" : "bg-gray-200 text-gray-700 font-semibold"
+                } hover:bg-blue-600 hover:text-white transition duration-300`}
+                onClick={() => setActiveTab("notes")}
+              >
+                Notes 📒
+              </button>
+              <button
+                className={`px-4 py-2 rounded-lg ${
+                  activeTab === "resources" ? "bg-blue-500 text-white font-semibold" : "bg-gray-200 text-gray-700 font-semibold"
+                } hover:bg-blue-600 hover:text-white transition duration-300`}
+                onClick={() => setActiveTab("resources")}
+              >
+                Additional Resources 🔗
+              </button>
+            </div>
+
+            {/* Togglable Content */}
+            {activeTab === "notes" && (
+            <div className="mb-6 p-4 bg-white rounded-lg shadow-md">
+              <h2 className="text-xl font-semibold mb-2">Notes 📖</h2>
+                {lessonData.notes ? (
+                <a
+                  href={notesContent} // Using notesContent as the href
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-600 text-sm hover:underline block font-semibold"
+                >
+                View Study Material (PDF)
+                </a>
+                ) : (
+                <p className="text-gray-600 text-sm">No materials available.</p>
+                )}
+            </div>
+            )}
+
+            {activeTab === "resources" && (
+              <div className="mb-6 p-4 bg-white rounded-lg shadow-md">
+                <h2 className="text-xl font-semibold mb-2">Additional Resources 🔗</h2>
+                {additionalResources.length > 0 ? (
+                  <div className="space-y-4">
+                    {additionalResources.map((resource, index) => (
+                      <div key={index} className="bg-white p-4 rounded-lg shadow-md">
+                        {isVideoResource(resource) ? (
+                          <div className="relative w-full" style={{ paddingTop: "56.25%" }}>
+                            <ReactPlayer
+                              url={resource}
+                              width="100%"
+                              height="100%"
+                              controls={true}
+                              className="absolute top-0 left-0"
+                              config={{
+                                youtube: { playerVars: { showinfo: 1 } },
+                              }}
+                            />
+                          </div>
+                        ) : (
+                          <a
+                            href={resource}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-600 hover:underline text-sm block"
+                          >
+                            Resource {index + 1}
+                          </a>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-gray-600 text-sm">No resources available.</p>
+                )}
+              </div>
             )}
 
             <button
