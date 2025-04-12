@@ -38,7 +38,7 @@ const bottomFourPrograms = [
   {
     id: 4,
     icon: <MdCode className="text-3xl text-gray-900" />,
-    title: "Coding for Kids",
+    title: "Coding",
     category:"coding",
     description: "Learn programming with resources.",
   },

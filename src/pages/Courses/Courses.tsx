@@ -12,6 +12,8 @@ interface Course {
   _id: string;
   title: string;
   description: string;
+  thumbnail?: string;
+  gradeLevel?: number;
 }
 
 const Courses = () => {
@@ -26,7 +28,7 @@ const Courses = () => {
   console.log("object", category);
 
   const fetchCourses = async () =>{
-  const response = await axios.get(`http://localhost:5005/api/courses/subject/${category}`);
+  const response = await axios.get(`http://localhost:5005/api/courses/subject/${category}`,{withCredentials: true});
   console.log("fetch courses", response.data.data);
   return response.data.data;
   }
@@ -90,9 +92,9 @@ const Courses = () => {
                 
                 <Link to={`/course/${item.title.replace(/\s+/g, "-")}/${item._id}`}>
                   <img
-                    src={"/welcome-bg.png"}
+                    src={item.thumbnail || "/welcome-bg.png"}
                     alt={item.title}
-                    className="h-40 w-full object-cover border-b border-gray-200 transition-transform duration-300 hover:scale-105"
+                    className="h-48 w-full object-cover border-b border-gray-200 transition-transform duration-300 hover:scale-105"
                   />
                 </Link>
 
@@ -100,8 +102,11 @@ const Courses = () => {
                   <h2 className="text-base text-center font-semibold text-gray-900">
                     {item.title}
                   </h2>
-                  <p className="text-gray-700 text-sm line-clamp-2">
+                  <p className="text-gray-700 text-sm line-clamp-2 w-full">
                     {item.description}
+                  </p>
+                  <p className="text-gray-700 text-sm font-semibold text-center">
+                    Grade: {item.gradeLevel || "Basic"}
                   </p>
 
 
