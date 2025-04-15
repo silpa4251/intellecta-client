@@ -108,19 +108,10 @@ const LessonQuiz = () => {
   return (
     <>
       <NavbarWelcome />
-      {isPending ? (
+      {isPending && (
         <button className="bg-blue-600 animate-pulse">
           Generating Questions
         </button>
-      ) : (
-        quiz.length === 0 && (
-          <button
-            onClick={() => postLessonQuiz(courseId || "")}
-            className="cursor-pointer bg-orange-500 p-5 text-3xl"
-          >
-            Generate Questions
-          </button>
-        )
       )}
 
       <div className="min-h-[80vh] flex flex-col justify-between  px-6 py-8 relative overflow-hidden">

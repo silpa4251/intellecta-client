@@ -22,6 +22,7 @@ import Footer from "../components/Footer/Footer";
 import Navbar from "../components/Navbar/NavbarLanding";
 import BlurText from "../components/TextAnimations/BlurText";
 import LandingImage from "../assets/LandingImages/landingFront.png"
+import MovingCard from "../utils/ui/MovingCards";
 
 const Landing: React.FC = () => {
   const steps = [
@@ -81,7 +82,7 @@ const Landing: React.FC = () => {
           {/* Buttons */}
           <div className="flex gap-6 justify-center sm:justify-start">
           <Link to="/register">
-          <button className="bg-[#F7D232] hover:bg-transparent hover:border-2 border-[#F7D232] hover:text-white text-black sm:justify-items-start font-semibold py-3 px-6 rounded-lg  ">
+          <button className="bg-[#F7D232] cursor-pointer hover:bg-transparent border-2 border-[#F7D232] hover:text-white text-black sm:justify-items-start font-semibold py-3 px-6 rounded-lg  ">
             Get Started
           </button>
           </Link>
@@ -101,9 +102,6 @@ const Landing: React.FC = () => {
       {/* Section Title */}
       <div className="h-[600px] py-5 md:px-36 px-5 ">
         <div className="mb-6  ">
-          <div className="inline-block px-4 py-1 bg-white text-black rounded-lg font-semibold shadow-2xl">
-          ⚙️ How It Works
-          </div>
           <h2 className="text-3xl font-bold mt-4">How To Get Started</h2>
         </div>
 
@@ -112,34 +110,13 @@ const Landing: React.FC = () => {
           {/* Track */}
           <div className="glide__track py-6" data-glide-el="track">
             <ul className="glide__slides">
+              
               {steps.map((step) => (
-                <li key={step.id} className="glide__slide flex justify-center">
-                  <div className="border-1 shadow-lg h-96 text-white p-6 rounded-lg w-80">
-                    <img src={step.image} alt={step.title} className="w-full mb-4" />
-                    <h3 className="text-lg font-semibold">{step.title}</h3>
-                  </div>
-                </li>
+                    <MovingCard key={step.id} step={step}/>
               ))}
             </ul>
           </div>
-
-          {/* Navigation Arrows */}
-          {/* <div className="absolute top-1/2 left-4 transform -translate-y-1/2 z-10">
-            <button
-            data-glide-dir="<"
-            className="bg-white text-black p-3 rounded-full shadow-md hover:bg-gray-200"
-            >
-            ◀
-            </button>
-          </div>
-          <div className="absolute top-1/2 right-4 transform -translate-y-1/2 z-10">
-            <button
-            data-glide-dir=">"
-            className="bg-white text-black p-3 rounded-full shadow-md hover:bg-gray-200"
-            >
-            ▶
-            </button>
-          </div> */}
+        
         </div>
       </div>
       {/* sliding-end */}
@@ -147,9 +124,9 @@ const Landing: React.FC = () => {
       <div id="about" className="relative text-white py-24 px-6 md:px-16 lg:px-24">
         {/* About Us */}
         <div className="mb-6">
-          <div className="inline-block px-4 py-1 bg-white text-black rounded-lg font-semibold shadow-2xl">
+          {/* <div className="inline-block px-4 py-1 bg-white text-black rounded-lg font-semibold shadow-2xl">
           ℹ️ About Us
-          </div>
+          </div> */}
           <h2 className="text-3xl font-bold mt-4">What We Offer ?</h2>
         </div>
 
@@ -176,7 +153,6 @@ const Landing: React.FC = () => {
               className="relative w-[475px] h-[475px] mx-auto"
             />
 
-            {/* Foreground Image (Above the Blob) */}
             <img
               src={studentImage1} // Replace with the actual image
               alt="Happy Student"
@@ -308,9 +284,9 @@ const Landing: React.FC = () => {
 
       <div className="py-20 px-4 md:py-24">
         <div className="mb-20">
-          <div className="inline-block px-4 py-1 bg-white text-black rounded-lg font-semibold">
+          {/* <div className="inline-block px-4 py-1 bg-white text-black rounded-lg font-semibold">
           ⭐ Testimonials
-          </div>
+          </div> */}
           <h2 className="text-3xl font-bold mt-4">Public Cheers For Us</h2>
         </div>
 
