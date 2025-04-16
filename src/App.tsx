@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes } from 'react-router-dom';
 import "./App.css";
 import Landing from "./pages/Landing";
 import Signup from "./pages/auth/Signup";
@@ -32,7 +32,10 @@ import AdminCoursesPage from './pages/admin/AdminCourses';
 import AddCourse from './pages/admin/AddCourse';
 
 import LessonContent from './pages/Courses/Lessons/LessonContent';
-import AdminNotifications from "./pages/admin/AdminNotifications";
+
+import LessonQuiz from './pages/Courses/Lessons/LessonQuiz';
+import NumberNinja from './pages/Gamefied/Games/NumberNinja/NumberNija';
+import Notification from './pages/Notification';
 
 function App() {
   return (
@@ -45,14 +48,12 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/courses" element={<Programs />} />
         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/notification" element={<Notification />} />
         <Route path="/courses/:category" element={<Courses />} />
         <Route path="/course/:courseTitle/:id" element={<Lessons />} />
         <Route path="/lesson/:lessonTitle/:lessonId" element={<LessonContent />} />
-        {/* <Route
-          path="/lesson/:lessonTitle/:lessonId"
-          element={<LessonDetails />}
-        /> */}
         <Route path="/assessment" element={<Assessment />} />
+        <Route path="/course/quiz/:courseId" element={<LessonQuiz/>}/>
         <Route path="/assessment-results" element={<AssessmentResults />} />
         <Route path="/login" element={<Login />} />
         <Route path="/games" element={<GamesLayout />}>
@@ -64,6 +65,7 @@ function App() {
           <Route path="word_builder" element={<WordBuilder />} />
           <Route path="tic_tac_toe" element={<TicTacToe />} />
           <Route path="geography_quiz" element={<GeographyQuiz />} />
+          <Route path="number_ninja" element={<NumberNinja />} />
         </Route>
         {/* user dash  */}
         <Route path="/userdash" element={<UserDashLayout />}></Route>
@@ -72,7 +74,6 @@ function App() {
           <Route path="students" element={<AdminStudents/>}/>
           <Route path="courses" element={<AdminCoursesPage/>}/>
           <Route path="addCourse" element={<AddCourse/>}/>
-          <Route path="notification" element={<AdminNotifications/>}/>
         </Route>
       </Routes>
     </>
