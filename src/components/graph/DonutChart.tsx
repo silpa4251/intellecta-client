@@ -1,4 +1,5 @@
 // DonutChart.tsx
+//need apply data , percentage of quiz score according to subjects
 import { Doughnut } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -13,7 +14,7 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 const DonutChart: React.FC = () => {
   const data = {
-    labels: ['Electronics', 'Clothing', 'Grocery'],
+    labels: ['learing', 'gamming', 'others'],
     datasets: [
       {
         label: 'Sales by Category',
@@ -42,7 +43,7 @@ const DonutChart: React.FC = () => {
       },
       title: {
         display: true,
-        text: 'Sales Distribution'
+        text: 'Your activity'
       }
     },
     cutout: '60%', // Makes it a donut

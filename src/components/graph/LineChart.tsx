@@ -1,4 +1,5 @@
 // LineChart.tsx
+//learning time progress of user per month
 import { Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -28,7 +29,7 @@ const LineChart: React.FC = () => {
     labels: ['January', 'February', 'March', 'April'],
     datasets: [
       {
-        label: 'Revenue',
+        label: '',
         data: [30, 45, 60, 70],
         fill: false,
         borderColor: 'rgba(75, 192, 192, 1)',
@@ -42,7 +43,7 @@ const LineChart: React.FC = () => {
     responsive: true,
     plugins: {
       legend: { position: 'top' as const },
-      title: { display: true, text: 'Monthly Revenue' }
+      title: { display: true, text: 'Monthly Progress' }
     },
     scales: {
       y: {
