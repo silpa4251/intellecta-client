@@ -15,9 +15,9 @@ const AddCourse = () => {
   const [courseDetails, setCourseDetails] = useState({
     thumbNailImage: "",
     heading: "What is the learning path",
-    category: "Empty",
-    language: "Empty",
-    duration: "Empty",
+    category: "",
+    language: "",
+    duration: "",
     description: "",
   });
   console.log(courseDetails);
@@ -166,32 +166,23 @@ const AddCourse = () => {
                   <BookOpenTextIcon />
                 </div>
                 <h2 className="text-3xl font-semibold leading-snug text-gray-700">
-                  General Knowledge about – <br />
-                  the world
+                  {courseDetails.heading}
                 </h2>
-                <p>
-                  The vibrant colors of the sunset painted the sky with hues of{" "}
-                  <br />
-                  orange and pink, casting long shadows across the beach. Gentle{" "}
-                  <br />
-                  waves lapped at the shore, creating a soothing rhythm as the{" "}
-                  <br />
-                  day faded into twilight. A flock of birds flew overhead
-                </p>
+                <p>{courseDetails.description}</p>
                 <br />
                 <div className="flex justify-around">
-                  <div className="bg-gray-300 rounded-3xl w-fit px-3">
+                  {/* <div className="bg-gray-300 rounded-3xl w-fit px-3">
                     Course
-                  </div>
+                  </div> */}
                   <div className="bg-gray-300 rounded-3xl w-fit px-3">
-                    Catagory
+                    {courseDetails.category || "Catagory"}
                   </div>
                   <div className=" flex w-fit  text-gray-600">
-                    <Clock3Icon className="mr-2" />1 Weak
+                    <Clock3Icon className="mr-2" />{courseDetails.duration || "Duration"}
                   </div>
                   <div className=" flex w-fit  text-gray-600 px-3">
                     <Languages className="mr-2" />
-                    Language
+                    {courseDetails.language || "Language"}
                   </div>
                 </div>
                 <br />
@@ -201,25 +192,25 @@ const AddCourse = () => {
                 <div className="flex justify-around items-center">
                   {/* Stage */}
                   <div className="flex flex-col items-center space-y-2">
-                    <div className="border-3 min-w-20 min-h-12 flex justify-center items-center rounded-xl">
+                    <button className="border-3 min-w-20 min-h-12 flex justify-center items-center rounded-xl">
                       <LucideFlagTriangleRight className="text-9xl" />
-                    </div>
+                    </button>
                     <h1>Stage</h1>
                   </div>
 
                   {/* Upload */}
                   <div className="flex flex-col items-center space-y-2">
-                    <div className="border-3 min-w-20 min-h-12 flex justify-center items-center rounded-xl">
+                    <button className="border-3 min-w-20 min-h-12 flex justify-center items-center rounded-xl">
                       <UploadCloudIcon className="text-9xl" />
-                    </div>
+                    </button>
                     <h1>Upload</h1>
                   </div>
 
                   {/* Library */}
                   <div className="flex flex-col items-center space-y-2">
-                    <div className="border-3 min-w-20 min-h-12 flex justify-center items-center rounded-xl">
+                    <button className="border-3 min-w-20 min-h-12 flex justify-center items-center rounded-xl">
                       <Library className="text-9xl" />
-                    </div>
+                    </button>
                     <h1>Library</h1>
                   </div>
                 </div>
@@ -310,6 +301,7 @@ const DetailItem = ({
     <input
       type="text"
       value={value}
+      placeholder="Enter something..."
       onChange={(e) => onChange(e.target.value)}
       className={`pl-2 border-none bg-transparent text-right focus:outline-none focus:ring-0 ${
         value === "" ? "text-black" : "text-grey-400"
