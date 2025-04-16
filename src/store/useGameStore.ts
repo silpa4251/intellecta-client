@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 type Game = {
   _id: string;
@@ -31,6 +32,7 @@ type GameStore = {
   showPlayNow: boolean;
   setShowPlayNow:(val: boolean)=>void;
   loading: boolean;
+  leaderboardLoading:boolean;
   leaderboard: LeaderboardEntry[] | null;
   fetchLeaderboard: () => Promise<void>;
   fetchGames: () => Promise<void>;
@@ -52,6 +54,7 @@ export const useGameStore = create<GameStore>((set) => ({
   games: [],
   loading: false,
   showPlayNow:false,
+  leaderboardLoading:false,
   setShowPlayNow:(val)=> {
     set({showPlayNow:val })
   },
@@ -71,9 +74,12 @@ export const useGameStore = create<GameStore>((set) => ({
 
   fetchLeaderboard: async () => {
     try {
+      set({leaderboardLoading: true})
       const res = await axios.get("http://localhost:5002/api/games/users/leaderboard");
       set({ leaderboard: res.data.leaderboard });
+      set({leaderboardLoading: false})
     } catch (err) {
+      set({leaderboardLoading: false})
       console.error("Failed to fetch leaderboard:", err);
     }
   },
@@ -96,6 +102,7 @@ export const useGameStore = create<GameStore>((set) => ({
         },
         { withCredentials: true }
       );
+      toast.success("Game Score updated!", {position : "top-right"})
       console.log("Game session submitted:", res.data);
     } catch (err) {
       console.error("Failed to submit game session:", err);

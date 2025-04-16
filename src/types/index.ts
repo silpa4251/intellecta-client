@@ -24,6 +24,7 @@ export type QuizQuestion = {
     duration?: number; 
     tags: string[];
     resources?: string[];
+    notes?: string;
     completed?: boolean;
   }
 
