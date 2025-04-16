@@ -32,6 +32,7 @@ import AdminCoursesPage from './pages/admin/AdminCourses';
 import AddCourse from './pages/admin/AddCourse';
 
 import LessonContent from './pages/Courses/Lessons/LessonContent';
+import AdminNotifications from "./pages/admin/AdminNotifications";
 
 function App() {
   return (
@@ -71,6 +72,7 @@ function App() {
           <Route path="students" element={<AdminStudents/>}/>
           <Route path="courses" element={<AdminCoursesPage/>}/>
           <Route path="addCourse" element={<AddCourse/>}/>
+          <Route path="notification" element={<AdminNotifications/>}/>
         </Route>
       </Routes>
     </>

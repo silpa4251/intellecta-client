@@ -9,36 +9,16 @@ import {
   CartesianGrid,
 } from "recharts";
 
-const sampleData = {
-  day: [
-    { date: "10AM", count: 5 },
-    { date: "12PM", count: 12 },
-    { date: "2PM", count: 8 },
-  ],
-  week: [
-    { date: "Mon", count: 20 },
-    { date: "Tue", count: 30 },
-    { date: "Wed", count: 25 },
-    { date: "Thu", count: 40 },
-    { date: "Fri", count: 35 },
-    { date: "Sat", count: 15 },
-    { date: "Sun", count: 22 },
-  ],
-  month: [
-    { date: "Week 1", count: 50 },
-    { date: "Week 2", count: 65 },
-    { date: "Week 3", count: 80 },
-    { date: "Week 4", count: 55 },
-  ],
-  year: [
-    { date: "Jan", count: 30 },
-    { date: "Feb", count: 45 },
-    { date: "Mar", count: 40 },
-    { date: "Apr", count: 60 },
-  ],
-};
+interface Props {
+  userRegistrationData: {
+    day: { date: string; count: number }[];
+    week: { date: string; count: number }[];
+    month: { date: string; count: number }[];
+    year: { date: string; count: number }[];
+  };
+}
 
-export default function RegistrationStatsCard() {
+export default function RegistrationStatsCard({ userRegistrationData }: Props) {
   const [range, setRange] = useState<"day" | "week" | "month" | "year">("week");
 
   return (
@@ -64,7 +44,7 @@ export default function RegistrationStatsCard() {
 
       <div className="h-64">
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={sampleData[range]}>
+          <LineChart data={userRegistrationData[range]}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="date" />
             <YAxis allowDecimals={false} />
