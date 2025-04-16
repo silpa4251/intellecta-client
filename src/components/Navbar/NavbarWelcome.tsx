@@ -9,6 +9,7 @@ import student from "../../assets/Profile.jpg";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import SpinningLoader from "../Loaders/SpinningLoader";
+import { IoNotifications } from "react-icons/io5";
 
 const fetchUser = async () => {
   const { data } = await axiosInstance.get(userEndPoints.USER.GET_PROFILE);
@@ -77,7 +78,7 @@ const NavbarWelcome = () => {
       )}
 
       {/* Navbar */}
-      <nav className="flex items-center justify-between bg-[#031532]/90 backdrop-blur-lg border-b border-slate-800 px-4 md:px-16 py-3 shadow-xl relative z-40">
+      <nav className="flex items-center justify-between bg-[#031532]/90 backdrop-blur-lg border-b border-slate-800 px-4 md:px-36 py-3 shadow-xl relative z-40">
         {/* Logo Section */}
         <div className="flex items-center gap-2 text-white">
           <img src={wcpagelogo} alt="Logo" className="h-[26px] md:h-[32px]" />
@@ -116,15 +117,23 @@ const NavbarWelcome = () => {
             Games
             <span className="absolute left-0 -bottom-1 w-0 h-0.5 bg-blue-400 transition-all group-hover:w-full"></span>
           </Link>
+          <Link
+            to="/userdash"
+            className="relative group text-slate-200 hover:text-blue-400 transition-all ease-in duration-300"
+          >
+            Overview
+            <span className="absolute left-0 -bottom-1 w-0 h-0.5 bg-blue-400 transition-all group-hover:w-full"></span>
+          </Link>
         </div>
-
 
         {/* Right Section */}
         <div className="flex items-center gap-4">
-          
-        <span className="text-slate-300 text-xl cursor-pointer hover:text-blue-400 transition">
-            <MdLeaderboard />
-          </span>
+          <Link to="/notification">
+            <span className="text-slate-300 text-xl cursor-pointer hover:text-blue-400 transition">
+              <IoNotifications />
+            </span>
+          </Link>
+
           {/* Profile */}
           <div className="relative" ref={dropdownRef}>
             <img

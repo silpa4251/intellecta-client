@@ -35,6 +35,7 @@ import AddCourse from './pages/admin/AddCourse';
 import LessonContent from './pages/Courses/Lessons/LessonContent';
 import LessonQuiz from './pages/Courses/Lessons/LessonQuiz';
 import NumberNinja from './pages/Gamefied/Games/NumberNinja/NumberNija';
+import Notification from './pages/Notification';
 
 function App() {
   return (
@@ -47,6 +48,7 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/courses" element={<Programs />} />
         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/notification" element={<Notification />} />
         <Route path="/courses/:category" element={<Courses />} />
         <Route path="/course/:courseTitle/:id" element={<Lessons />} />
         <Route path="/lesson/:lessonTitle/:lessonId" element={<LessonContent />} />

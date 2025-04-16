@@ -1,5 +1,5 @@
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
-import { IoIosNotifications } from "react-icons/io";
+import { IoIosNotifications, IoMdHome } from "react-icons/io";
 // import GameSidebar from "./GamePages/GameSidebar";
 import { useEffect, useState } from "react";
 import { useGameStore } from "../../store/useGameStore";
@@ -11,6 +11,7 @@ import axios from "axios";
 import DockLid from "./gameNav/DockLid";
 import violetemerald from "../../assets/game/violet-emerald.png";
 import "./Games.css";
+import { BiHome, BiHomeCircle, BiHomeSmile } from "react-icons/bi";
 
 const GamesLayout = () => {
   const { fetchGames, fetchLeaderboard, games } = useGameStore();
@@ -105,6 +106,11 @@ const GamesLayout = () => {
         )}
 
         <div className="flex items-center gap-2 md:gap-5">
+          <Link to="/home">
+            <span className="text-2xl">
+              <IoMdHome />
+            </span>
+          </Link>
           <div className="flex items-center rounded-3xl space-x-2 px-3 py-1 bg-sky-800">
             <img src={violetemerald} alt="" className="h-8" />
             <span className="text-base font-semibold">
