@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import wcpagelogo from "../../assets/wcpage-logo.svg";
-import { MdLeaderboard, MdSettings } from "react-icons/md";
+import {  MdSettings } from "react-icons/md";
 import { GoSignOut } from "react-icons/go";
 import axiosInstance from "../../utils/axiosInstance";
 import { userEndPoints } from "../../api/endPoints/userEndPoints";

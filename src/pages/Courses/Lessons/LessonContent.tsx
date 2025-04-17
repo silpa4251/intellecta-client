@@ -8,6 +8,7 @@ import { IoCheckmarkCircleOutline } from "react-icons/io5";
 import { FaPlay } from "react-icons/fa";
 import { useState } from "react";
 import axiosInstance from "../../../utils/axiosInstance";
+import axios from "axios";
 
 type Params = {
   lessonId: string;
@@ -22,7 +23,7 @@ const LessonContent = () => {
 
   const fetchCourseWithLessons = async () => {
     if (!courseId) throw new Error("Course ID is missing");
-    const response = await axiosInstance.get(`/courses/${courseId}`);
+    const response = await axios.get(`http://localhost:5005/api/courses/${courseId}`);
     console.log("Fetching lessons of course", response);
     return response.data.data;
   };
@@ -37,7 +38,7 @@ const LessonContent = () => {
   });
 
   const fetchLessonContent = async () => {
-    const response = await axiosInstance.get(`courses/lessons/${lessonId}`);
+    const response = await axios.get(`http://localhost:5005/api/courses/lessons/${lessonId}`);
     console.log("Fetching lesson content", response.data.data);
     return response.data.data;
   };

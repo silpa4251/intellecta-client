@@ -2,7 +2,7 @@ import { useGameStore } from "../../../store/useGameStore";
 import { formatTime, leaderboardData } from "./LeaderboardPreview";
 
 const LeaderboardPreview = () => {
-  const { leaderboard, leaderboardLoading } = useGameStore();
+  const { leaderboard, leaderboardLoading } = useGameStore();  
 
   return (
     <div className=" md:w-full overflow-x-auto">
@@ -64,7 +64,7 @@ const LeaderboardPreview = () => {
                           new Date(data.lastPlayedDate).toLocaleDateString()}
                       </td>
                       <td className=" py-3 px-5 text-right">
-                        {data.totalScore}
+                        {data.totalScore && Math.floor(data.totalScore) || 0}
                       </td>
                     </tr>
                   ))}

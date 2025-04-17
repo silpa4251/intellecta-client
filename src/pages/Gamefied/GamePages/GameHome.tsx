@@ -8,7 +8,7 @@ import { useAuthStore } from "../../../store/useAuthStore";
 import PlayNow from "../Games/PlayNow";
 import {motion} from 'framer-motion'
 import { toast } from "react-toastify";
-import axiosInstance from "../../../utils/axiosInstance";
+import axios from "axios";
 
 export const showToast = () => {
   toast.warn(
@@ -37,7 +37,7 @@ const GameHome = () => {
   const { data: recentgame } = useQuery({
     queryKey: ["recentgame"],
     queryFn: async () => {
-      const res = await axiosInstance.get("/games/latest/recent-game",
+      const res = await axios.get("http://localhost:5002/api/games/latest/recent-game",
         { withCredentials: true }
       );
       const games = res.data.games;

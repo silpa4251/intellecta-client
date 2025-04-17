@@ -9,7 +9,7 @@ import proplayerTrophy from "../../../assets/game/pro-player.png";
 import legendTrophy from "../../../assets/game/legend.png";
 import RotatingCard from "../../../utils/ui/RotatingCards";
 import LeaderboardLoading from "./LeaderboardLoading";
-import axiosInstance from "../../../utils/axiosInstance";
+import axios from "axios";
 
 interface UserRecentGamesType {
   _id: string;
@@ -25,7 +25,7 @@ const GameProfile = () => {
   const { data: userstats } = useQuery({
     queryKey: ["fetchUserleaderboard"],
     queryFn: async () => {
-      const res = await axiosInstance.get("games/userbyid/leaderboard",
+      const res = await axios.get("http://localhost:5005/api/games/userbyid/leaderboard",
         { withCredentials: true }
       );
       return res.data?.leaderboard || {};
@@ -69,14 +69,16 @@ const GameProfile = () => {
   const { data: userRecentGames, isLoading } = useQuery({
     queryKey: ["userRecentgame"],
     queryFn: async () => {
-      const res = await axiosInstance.get(
-        "games/latest/recent-game",
+      const res = await axios.get(
+        "http://localhost:5005/api/games/latest/recent-game",
         { withCredentials: true }
       );
       return res.data?.games || [];
     },
     enabled: !!user,
   });
+  console.log(user?.profilePic);
+  
 
   return (
     <div className="flex flex-col items-center justify-between gap-10 py-5 md:mx-auto px-4">
@@ -159,8 +161,8 @@ const GameProfile = () => {
             )}
           </div>
           <div className="h-fit gap-4">
-            <h4 className="text-gray-200 font-semibold">BADGES</h4>
-            <div className="grid grid-cols-2 gap-4">
+            <h4 className="text-gray-200 font-semibold mb-2">BADGES</h4>
+            <div className="grid grid-cols-3 gap-4">
               {userstats?.badges.length > 0 ? (
                 userstats?.badges.map((badge: any, index: number) => {
                   const filtered = badgeTrophies.find(

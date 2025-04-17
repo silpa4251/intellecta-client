@@ -6,11 +6,12 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import SpinningLoader from "../../components/Loaders/SpinningLoader";
 import axiosInstance from "../../utils/axiosInstance";
+import axios from "axios";
 
 // Course progress API call
 const fetchCourseProgress = async (courseId: string) => {
   try {
-  const response = await axiosInstance.get(`courses/progress/${courseId}`, { withCredentials: true });
+  const response = await axios.get(`http://localhost:5005/api/courses/progress/${courseId}`, { withCredentials: true });
   return response.data.data; 
 } catch (err) {
   console.warn(`Progress not found for course ${courseId}`);
@@ -45,7 +46,7 @@ const Courses = () => {
   console.log("object", category);
 
   const fetchCourses = async () => {
-    const response = await axiosInstance.get(`/courses/subject/${category}`, { withCredentials: true });
+    const response = await axios.get(`http://localhost:5005/api/courses/subject/${category}`, { withCredentials: true });
     console.log("fetch courses", response.data.data);
     return response.data.data;
   };
