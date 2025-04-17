@@ -4,9 +4,12 @@ import UserProfileHover from "../../utils/ui/userProfileHover";
 import RadioButtonAdminSideBar from "../../utils/ui/radioButtonAdminSidebar";
 import intellectalogo from "../../assets/Intellecta-logo.svg";
 import { useLocation } from "react-router-dom";
+import { useState } from "react";
+import NotificationPanel from "./AdminNotifications";
 
 const AdminLayout = () => {
   const location = useLocation();
+  const [showNotification, setShowNotification] = useState(false);
 
   const currentPage = (() => {
     switch (location.pathname) {
@@ -14,12 +17,12 @@ const AdminLayout = () => {
         return "Dashboard";
       case "/admin/students":
         return "Students";
-      case "/admin/teachers":
-        return "Teachers";
       case "/admin/courses":
         return "Courses";
+        case "/admin/notification":
+          return "Notification";  
       default:
-        return "";
+        return "Dashboard";
     }
   })();
 
@@ -44,7 +47,7 @@ const AdminLayout = () => {
 
         {/* Navigation Icons */}
         <nav className="flex flex-col space-y-4 justify-center py-30 flex-1">
-          <RadioButtonAdminSideBar />
+        <RadioButtonAdminSideBar onNotificationClick={() => setShowNotification(!showNotification)} />
         </nav>
 
         {/* User Profile & Logout - Stick to Bottom on Desktop */}
@@ -55,8 +58,8 @@ const AdminLayout = () => {
       </aside>
 
       {/* Main Section */}
-      <div className="flex flex-col flex-1">
-        {/* Navbar */}
+      <div className="flex flex-col flex-1 relative overflow-hidden"> {/* ⭐ Added relative */}
+        {/* Header */}
         <header className="px-6 py-8 bg-[#d8ede7] flex justify-between items-center">
           <div>
             <h1 className="text-5xl font-medium flex items-center space-x-0">
@@ -71,9 +74,12 @@ const AdminLayout = () => {
         </header>
 
         {/* Main Content */}
-        <main className="pr-4  flex-1 bg-[#D6EFEB]">
+        <main className="pr-4 flex-1 bg-[#D6EFEB]">
           <Outlet />
         </main>
+
+        {/* Notification Panel */}
+        {showNotification && <NotificationPanel onClose={() => setShowNotification(false)} />} {/* ⭐ */}
       </div>
     </div>
   );
