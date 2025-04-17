@@ -70,10 +70,10 @@ const ChatBot = () => {
                 initial={{ opacity: 0, x: msg.fromBot ? -50 : 50 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.2 }}
-                className={`max-w-[80%] p-2 rounded-lg shadow ${
+                className={`p-2 rounded-lg shadow ${
                   msg.fromBot
-                    ? "bg-white text-black self-start"
-                    : "bg-[#395e71] text-white self-end"
+                    ? "bg-white text-black self-start max-w-[80%]"
+                    : "bg-[#395e71] text-white self-end min-w-16"
                 }`}
               >
                 <h1 className="text-xs font-semibold">
