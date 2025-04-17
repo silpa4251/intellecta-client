@@ -1,13 +1,19 @@
 import { useParams, useNavigate, useLocation, Link } from "react-router-dom";
 import NavbarWelcome from "../../../components/Navbar/NavbarWelcome";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import SpinningLoader from "../../../components/Loaders/SpinningLoader";
 import { Lesson } from "../../../types";
 import ReactPlayer from "react-player";
 import { IoCheckmarkCircleOutline } from "react-icons/io5";
-import { FaPlay, FaPause, FaVolumeUp, FaVolumeMute, FaExpand } from "react-icons/fa";
-import { useState, useRef } from "react";
+import {
+  FaPlay,
+  FaPause,
+  FaVolumeUp,
+  FaVolumeMute,
+  FaExpand,
+} from "react-icons/fa";
+import { useState, useRef, useEffect } from "react";
 import screenfull from "screenfull";
 
 type Params = {
@@ -15,11 +21,20 @@ type Params = {
   lessonTitle: string;
 };
 
+type ProgressData = {
+  completedLessons: string[];
+  courseId: string;
+  currentLesson: string;
+  progressPercent: number;
+  _id: string;
+};
+
 const LessonContent = () => {
   const { lessonId = "" } = useParams<Params>();
   const navigate = useNavigate();
   const { state } = useLocation();
   const { courseTitle, courseId } = state || {};
+  const queryClient = useQueryClient();
 
   // State for custom controls
   const [playing, setPlaying] = useState(false);
@@ -30,8 +45,11 @@ const LessonContent = () => {
   const [playbackRate, setPlaybackRate] = useState(1);
   const playerRef = useRef<ReactPlayer>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
+  
+  // Track if this lesson is completed
+  const [isLessonCompleted, setIsLessonCompleted] = useState(false);
 
-  // Handlers for custom controls
+  // Handlers for custom controls (unchanged)
   const handlePlayPause = () => {
     setPlaying(!playing);
   };
@@ -43,7 +61,7 @@ const LessonContent = () => {
       playerRef.current.seekTo(value, "fraction");
     }
   };
-
+]
   const handleProgress = (state: { played: number; playedSeconds: number }) => {
     setPlayed(state.played);
     setPlayedSeconds(state.playedSeconds);
@@ -62,7 +80,9 @@ const LessonContent = () => {
     setVolume(volume === 0 ? 0.8 : 0);
   };
 
-  const handlePlaybackRateChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handlePlaybackRateChange = (
+    e: React.ChangeEvent<HTMLSelectElement>
+  ) => {
     const value = parseFloat(e.target.value);
     setPlaybackRate(value);
   };
@@ -79,14 +99,41 @@ const LessonContent = () => {
     return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
   };
 
+  // Fetch course progress
+  const fetchCourseProgress = async () => {
+    if (!courseId) throw new Error("Course ID is missing");
+    const response = await axios.get(
+      `http://localhost:5005/api/progress/${courseId}`,
+      { withCredentials: true }
+    );
+    console.log("Fetched course progress:", response.data.data);
+    return response.data.data;
+  };
+
+  const {
+    data: progressData,
+    isLoading: progressLoading,
+  } = useQuery<ProgressData>({
+    queryKey: ["courseProgress", courseId],
+    queryFn: fetchCourseProgress,
+    enabled: !!courseId,
+  });
+
+  // Fetch course with lessons
   const fetchCourseWithLessons = async () => {
     if (!courseId) throw new Error("Course ID is missing");
-    const response = await axios.get(`http://localhost:5005/api/courses/${courseId}`);
+    const response = await axios.get(
+      `http://localhost:5005/api/courses/${courseId}`
+    );
     console.log("Fetching lessons of course", response);
     return response.data.data;
   };
 
-  const { data: courseData, isLoading: courseLoading, error: courseError } = useQuery<{
+  const {
+    data: courseData,
+    isLoading: courseLoading,
+    error: courseError,
+  } = useQuery<{
     course: { _id: string; title: string; description: string };
     lessons: Lesson[];
   }>({
@@ -95,17 +142,81 @@ const LessonContent = () => {
     enabled: !!courseId,
   });
 
+  // Fetch lesson content
   const fetchLessonContent = async () => {
-    const response = await axios.get(`http://localhost:5005/api/courses/lessons/${lessonId}`);
+    const response = await axios.get(
+      `http://localhost:5005/api/courses/lessons/${lessonId}`
+    );
     console.log("Fetching lesson content", response.data.data);
     return response.data.data;
   };
 
-  const { data: lessonData, isLoading, error } = useQuery<Lesson>({
+  const {
+    data: lessonData,
+    isLoading,
+    error,
+  } = useQuery<Lesson>({
     queryKey: ["lessonContent", lessonId],
     queryFn: fetchLessonContent,
     enabled: !!lessonId,
   });
+
+  // Check if this lesson is completed whenever progressData or lessonId changes
+  useEffect(() => {
+    if (progressData && lessonId) {
+      const completed = progressData.completedLessons.includes(lessonId);
+      setIsLessonCompleted(completed);
+      console.log(`Lesson ${lessonId} completed status:`, completed);
+    }
+  }, [progressData, lessonId]);
+
+  // Mutation for marking lesson as complete
+  const markAsCompleteMutation = useMutation({
+    mutationFn: async () => {
+      if (!lessonId || !courseId) throw new Error("Lesson or Course ID is missing");
+      const response = await axios.post(
+        `http://localhost:5005/api/progress/update`,
+        {
+          courseId,
+          lessonId,
+        },
+        { withCredentials: true }
+      );
+      return response.data.data;
+    },
+    onSuccess: async (data) => {
+      console.log("Lesson marked as complete:", data);
+      alert("Lesson marked as complete!");
+      
+      // Update local state
+      setIsLessonCompleted(true);
+      
+      // Invalidate progress data query to force a refetch
+      queryClient.invalidateQueries({ queryKey: ["courseProgress", courseId] });
+      
+      // Update the lesson completion status in the course data cache
+      queryClient.setQueryData(["courseWithLessons", courseId], (oldData: any) => {
+        if (!oldData) return oldData;
+        
+        const updatedLessons = oldData.lessons.map((lesson: any) => 
+          lesson._id === lessonId ? { ...lesson, completed: true } : lesson
+        );
+        
+        return {
+          ...oldData,
+          lessons: updatedLessons
+        };
+      });
+    },
+    onError: (error) => {
+      console.error("Error marking lesson as complete:", error);
+      alert("Failed to mark lesson as complete. Please try again.");
+    },
+  });
+
+  const handleMarkAsComplete = () => {
+    markAsCompleteMutation.mutate();
+  };
 
   const isVideoResource = (resource: any) => {
     return (
@@ -122,14 +233,16 @@ const LessonContent = () => {
       videoCount += 1;
     }
     if (lesson.resources && lesson.resources.length > 0) {
-      videoCount += lesson.resources.filter((resource) => isVideoResource(resource)).length;
+      videoCount += lesson.resources.filter((resource) =>
+        isVideoResource(resource)
+      ).length;
     }
     return videoCount;
   };
 
   const [activeTab, setActiveTab] = useState<string | null>(null);
 
-  if (isLoading || courseLoading) {
+  if (isLoading || courseLoading || progressLoading) {
     return (
       <div className="fixed inset-0 bg-white bg-opacity-90 flex flex-col justify-center items-center z-50">
         <SpinningLoader />
@@ -157,6 +270,12 @@ const LessonContent = () => {
   const lessons = courseData.lessons || [];
   const notesContent = lessonData.notes || "No materials available";
   const additionalResources = lessonData.resources || [];
+
+  // Check if the lesson is completed based on the progress data
+  const isCompletedLesson = (lesson: Lesson) => {
+    if (!progressData) return false;
+    return progressData.completedLessons.includes(lesson._id);
+  };
 
   return (
     <>
@@ -187,11 +306,17 @@ const LessonContent = () => {
                 >
                   <div className="flex items-center gap-2">
                     <span className="text-green-500">
-                      {lesson.completed ? <IoCheckmarkCircleOutline /> : <FaPlay />}
+                      {isCompletedLesson(lesson) ? (
+                        <IoCheckmarkCircleOutline />
+                      ) : (
+                        <FaPlay />
+                      )}
                     </span>
                     <span className="text-xs sm:text-sm">{lesson.title}</span>
                   </div>
-                  <span className="text-xs text-gray-700">{getVideoCount(lesson)}</span>
+                  <span className="text-xs text-gray-700">
+                    {getVideoCount(lesson)}
+                  </span>
                 </div>
                 {lessonIndex < lessons.length - 1 && (
                   <hr className="border-t border-gray-300" />
@@ -199,10 +324,25 @@ const LessonContent = () => {
               </div>
             ))}
           </div>
-
-          {/* Main Content */}
-          <div className="w-full lg:w-3/4 bg-white p-4 sm:p-6 rounded-lg shadow-md">
-            <h1 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">{lessonData.title}</h1>
+          <div className="w-3/4 bg-white p-6 rounded-lg shadow-md">
+            <div className="flex justify-between">
+              <h1 className="text-2xl font-bold mb-6">{lessonData.title}</h1>
+              <button
+                onClick={handleMarkAsComplete}
+                disabled={isLessonCompleted || markAsCompleteMutation.isPending}
+                className={`px-4 py-2 mb-6 rounded-lg font-semibold shadow-md transition duration-300 w-full sm:w-auto ${
+                  isLessonCompleted || markAsCompleteMutation.isPending
+                    ? "bg-gray-500 text-gray-300 cursor-not-allowed"
+                    : "bg-green-500 text-white hover:bg-green-600"
+                }`}
+              >
+                {markAsCompleteMutation.isPending
+                  ? "Marking..."
+                  : isLessonCompleted
+                  ? "Completed"
+                  : "Mark as Complete"}
+              </button>
+            </div>
 
             {lessonData.content && (
               <div className="mb-4 sm:mb-6">
@@ -321,7 +461,9 @@ const LessonContent = () => {
                         </select>
                       </div>
                       <div>
-                        <span>Remaining: {formatTime(duration - playedSeconds)}</span>
+                        <span>
+                          Remaining: {formatTime(duration - playedSeconds)}
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -358,13 +500,11 @@ const LessonContent = () => {
                 </div>
               </div>
             )}
-
             {!lessonData.url && !lessonData.content && !lessonData.resources && (
               <p className="text-gray-600 text-xs sm:text-sm text-center">
                 No content available for this lesson yet.
               </p>
             )}
-
             <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4 mb-4 sm:mb-6 mt-4 sm:mt-6">
               <button
                 className={`px-3 py-2 rounded-lg text-xs sm:text-sm ${
@@ -414,7 +554,10 @@ const LessonContent = () => {
                     {additionalResources.map((resource, index) => (
                       <div key={index} className="bg-white p-3 sm:p-4 rounded-lg shadow-md">
                         {isVideoResource(resource) ? (
-                          <div className="relative w-full" style={{ paddingTop: "56.25%" }}>
+                          <div
+                            className="relative w-full"
+                            style={{ paddingTop: "56.25%" }}
+                          >
                             <ReactPlayer
                               url={resource}
                               width="100%"

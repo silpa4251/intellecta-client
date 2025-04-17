@@ -81,7 +81,6 @@ const Courses = () => {
     enabled: initialCourses.length > 0,
     initialData: {} as ProgressMap,
   });
-
   // Callback to update courses when filters are applied
   const handleCoursesUpdate = (courses: Course[]) => {
     console.log("Filtered courses received:", courses);
@@ -90,7 +89,6 @@ const Courses = () => {
 
   // Use filteredCourses if available, otherwise fall back to initialCourses
   const displayedCourses = filteredCourses.length > 0 ? filteredCourses : initialCourses;
-
   if (isLoading || isProgressLoading) {
     return (
       <div className="fixed inset-0 bg-white bg-opacity-90 flex flex-col justify-center items-center z-50">
