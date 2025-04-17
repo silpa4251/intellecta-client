@@ -1,5 +1,5 @@
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
-import { IoIosNotifications, IoMdHome } from "react-icons/io";
+import { IoMdHome } from "react-icons/io";
 // import GameSidebar from "./GamePages/GameSidebar";
 import { useEffect, useState } from "react";
 import { useGameStore } from "../../store/useGameStore";
@@ -7,11 +7,9 @@ import { useAuthStore } from "../../store/useAuthStore";
 import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "../../utils/axiosInstance";
 import { userEndPoints } from "../../api/endPoints/userEndPoints";
-import axios from "axios";
 import DockLid from "./gameNav/DockLid";
 import violetemerald from "../../assets/game/violet-emerald.png";
 import "./Games.css";
-import { BiHome, BiHomeCircle, BiHomeSmile } from "react-icons/bi";
 
 const GamesLayout = () => {
   const { fetchGames, fetchLeaderboard, games } = useGameStore();
@@ -41,8 +39,7 @@ const GamesLayout = () => {
   const { data: userstats } = useQuery({
     queryKey: ["fetchUserleaderboard"],
     queryFn: async () => {
-      const res = await axios.get(
-        "http://localhost:5002/api/games/userbyid/leaderboard",
+      const res = await axiosInstance.get("games/userbyid/leaderboard",
         { withCredentials: true }
       );
       return res.data?.leaderboard || {};
@@ -114,7 +111,7 @@ const GamesLayout = () => {
           <div className="flex items-center rounded-3xl space-x-2 px-3 py-1 bg-sky-800">
             <img src={violetemerald} alt="" className="h-8" />
             <span className="text-base font-semibold">
-              {userstats?.totalScore || 0}
+              {Math.floor(userstats?.totalScore) || 0}
             </span>
           </div>
           <Link to="/games/myprofile">

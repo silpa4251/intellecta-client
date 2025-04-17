@@ -4,7 +4,6 @@ import { IoCheckmarkOutline } from "react-icons/io5";
 import { RxCross1 } from "react-icons/rx";
 import axiosInstance from "../utils/axiosInstance";
 import { toast } from "react-toastify";
-import axios from "axios";
 import SpinningLoader from "../components/Loaders/SpinningLoader";
 import { useNavigate } from "react-router-dom";
 
@@ -95,7 +94,7 @@ const Assessment = () => {
         }))
       };
 
-      const response = await axios.post("http://localhost:5001/api/assessment/evaluate",submissionData,{withCredentials: true});
+      const response = await axiosInstance.post("/ai-tutor/evaluate",submissionData,{withCredentials: true});
       setIsSubmitting(false);
       console.log('Assessment Evaluation Response:', response.data);
       toast.success('Assessment submitted successfully!');

@@ -1,13 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
-import GameController from "../../../assets/game/controller.png";
+import  gamebg4 from "../../../assets/game/test4.png";
 import { useGameStore } from "../../../store/useGameStore";
 import GameFooter from "./GameFooter";
 import LeaderboardPreview from "./LeaderboardPreview";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
 import { useAuthStore } from "../../../store/useAuthStore";
 import PlayNow from "../Games/PlayNow";
+import {motion} from 'framer-motion'
 import { toast } from "react-toastify";
+import axiosInstance from "../../../utils/axiosInstance";
 
 export const showToast = () => {
   toast.warn(
@@ -32,11 +33,11 @@ const GameHome = () => {
   const { user } = useAuthStore();
   const navigate = useNavigate();
 
+
   const { data: recentgame } = useQuery({
     queryKey: ["recentgame"],
     queryFn: async () => {
-      const res = await axios.get(
-        "http://localhost:5002/api/games/latest/recent-game",
+      const res = await axiosInstance.get("/games/latest/recent-game",
         { withCredentials: true }
       );
       const games = res.data.games;
@@ -82,13 +83,18 @@ const GameHome = () => {
               </button>
             </Link>
           </div>
-          <div>
+          <motion.div
+          initial={{ x: "2%", opacity: 0 }}
+          animate={{ x: "0%", opacity: 1 }}
+          exit={{ x: "20%", opacity: 0 }}
+          transition={{ duration: 0.5, ease: "easeInOut" }}
+          >
             <img
-              src={GameController}
+              src={gamebg4}
               alt="Game Controller"
-              className="hidden md:block max-w-xl relative bottom-16 transition-transform duration-700  ease-in-out hover:rotate-12 hover:scale-90"
+              className="hidden mt-7 md:block max-w-xl h-[450px] relative bottom-16 transition-all  duration-700 ease-in-out hover:scale-105"
             />
-          </div>
+          </motion.div>
         </div>
         {recentgame && (
           <div>

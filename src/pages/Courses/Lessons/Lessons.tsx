@@ -7,9 +7,9 @@ import CircularProgress from "../../../utils/ui/Progress";
 import { useState } from "react";
 import { IoCheckmarkCircleOutline } from "react-icons/io5";
 import { Lesson } from "../../../types";
-import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import SpinningLoader from "../../../components/Loaders/SpinningLoader";
+import axiosInstance from "../../../utils/axiosInstance";
 
 type Params = {
   id: string;
@@ -21,7 +21,7 @@ const Lessons = () => {
   const navigate = useNavigate();
 
   const fetchCourseWithLessons = async () => {
-    const response = await axios.get(`http://localhost:5005/api/courses/${id}`);
+    const response = await axiosInstance.get(`courses/${id}`);
     console.log("Fetching lessons", response);
     return response.data.data;
   };

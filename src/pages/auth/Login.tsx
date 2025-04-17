@@ -42,11 +42,7 @@ const SignIn = () => {
   const onSubmit = async (values: LoginFormData) => {
     try {
       console.log("submitting", values);
-      const response = await axiosInstance.post(
-        userEndPoints.USER.LOGIN, 
-        values,
-        { headers: { "Content-Type": "application/json" } }
-      );
+      const response = await axiosInstance.post(userEndPoints.USER.LOGIN, values);
       console.log("Login success:", response);
       toast.success("Login Successfull 🎉");
       navigate("/home");

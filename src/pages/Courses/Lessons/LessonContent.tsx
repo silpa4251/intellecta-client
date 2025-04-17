@@ -1,13 +1,13 @@
 import { useParams, useNavigate, useLocation, Link } from "react-router-dom";
 import NavbarWelcome from "../../../components/Navbar/NavbarWelcome";
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import SpinningLoader from "../../../components/Loaders/SpinningLoader";
 import { Lesson } from "../../../types";
 import ReactPlayer from "react-player";
 import { IoCheckmarkCircleOutline } from "react-icons/io5";
 import { FaPlay } from "react-icons/fa";
 import { useState } from "react";
+import axiosInstance from "../../../utils/axiosInstance";
 
 type Params = {
   lessonId: string;
@@ -22,7 +22,7 @@ const LessonContent = () => {
 
   const fetchCourseWithLessons = async () => {
     if (!courseId) throw new Error("Course ID is missing");
-    const response = await axios.get(`http://localhost:5005/api/courses/${courseId}`);
+    const response = await axiosInstance.get(`/courses/${courseId}`);
     console.log("Fetching lessons of course", response);
     return response.data.data;
   };
@@ -37,7 +37,7 @@ const LessonContent = () => {
   });
 
   const fetchLessonContent = async () => {
-    const response = await axios.get(`http://localhost:5005/api/courses/lessons/${lessonId}`);
+    const response = await axiosInstance.get(`courses/lessons/${lessonId}`);
     console.log("Fetching lesson content", response.data.data);
     return response.data.data;
   };
