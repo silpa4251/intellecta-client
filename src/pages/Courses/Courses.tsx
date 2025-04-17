@@ -78,7 +78,7 @@ const Courses = () => {
     enabled: courses.length > 0,
     initialData: {} as ProgressMap 
   });
-console.log('first', progressData);
+
   if (isLoading || isProgressLoading) {
     return (
       <div className="fixed inset-0 bg-white bg-opacity-90 flex flex-col justify-center items-center z-50">
