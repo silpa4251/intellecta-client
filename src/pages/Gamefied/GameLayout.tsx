@@ -110,7 +110,7 @@ const GamesLayout = () => {
             </span>
           </Link>
           <div className="flex items-center rounded-3xl space-x-2 px-3 py-1 bg-sky-800">
-            <img src={violetemerald} alt="" className="h-8" />
+            <img src={violetemerald} alt="" className="md:h-8 h-5" />
             <span className="text-base font-semibold">
               {Math.floor(userstats?.totalScore) || 0}
             </span>
@@ -120,7 +120,7 @@ const GamesLayout = () => {
               <img
                 src={user?.profilePic || "/home-bg.png"}
                 alt=""
-                className="w-10 h-10 object-contain cursor-pointer rounded-full bg-white"
+                className="md:w-10 md:h-10 h-9 w-9 object-cover cursor-pointer rounded-full bg-white"
               />
             </div>
           </Link>
@@ -129,7 +129,7 @@ const GamesLayout = () => {
 
       <div className="flex">
         {/* <GameSidebar /> */}
-        <div className="w-full min-h-full md:px-10">
+        <div className="w-full min-h-full">
           <Outlet />
         </div>
       </div>

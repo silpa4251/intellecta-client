@@ -94,7 +94,7 @@ const Assessment = () => {
         }))
       };
 
-      const response = await axios.post("/http://localhost:5001/api/ai-tutor/evaluate",submissionData,{withCredentials: true});
+      const response = await axios.post("http://localhost:5001/api/ai-tutor/evaluate",submissionData,{withCredentials: true});
       setIsSubmitting(false);
       console.log('Assessment Evaluation Response:', response.data);
       toast.success('Assessment submitted successfully!');

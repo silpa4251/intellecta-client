@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import wcpagelogo from "../../assets/wcpage-logo.svg";
-import {  MdSettings } from "react-icons/md";
+import { MdLeaderboard, MdSettings } from "react-icons/md";
 import { GoSignOut } from "react-icons/go";
 import axiosInstance from "../../utils/axiosInstance";
 import { userEndPoints } from "../../api/endPoints/userEndPoints";
@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import SpinningLoader from "../Loaders/SpinningLoader";
 import { IoNotifications } from "react-icons/io5";
+import { FaGamepad } from "react-icons/fa6";
 
 const fetchUser = async () => {
   const { data } = await axiosInstance.get(userEndPoints.USER.GET_PROFILE);
@@ -157,6 +158,19 @@ const NavbarWelcome = () => {
                       Profile Settings
                     </button>
                   </li>
+                  <Link to="/userdash" className="md:hidden block">
+                    <li className="flex items-center gap-2 px-4 py-2 w-full hover:bg-slate-800 transition">
+                      <MdLeaderboard />
+                      Overview
+                    </li>
+                  </Link>
+                  <Link to="/games" className="md:hidden block">
+                    <li className="flex items-center gap-2 px-4 py-2 w-full hover:bg-slate-800 transition">
+                      <FaGamepad className="text-lg" />
+                      Games
+                    </li>
+                  </Link>
+
                   <li>
                     <button
                       className="flex items-center gap-2 px-4 py-2 w-full hover:bg-red-600/20 text-red-300 hover:text-white transition"

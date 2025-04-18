@@ -25,7 +25,8 @@ const GameProfile = () => {
   const { data: userstats } = useQuery({
     queryKey: ["fetchUserleaderboard"],
     queryFn: async () => {
-      const res = await axios.get("http://localhost:5005/api/games/userbyid/leaderboard",
+      const res = await axios.get(
+        "http://localhost:5005/api/games/userbyid/leaderboard",
         { withCredentials: true }
       );
       return res.data?.leaderboard || {};
@@ -70,26 +71,24 @@ const GameProfile = () => {
     queryKey: ["userRecentgame"],
     queryFn: async () => {
       const res = await axios.get(
-        "http://localhost:5005/api/games/latest/recent-game",
+        "http://localhost:5002/api/games/latest/recent-game",
         { withCredentials: true }
       );
       return res.data?.games || [];
     },
     enabled: !!user,
   });
-  console.log(user?.profilePic);
-  
 
   return (
-    <div className="flex flex-col items-center justify-between gap-10 py-5 md:mx-auto px-4">
+    <div className="flex flex-col items-center justify-between gap-10 py-5 md:mx-auto md:px-4 ">
       {user ? (
-        <div className="flex justify-between w-full max-w-5xl rounded-xl p-6">
+        <div className="flex flex-col md:flex-row justify-between w-full max-w-5xl rounded-xl p-6">
           <div className="space-y-4 ">
             <div className="flex items-center text-white gap-4">
               <img
                 src={user?.profilePic}
                 alt=""
-                className="h-20 w-20 bg-red-100 object-contain rounded-full"
+                className="h-20 w-20 bg-red-100 object-cover rounded-full"
               />
               <div>
                 <h2 className="text-gray-400 font-semibold text-lg">WELCOME</h2>
@@ -98,18 +97,22 @@ const GameProfile = () => {
                 </h1>
               </div>
             </div>
-            <div className="flex gap-8 text-white">
-              <div className=" p-6 rounded-xl brounded-xl border-2 border-gray-800 bg-[#070e1f]">
-                <p className="text-gray-500">TOTAL TIME SPEND</p>
-                <h1 className="font-semibold text-3xl">
+            <div className="flex md:gap-8 gap-3 text-white">
+              <div className="md:p-6 p-3 rounded-xl brounded-xl border-2 border-gray-800 bg-[#070e1f]">
+                <p className="text-gray-500 text-cs md:text-base">
+                  TOTAL TIME SPEND
+                </p>
+                <h1 className="font-semibold md:text-3xl text-xl">
                   {(userstats?.totalTimePlayed &&
                     formatTime(userstats?.totalTimePlayed)) ||
                     0}
                 </h1>
               </div>
-              <div className="p-6 rounded-xl border-2 border-gray-800 bg-[#070e1f]">
-                <p className="text-gray-500">TOTAL GAMES PLAYED</p>
-                <h1 className="font-semibold text-3xl">
+              <div className="md:p-6 p-3 rounded-xl border-2 border-gray-800 bg-[#070e1f]">
+                <p className="text-gray-500 text-sm md:text-base">
+                  TOTAL GAMES PLAYED
+                </p>
+                <h1 className="font-semibold md:text-3xl text-xl">
                   {userstats?.gamesPlayed || 0}
                 </h1>
               </div>
@@ -118,8 +121,8 @@ const GameProfile = () => {
               Recently Played games
             </h2>
             {userRecentGames?.length > 0 ? (
-              <div>
-                <div className="min-h-4fygh4 mt-5 w-full max-w-3xl mx-auto rounded-xl border-2 border-gray-800 bg-[#070e1f] p-4">
+              <div className="mt-5 w-full overflow-x-auto">
+                <div className="min-w-[450px] md:max-w-3xl mx-auto rounded-xl border-2 border-gray-800 bg-[#070e1f] p-4">
                   <div className="grid grid-cols-3 text-white text-sm font-semibold border-b border-gray-600 pb-2">
                     <div className="text-left">Game</div>
                     <div className="text-center">Difficulty</div>
@@ -133,7 +136,7 @@ const GameProfile = () => {
                     userRecentGames.map((game: UserRecentGamesType) => (
                       <div
                         key={game._id}
-                        className={`grid grid-cols-3 items-center py-3 text-gray-300 text-sm`}
+                        className="grid grid-cols-3 items-center py-3 text-gray-300 text-sm"
                       >
                         <div className="flex items-center gap-5 text-left font-medium">
                           <img
@@ -160,7 +163,7 @@ const GameProfile = () => {
               </p>
             )}
           </div>
-          <div className="h-fit gap-4">
+          <div className="h-fit gap-4 md:mt-0 mt-10">
             <h4 className="text-gray-200 font-semibold mb-2">BADGES</h4>
             <div className="grid grid-cols-3 gap-4">
               {userstats?.badges.length > 0 ? (
@@ -169,7 +172,7 @@ const GameProfile = () => {
                     (trophy) => trophy.badge === badge
                   );
                   return (
-                    <div key={index} className="gr">
+                    <div key={index} className="">
                       {filtered && (
                         <RotatingCard badges={filtered} badge={badge} />
                       )}

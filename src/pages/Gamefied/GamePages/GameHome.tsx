@@ -59,13 +59,13 @@ const GameHome = () => {
 
   return (
     <>
-      <div className="p-5 md:mx-28">
+      <div className="p-5 md:mx-36">
         <div className="flex flex-col md:flex-row md:justify-between  mt-10">
           <div className="max-w-md space-y-3">
             <h3 className="text-violet-800 text-lg font-bold">
               EXPLORE OUR GAMES
             </h3>
-            <h1 className="text-6xl text-white font-semibold">
+            <h1 className="md:text-6xl text-4xl  text-white font-semibold">
               Play. Compete. Conquer.
             </h1>
             <p className="text-gray-200">

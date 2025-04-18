@@ -28,14 +28,15 @@ import UserDashLayout from "./pages/userDash.tsx/UserDashLayout";
 import AdminLayout from './pages/admin/AdminLayout';
 import Admindashboard from './pages/admin/Admindashboard';
 import AdminStudents from './pages/admin/AdminStudents';
-import AdminTeachers from './pages/admin/AdminTeachers';
 import AdminCoursesPage from './pages/admin/AdminCourses';
 import AddCourse from './pages/admin/AddCourse';
 
 import LessonContent from './pages/Courses/Lessons/LessonContent';
+
 import LessonQuiz from './pages/Courses/Lessons/LessonQuiz';
 import NumberNinja from './pages/Gamefied/Games/NumberNinja/NumberNija';
 import Notification from './pages/Notification';
+import AdminLogin from './pages/admin/AdminLogin';
 
 function App() {
   return (
@@ -69,10 +70,10 @@ function App() {
         </Route>
         {/* user dash  */}
         <Route path="/userdash" element={<UserDashLayout />}></Route>
+        <Route path="/admin_login" element={<AdminLogin />} />
         <Route path='/admin' element={<AdminLayout/>}>
           <Route index element={<Admindashboard/>}/>
           <Route path="students" element={<AdminStudents/>}/>
-          <Route path="teachers" element={<AdminTeachers/>}/>
           <Route path="courses" element={<AdminCoursesPage/>}/>
           <Route path="addCourse" element={<AddCourse/>}/>
         </Route>

@@ -3,10 +3,12 @@ import { formatTime, leaderboardData } from "./LeaderboardPreview";
 
 const LeaderboardPreview = () => {
   const { leaderboard, leaderboardLoading } = useGameStore();  
+  console.log(leaderboard);
+  
 
   return (
     <div className=" md:w-full overflow-x-auto">
-      <div className="min-h-screen md:mx-28 mx-4 py-10 w-[200%] md:w-auto">
+      <div className="min-h-screen md:mx-36 mx-4 py-10 w-[200%] md:w-auto">
         <div className="flex items-center w-full mx-auto mb-8">
           <div className="flex-grow h-px bg-white/30 "></div>
           <div className="px-4 text-white text-3xl font-bold text-center">
