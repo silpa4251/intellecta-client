@@ -41,6 +41,7 @@ const LessonContent = () => {
   const [volume, setVolume] = useState(0.8);
   const [played, setPlayed] = useState(0);
   const [playedSeconds, setPlayedSeconds] = useState(0);
+  // const [loaded, setLoaded] = useState(0);
   const [duration, setDuration] = useState(0);
   const [playbackRate, setPlaybackRate] = useState(1);
   const playerRef = useRef<ReactPlayer>(null);
@@ -61,8 +62,11 @@ const LessonContent = () => {
       playerRef.current.seekTo(value, "fraction");
     }
   };
-]
-  const handleProgress = (state: { played: number; playedSeconds: number }) => {
+
+  const handleProgress = (state: {
+    played: number;
+    playedSeconds: number
+  }) => {
     setPlayed(state.played);
     setPlayedSeconds(state.playedSeconds);
   };
@@ -256,7 +260,7 @@ const LessonContent = () => {
   if (error || courseError) {
     return (
       <div className="min-h-screen flex items-center justify-center px-4">
-        <p className="text-center text-sm sm:text-base">
+         <p className="text-center text-sm sm:text-base">
           Error loading content: {(error || courseError)?.message}
         </p>
       </div>
@@ -281,10 +285,9 @@ const LessonContent = () => {
     <>
       <NavbarWelcome />
       <div className="min-h-screen bg-gray-200 py-4 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16">
-        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-6">
-          {/* Sidebar: Lessons List */}
-          <div className="w-full lg:w-1/4 bg-white p-4 rounded-lg shadow-md space-y-4">
-            <h3 className="text-base sm:text-lg font-semibold pb-2 border-b border-gray-300">
+      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-6">
+      <div className="w-full lg:w-1/4 bg-white p-4 rounded-lg shadow-md space-y-4">
+      <h3 className="text-base sm:text-lg font-semibold pb-2 border-b border-gray-300">
               Your Lessons
             </h3>
             {lessons.map((lesson, lessonIndex) => (
@@ -324,6 +327,7 @@ const LessonContent = () => {
               </div>
             ))}
           </div>
+
           <div className="w-3/4 bg-white p-6 rounded-lg shadow-md">
             <div className="flex justify-between">
               <h1 className="text-2xl font-bold mb-6">{lessonData.title}</h1>
@@ -332,7 +336,7 @@ const LessonContent = () => {
                 disabled={isLessonCompleted || markAsCompleteMutation.isPending}
                 className={`px-4 py-2 mb-6 rounded-lg font-semibold shadow-md transition duration-300 w-full sm:w-auto ${
                   isLessonCompleted || markAsCompleteMutation.isPending
-                    ? "bg-gray-500 text-gray-300 cursor-not-allowed"
+                    ? "bg-gray-300 text-gray-300 cursor-not-allowed"
                     : "bg-green-500 text-white hover:bg-green-600"
                 }`}
               >
@@ -358,7 +362,7 @@ const LessonContent = () => {
 
             {lessonData.url && (
               <div className="mb-4 sm:mb-6">
-                <h2 className="text-lg sm:text-xl font-semibold mb-2">Watch & Learn</h2>
+               <h2 className="text-lg sm:text-xl font-semibold mb-2">Watch & Learn</h2>
                 <div className="relative bg-white rounded-lg shadow-md overflow-hidden" ref={wrapperRef}>
                   <div className="relative w-full" style={{ paddingTop: "56.25%" }}>
                     <ReactPlayer
@@ -374,7 +378,7 @@ const LessonContent = () => {
                       onDuration={handleDuration}
                       onPlay={() => setPlaying(true)}
                       onPause={() => setPlaying(false)}
-                      className="absolute top-0 left-0"
+                 className="absolute top-0 left-0"
                       config={{
                         youtube: {
                           playerVars: {
@@ -389,19 +393,23 @@ const LessonContent = () => {
                       light={true}
                       playIcon={
                         <div className="absolute inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
-                          <FaPlay className="text-white text-3xl sm:text-5xl" />
+                            <FaPlay className="text-white text-3xl sm:text-5xl" />
                         </div>
                       }
                     />
                   </div>
                   <div className="bg-gray-800 p-2 sm:p-3 flex flex-col space-y-2 text-white">
-                    <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-3">
+                  <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-3">
                       <button
                         onClick={handlePlayPause}
                         className="p-2 hover:bg-gray-700 rounded-full"
                         aria-label={playing ? "Pause" : "Play"}
                       >
-                        {playing ? <FaPause className="text-base sm:text-lg" /> : <FaPlay className="text-base sm:text-lg" />}
+                        {playing ? (
+                          <FaPause className="text-base sm:text-lg" />
+                        ) : (
+                          <FaPlay className="text-base sm:text-lg" />
+                        )}
                       </button>
                       <div className="flex-1 flex items-center w-full sm:w-auto">
                         <input
@@ -423,7 +431,11 @@ const LessonContent = () => {
                           className="p-2 hover:bg-gray-700 rounded-full"
                           aria-label={volume === 0 ? "Unmute" : "Mute"}
                         >
-                          {volume === 0 ? <FaVolumeMute className="text-base sm:text-lg" /> : <FaVolumeUp className="text-base sm:text-lg" />}
+                          {volume === 0 ? (
+                            <FaVolumeMute className="text-base sm:text-lg" />
+                          ) : (
+                            <FaVolumeUp className="text-base sm:text-lg" />
+                          )}
                         </button>
                         <input
                           type="range"
@@ -432,7 +444,7 @@ const LessonContent = () => {
                           step="any"
                           value={volume}
                           onChange={handleVolumeChange}
-                          className="w-16 sm:w-20 h-1 bg-gray-600 rounded-lg appearance-none cursor-pointer"
+                           className="w-16 sm:w-20 h-1 bg-gray-600 rounded-lg appearance-none cursor-pointer"
                         />
                       </div>
                       <button
@@ -486,9 +498,9 @@ const LessonContent = () => {
             )}
 
             {lessonData.type === "exercise" && lessonData.url && (
-              <div className="mb-4 sm:mb-6">
-                <h2 className="text-lg sm:text-xl font-semibold mb-2">Exercise</h2>
-                <div className="bg-white p-3 sm:p-4 rounded-lg shadow-md">
+             <div className="mb-4 sm:mb-6">
+             <h2 className="text-lg sm:text-xl font-semibold mb-2">Exercise</h2>
+             <div className="bg-white p-3 sm:p-4 rounded-lg shadow-md">
                   <a
                     href={lessonData.url}
                     target="_blank"
@@ -500,12 +512,16 @@ const LessonContent = () => {
                 </div>
               </div>
             )}
-            {!lessonData.url && !lessonData.content && !lessonData.resources && (
-              <p className="text-gray-600 text-xs sm:text-sm text-center">
-                No content available for this lesson yet.
-              </p>
-            )}
-            <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4 mb-4 sm:mb-6 mt-4 sm:mt-6">
+
+            {!lessonData.url &&
+              !lessonData.content &&
+              !lessonData.resources && (
+                <p className="text-gray-600 text-xs sm:text-sm text-center">
+                  No content available for this lesson yet.
+                </p>
+              )}
+
+<div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4 mb-4 sm:mb-6 mt-4 sm:mt-6">
               <button
                 className={`px-3 py-2 rounded-lg text-xs sm:text-sm ${
                   activeTab === "notes"
@@ -529,7 +545,7 @@ const LessonContent = () => {
             </div>
 
             {activeTab === "notes" && (
-              <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-white rounded-lg shadow-md">
+               <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-white rounded-lg shadow-md">
                 <h2 className="text-lg sm:text-xl font-semibold mb-2">Notes 📖</h2>
                 {lessonData.notes ? (
                   <a
@@ -541,18 +557,25 @@ const LessonContent = () => {
                     View Study Material (PDF)
                   </a>
                 ) : (
-                  <p className="text-gray-600 text-xs sm:text-sm">No materials available.</p>
+                  <p className="text-gray-600 text-xs sm:text-sm">
+                    No materials available.
+                  </p>
                 )}
               </div>
             )}
 
             {activeTab === "resources" && (
-              <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-white rounded-lg shadow-md">
-                <h2 className="text-lg sm:text-xl font-semibold mb-2">Additional Resources 🔗</h2>
+                 <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-white rounded-lg shadow-md">
+                <h2 className="text-lg sm:text-xl font-semibold mb-2">
+                  Additional Resources 🔗
+                </h2>
                 {additionalResources.length > 0 ? (
                   <div className="space-y-4">
                     {additionalResources.map((resource, index) => (
-                      <div key={index} className="bg-white p-3 sm:p-4 rounded-lg shadow-md">
+                      <div
+                        key={index}
+                        className="bg-white p-3 sm:p-4 rounded-lg shadow-md"
+                      >
                         {isVideoResource(resource) ? (
                           <div
                             className="relative w-full"
@@ -583,7 +606,9 @@ const LessonContent = () => {
                     ))}
                   </div>
                 ) : (
-                  <p className="text-gray-600 text-xs sm:text-sm">No resources available.</p>
+                  <p className="text-gray-600 text-xs sm:text-sm">
+                    No resources available.
+                  </p>
                 )}
               </div>
             )}
