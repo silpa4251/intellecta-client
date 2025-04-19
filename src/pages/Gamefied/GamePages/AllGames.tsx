@@ -56,7 +56,7 @@ const AllGames = () => {
 
   return (
     <>
-      <div className="md:mx-28 mx-4 mt-10 pb-10">
+      <div className="md:mx-36 mx-4 mt-10 pb-10">
         <div className="flex gap-2 md:gap-4 md:h-[350px] h-[320px] transition-all duration-700">
           <motion.div
             key={currentGameIndex}

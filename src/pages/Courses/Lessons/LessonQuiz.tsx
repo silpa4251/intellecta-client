@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { IoCheckmarkOutline, IoClose } from "react-icons/io5";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
 import NavbarWelcome from "../../../components/Navbar/NavbarWelcome";
 import QuizCompleted from "../../../utils/ui/QuizCompleted";
 import SpinningLoader from "../../../components/Loaders/SpinningLoader";
+import axiosInstance from "../../../utils/axiosInstance";
+import axios from "axios";
 
 type Params = {
   courseId?: string;
@@ -40,8 +41,7 @@ const LessonQuiz = () => {
   const { mutate: postLessonQuiz, isPending } = useMutation({
     mutationKey: ["fetchlessonquiz"],
     mutationFn: async (courseId: string) => {
-      const res = await axios.post(
-        `http://localhost:5005/api/courses/generate-quiz`,
+      const res = await axios.post(`http://localhost:5005/api/courses/generate-quiz`,
         courseId
       );
       return res.data;
@@ -57,8 +57,7 @@ const LessonQuiz = () => {
   const { data: quizData, isLoading } = useQuery({
     queryKey: ["quizLesson", courseId],
     queryFn: async () => {
-      const res = await axios.get(
-        `http://localhost:5005/api/courses/fetch-quiz/${courseId}`
+      const res = await axios.get(`http://localhost:5005/api/courses/fetch-quiz/${courseId}`
       );
       return res.data.quiz || [];
     },

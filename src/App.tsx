@@ -32,9 +32,17 @@ import AdminCoursesPage from './pages/admin/AdminCourses';
 import AddCourse from './pages/admin/AddCourse';
 
 import LessonContent from './pages/Courses/Lessons/LessonContent';
+<<<<<<< HEAD
 import LessonQuiz from './pages/Courses/Lessons/LessonQuiz';
 import NumberNinja from './pages/Gamefied/Games/NumberNinja/NumberNija';
 import Notification from './pages/Notification';
+=======
+
+import LessonQuiz from './pages/Courses/Lessons/LessonQuiz';
+import NumberNinja from './pages/Gamefied/Games/NumberNinja/NumberNija';
+import Notification from './pages/Notification';
+import AdminLogin from './pages/admin/AdminLogin';
+>>>>>>> c2fa8d6dc8e63197bc69a0f0f1586fb3a07f973f
 
 function App() {
   return (
@@ -68,6 +76,7 @@ function App() {
         </Route>
         {/* user dash  */}
         <Route path="/userdash" element={<UserDashLayout />}></Route>
+        <Route path="/admin_login" element={<AdminLogin />} />
         <Route path='/admin' element={<AdminLayout/>}>
           <Route index element={<Admindashboard/>}/>
           <Route path="students" element={<AdminStudents/>}/>
