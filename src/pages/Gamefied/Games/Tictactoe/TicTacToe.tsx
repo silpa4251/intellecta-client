@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { IoMdClose } from "react-icons/io";
 import { useAuthStore } from "../../../../store/useAuthStore";
 import { useGameStore } from "../../../../store/useGameStore";
+import GameWinner from "../../../../utils/ui/GameFinished";
 
 const initialBoard = Array(9).fill(null);
 const winningCombos = [
@@ -248,7 +249,6 @@ const TicTacToe = () => {
           {winner === "Draw" ? "It's a Draw!" : `${winner} Wins!`}
         </motion.div>
       )}
-
       <button
         onClick={resetGame}
         className="mt-4 bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-xl shadow-lg"
