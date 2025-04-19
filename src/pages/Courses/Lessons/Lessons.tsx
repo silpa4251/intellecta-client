@@ -1,7 +1,6 @@
 import { AiOutlineMenuFold } from "react-icons/ai";
 import { useNavigate, useParams } from "react-router-dom";
 import NavbarWelcome from "../../../components/Navbar/NavbarWelcome";
-// import { MdLockOutline } from "react-icons/md";
 import { FaPlay } from "react-icons/fa";
 import CircularProgress from "../../../utils/ui/Progress";
 import { useState } from "react";
@@ -16,9 +15,35 @@ type Params = {
   courseTitle: string;
 };
 
+type ProgressData = {
+  completedLessons: string[];
+  courseId: string;
+  createdAt: string;
+  currentLesson: string;
+  lastUpdated: string;
+  progressPercent: number;
+  updatedAt: string;
+  userId: string;
+  __v: number;
+  _id: string;
+};
+
 const Lessons = () => {
   const { id = "", courseTitle = "" } = useParams<Params>();
   const navigate = useNavigate();
+
+  const fetchCourseProgress = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:5005/api/progress/${id}`,
+        { withCredentials: true }
+      );
+      return response.data.data;
+    } catch (err) {
+      console.warn(`Progress not found for course ${id}`);
+      throw err;
+    }
+  };
 
   const fetchCourseWithLessons = async () => {
     const response = await axios.get(`http://localhost:5005/api/courses/${id}`);
@@ -26,37 +51,37 @@ const Lessons = () => {
     return response.data.data;
   };
 
-  const { 
-    data, 
-    isLoading, 
-    error 
-  } = useQuery<{
+  const { data, isLoading, error } = useQuery<{
     course: { _id: string; title: string; description: string };
     lessons: Lesson[];
   }>({
-    queryKey: ['courseWithLessons', id],
+    queryKey: ["courseWithLessons", id],
     queryFn: fetchCourseWithLessons,
     enabled: !!id,
   });
 
+  const { data: progressData, isLoading: isProgressLoading } =
+    useQuery<ProgressData>({
+      queryKey: ["courseProgress", id],
+      queryFn: fetchCourseProgress,
+      enabled: !!id,
+    });
+
   const [selectLesson, setSelectLesson] = useState<Lesson | null>(null);
   const realLesson = data?.lessons || [];
-  
-  const completedCount = realLesson.filter(lesson => lesson.completed).length;
-  const progress = realLesson.length > 0 
-    ? Math.round((completedCount / realLesson.length) * 100) 
-    : 0;
 
   const chooseLesson = (lesson: Lesson) => {
     // Allow clicking on any lesson regardless of completion status or position
     setSelectLesson(lesson);
-    const sanitizedTitle = lesson.title.replace(/[^a-zA-Z0-9\s-]/g, "").replace(/\s+/g, "-");
+    const sanitizedTitle = lesson.title
+      .replace(/[^a-zA-Z0-9\s-]/g, "")
+      .replace(/\s+/g, "-");
     navigate(`/lesson/${sanitizedTitle}/${lesson._id}`, {
       state: { courseTitle, courseId: id },
     });
   };
 
-  if (isLoading) {
+  if (isLoading || isProgressLoading) {
     return (
       <div className="fixed inset-0 bg-white bg-opacity-90 flex flex-col justify-center items-center z-50">
         <SpinningLoader />
@@ -79,74 +104,83 @@ const Lessons = () => {
     return null;
   }
 
+  // Check if a lesson is completed by looking for its ID in completedLessons array
+  const isLessonCompleted = (lessonId: string) => {
+    return progressData?.completedLessons?.includes(lessonId) || false;
+  };
+
   return (
     <>
       <NavbarWelcome />
       <div className="pb-5">
         <div className="flex justify-between py-4 px-8 border-b border-b-gray-300">
           <div className="flex items-center gap-5">
-            <span className="text-2xl">
-              <AiOutlineMenuFold 
-              onClick={() => navigate(-1)}
-              />
+            <span className="text-2xl cursor-pointer">
+              <AiOutlineMenuFold onClick={() => navigate(-1)} />
             </span>
             <h3 className="font-semibold">{data.course.title}</h3>
           </div>
           <div className="flex items-center gap-5">
             <span className="font-medium">
-              {completedCount}/{realLesson.length}
+              {progressData?.completedLessons?.length || 0}/{realLesson.length}
             </span>
             <div className="bg-gray-300 w-44 h-2 rounded-r-lg rounded-l-lg">
               <div
                 className="bg-green-600 h-2 rounded-l-lg rounded-r-lg"
-                style={{ width: `${progress}%` }}
+                style={{
+                  width: progressData
+                    ? `${progressData.progressPercent}%`
+                    : "0%",
+                }}
               ></div>
             </div>
           </div>
         </div>
 
         <div className="flex justify-between px-32 gap-10 mt-10">
-        <div className="w-1/3 space-y-5">
-          <div className="space-y-2">
-            <h3 className="pb-2 border-b border-b-gray-300 font-bold">COURSE</h3>
-            <div className="flex justify-between mt-4">
-              <div className="max-w-xs mt-4">
-                <h3 className="font-semibold text-2xl">{data.course.title}</h3>
-                <p>{data.course.description}</p>
+          <div className="w-1/3 space-y-5">
+            <div className="space-y-2">
+              <h3 className="pb-2 border-b border-b-gray-300 font-bold">
+                COURSE
+              </h3>
+              <div className="flex justify-between mt-4">
+                <div className="max-w-xs mt-4">
+                  <h3 className="font-semibold text-2xl">
+                    {data.course.title}
+                  </h3>
+                  <p>{data.course.description}</p>
+                </div>
+                <div className="mt-6">
+                <CircularProgress percentage={Math.round(progressData?.progressPercent || 0)} />
+                </div>
               </div>
-              <div className="mt-6">
-                <CircularProgress  percentage={progress}/></div>
+            </div>
+
+            <div className="space-y-4 mt-6">
+              <h3 className="pb-2 border-b border-b-gray-300 font-bold">
+                CONTENT
+              </h3>
+            </div>
+            <div className="w-full mt-10">
+              <video className="h-auto w-full" autoPlay muted loop playsInline>
+                <source src="/366278579992174595.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
             </div>
           </div>
 
-          <div className="space-y-4 mt-6">
-            <h3 className="pb-2 border-b border-b-gray-300 font-bold">CONTENT</h3>
-          </div>
-          <div className="w-full mt-10">
-          <video
-            className="h-auto w-full "
-            // controls
-            autoPlay
-            muted
-            loop
-            playsInline
-          >
-            <source src="/366278579992174595.mp4" type="video/mp4" />
-            Your browser does not support the video tag.
-        </video>
-          </div>
-        </div>
-
           <div className="w-2/3">
-            <h3 className="pb-2 border-b border-b-gray-300 font-bold">LESSONS</h3>
+            <h3 className="pb-2 border-b border-b-gray-300 font-bold">
+              LESSONS
+            </h3>
             <div className="mt-5">
               {realLesson.map((lesson, index) => (
                 <div
                   key={lesson._id}
                   onClick={() => chooseLesson(lesson)}
                   className={`flex items-center justify-between font-semibold rounded-md gap-2 mb-4 px-4 py-4 shadow-md border cursor-pointer ${
-                    selectLesson?._id === lesson._id 
-                      ? "border-2 border-green-500" 
+                    selectLesson?._id === lesson._id
+                      ? "border-2 border-green-500"
                       : "border-2 border-gray-300"
                   }`}
                 >
@@ -154,12 +188,14 @@ const Lessons = () => {
                     <span>{index + 1}.</span>
                     <h3>{lesson.title}</h3>
                   </div>
-                  {lesson.completed ? (
+                  {isLessonCompleted(lesson._id) ? (
                     <span className="text-green-500 text-2xl">
                       <IoCheckmarkCircleOutline />
                     </span>
                   ) : (
-                    <span><FaPlay /></span>
+                    <span>
+                      <FaPlay />
+                    </span>
                   )}
                 </div>
               ))}
