@@ -5,7 +5,6 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import NavbarWelcome from "../../../components/Navbar/NavbarWelcome";
 import QuizCompleted from "../../../utils/ui/QuizCompleted";
 import SpinningLoader from "../../../components/Loaders/SpinningLoader";
-import axiosInstance from "../../../utils/axiosInstance";
 import axios from "axios";
 
 type Params = {
@@ -23,6 +22,12 @@ interface QuizDataType {
   explanation: string;
   subject: string;
   difficulty: string;
+}
+
+interface UpdateScoreType {
+  courseId : string | undefined;
+  score: number;
+  totalQuestions: number
 }
 
 const LessonQuiz = () => {
@@ -94,15 +99,29 @@ const LessonQuiz = () => {
     }
   };
 
-  const handleSubmitScore = () => {
+  const {mutate: updateScore} = useMutation({
+    mutationFn: async(values : UpdateScoreType)=> {
+      const res = await axios.post("http://localhost:5005/api/progress/update/quiz-score", values, {
+        withCredentials: true
+      })
+      return res.data
+    },
+    onError: (error)=> {
+      console.log(error);
+      
+    }
+  })
+  const handleSubmitScore = async() => {
     setShowCompleted(true);
     const currentQuestion: currentQsType = quiz[currentStep];
     const isCorrect = selectedOption === currentQuestion.correctAnswer;
-    const finalScore = ((score + (isCorrect ? 1 : 0)) / steps) * 100;
+    const finalScore = ((score + (isCorrect ? 1 : 0)) / steps) * 100;    
     const newStepResults = [...stepResults];
     newStepResults[currentStep] = isCorrect;
+    updateScore({courseId,score : finalScore, totalQuestions: quiz.length})
     setStepResults(newStepResults);
   };
+  
 
   return (
     <>
