@@ -2,11 +2,11 @@
 import { useParams, useNavigate, useLocation, Link } from "react-router-dom";
 import NavbarWelcome from "../../../components/Navbar/NavbarWelcome";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
 import SpinningLoader from "../../../components/Loaders/SpinningLoader";
 import { Lesson } from "../../../types";
 import ReactPlayer from "react-player";
 import { IoCheckmarkCircleOutline } from "react-icons/io5";
+import axios from "axios";
 import {
   FaPlay,
   FaPause,

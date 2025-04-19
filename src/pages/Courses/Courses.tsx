@@ -4,8 +4,9 @@ import CourseSidebar from "./CourseSidebar";
 import { VscSettings } from "react-icons/vsc";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import SpinningLoader from "../../components/Loaders/SpinningLoader";
+import axiosInstance from "../../utils/axiosInstance";
+import axios from "axios";
 
 interface Course {
   _id: string;
@@ -105,6 +106,7 @@ const Courses = () => {
       </div>
     );
   }
+  
 
   return (
     <>
