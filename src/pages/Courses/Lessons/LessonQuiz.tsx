@@ -6,6 +6,7 @@ import NavbarWelcome from "../../../components/Navbar/NavbarWelcome";
 import QuizCompleted from "../../../utils/ui/QuizCompleted";
 import SpinningLoader from "../../../components/Loaders/SpinningLoader";
 import axios from "axios";
+import axiosInstance from "../../../utils/axiosInstance";
 
 type Params = {
   courseId?: string;
@@ -46,7 +47,7 @@ const LessonQuiz = () => {
   const { mutate: postLessonQuiz, isPending } = useMutation({
     mutationKey: ["fetchlessonquiz"],
     mutationFn: async (courseId: string) => {
-      const res = await axios.post(
+      const res = await axiosInstance.post(
         `http://localhost:5005/api/courses/generate-quiz`,
         {courseId} 
       );
