@@ -1,4 +1,4 @@
-import { AiOutlineMenuFold } from "react-icons/ai";
+import { IoArrowBack } from "react-icons/io5";
 import { useNavigate, useParams } from "react-router-dom";
 import NavbarWelcome from "../../../components/Navbar/NavbarWelcome";
 import { FaPlay } from "react-icons/fa";
@@ -6,9 +6,9 @@ import CircularProgress from "../../../utils/ui/Progress";
 import { useState } from "react";
 import { IoCheckmarkCircleOutline } from "react-icons/io5";
 import { Lesson } from "../../../types";
-import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import SpinningLoader from "../../../components/Loaders/SpinningLoader";
+import axios from "axios";
 
 type Params = {
   id: string;
@@ -47,11 +47,10 @@ const Lessons = () => {
 
   const fetchCourseWithLessons = async () => {
     const response = await axios.get(`http://localhost:5005/api/courses/${id}`);
-    console.log("Fetching lessons", response);
     return response.data.data;
   };
 
-  const { data, isLoading, error } = useQuery<{
+  const { data, isLoading } = useQuery<{
     course: { _id: string; title: string; description: string };
     lessons: Lesson[];
   }>({
@@ -60,7 +59,7 @@ const Lessons = () => {
     enabled: !!id,
   });
 
-  const { data: progressData, isLoading: isProgressLoading } =
+  const { data: progressData } =
     useQuery<ProgressData>({
       queryKey: ["courseProgress", id],
       queryFn: fetchCourseProgress,
@@ -71,7 +70,6 @@ const Lessons = () => {
   const realLesson = data?.lessons || [];
 
   const chooseLesson = (lesson: Lesson) => {
-    // Allow clicking on any lesson regardless of completion status or position
     setSelectLesson(lesson);
     const sanitizedTitle = lesson.title
       .replace(/[^a-zA-Z0-9\s-]/g, "")
@@ -81,30 +79,21 @@ const Lessons = () => {
     });
   };
 
-  if (isLoading || isProgressLoading) {
-    return (
-      <div className="fixed inset-0 bg-white bg-opacity-90 flex flex-col justify-center items-center z-50">
-        <SpinningLoader />
-        <p className="mt-14 text-xl font-semibold text-gray-800">
-          Loading your Courses. Please wait...!
-        </p>
-      </div>
-    );
-  }
 
-  if (error) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p>Error loading courses: {error.message}</p>
-      </div>
-    );
-  }
+  // if (error) {
+  //   return (
+  //     <div className="min-h-screen flex items-center justify-center px-4">
+  //       <p className="text-center text-sm sm:text-base md:text-lg text-red-600">
+  //         Error loading courses: {error.message}
+  //       </p>
+  //     </div>
+  //   );
+  // }
 
-  if (!data) {
-    return null;
-  }
+  // if (!data) {
+  //   return null;
+  // }
 
-  // Check if a lesson is completed by looking for its ID in completedLessons array
   const isLessonCompleted = (lessonId: string) => {
     return progressData?.completedLessons?.includes(lessonId) || false;
   };
@@ -112,97 +101,134 @@ const Lessons = () => {
   return (
     <>
       <NavbarWelcome />
-      <div className="pb-5">
-        <div className="flex justify-between py-4 px-8 border-b border-b-gray-300">
-          <div className="flex items-center gap-5">
-            <span className="text-2xl cursor-pointer">
-              <AiOutlineMenuFold onClick={() => navigate(-1)} />
-            </span>
-            <h3 className="font-semibold">{data.course.title}</h3>
+      {isLoading ? <div className="fixed inset-0 bg-white bg-opacity-90 flex flex-col justify-center items-center z-50">
+        <SpinningLoader />
+        <p className="mt-12 text-sm sm:text-base md:text-lg font-semibold text-gray-800 text-center px-4">
+          Loading your Lessons. Please wait...!
+        </p>
+      </div>: 
+      <div className="min-h-screen bg-gray-100 py-4 px-4 sm:px-6 md:px-8">
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row justify-between items-center sm:items-center py-4 px-4 sm:px-6 border-b border-gray-300 bg-white rounded-lg shadow-sm">
+          <div className="flex items-center gap-3 sm:gap-5">
+            <button
+              className="text-xl sm:text-3xl text-gray-700 hover:text-gray-900"
+              onClick={() => navigate(-1)}
+              aria-label="Go back"
+            >
+              <IoArrowBack className="text-black" />
+            </button>
+            <h3 className="text-base sm:text-lg font-bold text-gray-800">
+              {data?.course.title}
+            </h3>
           </div>
-          <div className="flex items-center gap-5">
-            <span className="font-medium">
+          <div className="flex items-center gap-3 sm:gap-5 mt-3 sm:mt-0">
+            <span className="text-xs sm:text-sm md:text-base font-medium text-gray-700">
               {progressData?.completedLessons?.length || 0}/{realLesson.length}
             </span>
-            <div className="bg-gray-300 w-44 h-2 rounded-r-lg rounded-l-lg">
+            <div className="bg-gray-300 w-24 sm:w-32 md:w-44 h-2 rounded-full overflow-hidden">
               <div
-                className="bg-green-600 h-2 rounded-l-lg rounded-r-lg"
+                className="bg-green-600 h-full rounded-full transition-all duration-300"
                 style={{
-                  width: progressData
-                    ? `${progressData.progressPercent}%`
-                    : "0%",
+                  width: progressData ? `${progressData.progressPercent}%` : "0%",
                 }}
               ></div>
             </div>
           </div>
         </div>
 
-        <div className="flex justify-between px-32 gap-10 mt-10">
-          <div className="w-1/3 space-y-5">
-            <div className="space-y-2">
-              <h3 className="pb-2 border-b border-b-gray-300 font-bold">
+        {/* Main Content */}
+        <div className="max-w-7xl mx-auto mt-6 sm:mt-8 flex flex-col lg:flex-row gap-6">
+          {/* Course Info and Video */}
+          <div className="w-full lg:w-1/3 space-y-6">
+            {/* Course Section */}
+            <div className="bg-white p-4 sm:p-6 rounded-lg shadow-md space-y-4">
+              <h3 className="text-sm sm:text-base font-bold pb-2 border-b border-gray-300">
                 COURSE
               </h3>
-              <div className="flex justify-between mt-4">
-                <div className="max-w-xs mt-4">
-                  <h3 className="font-semibold text-2xl">
-                    {data.course.title}
+              <div className="flex flex-col sm:flex-row justify-between gap-4">
+                <div className="flex-1">
+                  <h3 className="text-xl sm:text-xl font-semibold text-center sm:text-left">
+                    {data?.course.title}
                   </h3>
-                  <p>{data.course.description}</p>
+                  <p className="text-xs sm:text-sm text-gray-600 mt-2">
+                    {data?.course.description}
+                  </p>
                 </div>
-                <div className="mt-6">
-                <CircularProgress percentage={Math.round(progressData?.progressPercent || 0)} />
+                <div className="flex-shrink-0 flex items-center justify-center">
+                  <CircularProgress
+                    percentage={Math.round(progressData?.progressPercent || 0)}
+                    className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24"
+                  />
                 </div>
               </div>
             </div>
 
-            <div className="space-y-4 mt-6">
-              <h3 className="pb-2 border-b border-b-gray-300 font-bold">
-                CONTENT
+            {/* Content Section */}
+            <div className="bg-white p-4 sm:p-5 rounded-lg shadow-md space-y-4">
+              <h3 className="text-sm sm:text-base font-bold pb-2 border-b border-gray-300">
+              SMART LEARNING, STARTS HERE !
               </h3>
-            </div>
-            <div className="w-full mt-10">
-              <video className="h-auto w-full" autoPlay muted loop playsInline>
-                <source src="/366278579992174595.mp4" type="video/mp4" />
-                Your browser does not support the video tag.
-              </video>
+              <div className="w-full">
+                <video
+                  className="w-full h-auto rounded-lg aspect-video"
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                >
+                  <source src="/366278579992174595.mp4" type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+              </div>
             </div>
           </div>
 
-          <div className="w-2/3">
-            <h3 className="pb-2 border-b border-b-gray-300 font-bold">
-              LESSONS
-            </h3>
-            <div className="mt-5">
-              {realLesson.map((lesson, index) => (
-                <div
-                  key={lesson._id}
-                  onClick={() => chooseLesson(lesson)}
-                  className={`flex items-center justify-between font-semibold rounded-md gap-2 mb-4 px-4 py-4 shadow-md border cursor-pointer ${
-                    selectLesson?._id === lesson._id
-                      ? "border-2 border-green-500"
-                      : "border-2 border-gray-300"
-                  }`}
-                >
-                  <div className="flex gap-2">
-                    <span>{index + 1}.</span>
-                    <h3>{lesson.title}</h3>
+          {/* Lessons List */}
+          <div className="w-full lg:w-2/3">
+            <div className="bg-white p-4 sm:p-6 rounded-lg shadow-md">
+              <h3 className="text-sm sm:text-base font-bold pb-2 border-b border-gray-300">
+                LESSONS
+              </h3>
+              <div className="mt-4 space-y-2">
+                {realLesson.map((lesson, index) => (
+                  <div
+                    key={lesson._id}
+                    onClick={() => chooseLesson(lesson)}
+                    className={`flex items-center justify-between rounded-lg p-3 border-2 cursor-pointer transition-all duration-200 ${
+                      selectLesson?._id === lesson._id
+                        ? "border-green-500 bg-green-50"
+                        : "border-gray-300 hover:bg-gray-50"
+                    }`}
+                  >
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs sm:text-sm md:text-base font-medium text-gray-700">
+                        {index + 1}.
+                      </span>
+                      <h3 className="text-sm sm:text-base font-semibold">
+                        {lesson.title}
+                      </h3>
+                    </div>
+                    <span
+                      className={`text-lg sm:text-xl ${
+                        isLessonCompleted(lesson._id)
+                          ? "text-green-500"
+                          : "text-gray-500"
+                      }`}
+                    >
+                      {isLessonCompleted(lesson._id) ? (
+                        <IoCheckmarkCircleOutline />
+                      ) : (
+                        <FaPlay className="text-black" />
+                      )}
+                    </span>
                   </div>
-                  {isLessonCompleted(lesson._id) ? (
-                    <span className="text-green-500 text-2xl">
-                      <IoCheckmarkCircleOutline />
-                    </span>
-                  ) : (
-                    <span>
-                      <FaPlay />
-                    </span>
-                  )}
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </div>}
     </>
   );
 };

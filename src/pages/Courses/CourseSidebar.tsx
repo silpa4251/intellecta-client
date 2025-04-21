@@ -233,6 +233,8 @@ const CourseSidebar: React.FC<CourseSidebarProps> = ({
                   "Grade 8",
                   "Grade 9",
                   "Grade 10",
+                  "Grade 11",
+                  "Grade 12"
                 ].map((grade) => (
                   <label key={grade} className="flex items-center space-x-2 cursor-pointer group">
                     <input

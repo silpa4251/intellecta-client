@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { FaEdit, FaCamera } from "react-icons/fa";
 import student from "../assets/Profile.jpg";
 import { useNavigate } from "react-router-dom";
@@ -16,6 +16,7 @@ const fetchUser = async () => {
 
 const ProfilePage: React.FC = () => {
   const navigate = useNavigate();
+  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const queryClient = useQueryClient();
   const [profile, setProfile] = useState({
     name: "",
@@ -113,6 +114,10 @@ const ProfilePage: React.FC = () => {
     }
   };
 
+  const handleFocus = (index:number)=> {
+    inputRefs.current[index]?.focus()
+  }
+
   return (
     <>
       <NavbarWelcome />
@@ -123,12 +128,7 @@ const ProfilePage: React.FC = () => {
         >
           {/* Profile Image Upload */}
           <div className="flex justify-center w-full relative">
-            <img
-              src={profile.profilePic}
-              alt="Profile"
-              className="w-24 h-24 rounded-full object-cover border-4 border-white shadow-lg transition-transform hover:scale-105"
-            />
-            <label className="absolute bottom-0 right-1 bg-white p-2 rounded-full shadow-md cursor-pointer hover:bg-gray-300 transition">
+            <label className="absolute -bottom-1 ml-16 bg-white p-2 rounded-full shadow-md cursor-pointer hover:bg-gray-300 transition">
               <FaCamera className="text-gray-700 text-md" />
               <input
                 type="file"
@@ -137,6 +137,11 @@ const ProfilePage: React.FC = () => {
                 onChange={handleImageUpload}
               />
             </label>
+            <img
+              src={profile.profilePic}
+              alt="Profile"
+              className="w-24 h-24 rounded-full object-cover border-4 border-white shadow-lg "
+            />
           </div>
 
           {/* User Info */}
@@ -152,7 +157,7 @@ const ProfilePage: React.FC = () => {
               { label: "Email", name: "email", value: profile.email },
               { label: "Phone", name: "phone", value: profile.phone },
               { label: "Age", name: "age", value: profile.age || 0 },
-            ].map((field) => (
+            ].map((field, index) => (
               <div
                 key={field.name}
                 className="flex items-center justify-between gap-4"
@@ -163,12 +168,14 @@ const ProfilePage: React.FC = () => {
                 <div className="flex items-center space-x-2 w-2/3">
                   <input
                     type="text"
+                    ref={(el: any) => (inputRefs.current[index] = el)}
                     name={field.name}
                     value={field.value}
                     onChange={handleChange}
                     className="w-full py-2 px-3 bg-transparent border border-slate-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
                   />
-                  <FaEdit className="text-slate-300 cursor-pointer hover:text-blue-400 transition" />
+                  
+                    <FaEdit onClick={()=> handleFocus(index)} className="text-slate-300 cursor-pointer hover:text-blue-400 transition" />
                 </div>
               </div>
             ))}
