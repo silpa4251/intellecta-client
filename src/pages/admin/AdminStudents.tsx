@@ -70,7 +70,7 @@ const AdminStudents = () => {
               </tr>
             </thead>
             <tbody>
-              {students?.map((student, index) => (
+              {students && students?.map((student, index) => (
                 <tr
                   key={student._id + index}
                   className={`transition-colors duration-200 ${
