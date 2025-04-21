@@ -24,7 +24,7 @@ const NotificationPanel = ({ onClose }: Props) => {
         {/* Notifications List Here */}
         <div className="flex justify-center ">
           <button
-            className="flex justify-between px-14 py-1 bg-[#008852] text-[#ffff] rounded-xl hover:bg-[#029061db]"
+            className="flex justify-between px-4 py-2 bg-[#008852] text-[#ffff] rounded-xl hover:bg-[#029061db]"
             onClick={() => setCreateButton(createButton ? false : true)}
           >
             {createButton ? (
@@ -40,36 +40,36 @@ const NotificationPanel = ({ onClose }: Props) => {
           <div className="flex flex-wrap justify-center gap-y-8 mt-10">
             <div className="flex flex-wrap justify-between gap-x-5 ">
               <button
-                className="bg-[#aeaeae] px-4 py-1 rounded-xl hover:bg-[#888] "
+                className="bg-[#aeaeae] px-4 py-3 rounded-xl hover:bg-[#888] "
                 onClick={() => setMessageBox(messageBox ? false : true)}
               >
                 All Users
               </button>
               <button
-                className="bg-[#aeaeae] px-4 py-1 rounded-xl hover:bg-[#888] "
+                className="bg-[#aeaeae] px-4 py-2 rounded-xl hover:bg-[#888] "
                 onClick={() => setShowSearchBox(showSearchBox ? false : true)}
               >
-                Indivdually
+                Individually
               </button>
             </div>
             <div className="flex flex-wrap justify-between gap-x-5">
               <button
-                className="bg-[#aeaeae] px-4 py-1 rounded-xl hover:bg-[#888] "
+                className="bg-[#aeaeae] px-4 py-2 rounded-xl hover:bg-[#888] "
                 onClick={() => setMessageBox(messageBox ? false : true)}
               >
-                catagory 5-8
+                Category 5-8
               </button>
               <button
-                className="bg-[#aeaeae] px-4 py-1 rounded-xl hover:bg-[#888] "
+                className="bg-[#aeaeae] px-4 py-2 rounded-xl hover:bg-[#888] "
                 onClick={() => setMessageBox(messageBox ? false : true)}
               >
-                catagory 9-12
+                Category 9-12
               </button>
               <button
-                className="bg-[#aeaeae] px-4 py-1 rounded-xl hover:bg-[#888] "
+                className="bg-[#aeaeae] px-4 py-2 rounded-xl hover:bg-[#888] "
                 onClick={() => setMessageBox(messageBox ? false : true)}
               >
-                catagory 13-18
+                Category 13-18
               </button>
             </div>
           </div>
@@ -88,7 +88,7 @@ const NotificationPanel = ({ onClose }: Props) => {
               className="bg-[#dcdcdc] p-2 border-none w-4/6 h-50"
               placeholder="Enter the message..."
             />
-            <button className="bg-emerald-600 p-2 rounded-2xl text-amber-50">
+            <button className="bg-emerald-600 px-4 py-2 rounded-xl text-amber-50">
               Send Message
             </button>
           </div>
