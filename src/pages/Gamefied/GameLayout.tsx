@@ -1,4 +1,4 @@
-import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Link, Navigate, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { IoMdHome } from "react-icons/io";
 // import GameSidebar from "./GamePages/GameSidebar";
 import { useEffect, useState } from "react";
@@ -66,6 +66,7 @@ const GamesLayout = () => {
     navigate(`/games/${slug}`);
     setSearchVal("");
   };
+
 
   return (
     <div className="min-h-screen bg-gradient-to-l from-[#0b2672] to-[#111827]">
