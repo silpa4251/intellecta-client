@@ -1,6 +1,5 @@
 import { ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import intellectalogo from "../../assets/Intellecta-Logo (1).svg"
 
  
 export function cn(...inputs: ClassValue[]) {
@@ -18,6 +17,8 @@ export const HoverEffect = ({
 }: {
   items: {
     title: string;
+    thumbnail: string;
+    gradeLevel: number;
     description: string;
     link: string;
   }[];
@@ -32,37 +33,36 @@ export const HoverEffect = ({
         className
       )}
     >
-      {items.map((item, idx) => (
-        <Link
-          to={item?.link}
-          key={item?.link}
-          className="relative group  block p-2 h-full w-full"
-          onMouseEnter={() => setHoveredIndex(idx)}
-          onMouseLeave={() => setHoveredIndex(null)}
-        >
-          <AnimatePresence>
-            {hoveredIndex === idx && (
-              <motion.span
-                className="absolute inset-0 h-full w-full bg-neutral-200 dark:bg-slate-800/[0.8] block  rounded-3xl"
-                layoutId="hoverBackground"
-                initial={{ opacity: 0 }}
-                animate={{
-                  opacity: 1,
-                  transition: { duration: 0.15 },
-                }}
-                exit={{
-                  opacity: 0,
-                  transition: { duration: 0.15, delay: 0.2 },
-                }}
-              />
-            )}
-          </AnimatePresence>
-          <Card>
-            <CardTitle>{item.title}</CardTitle>
-            <CardDescription>{item.description}</CardDescription>
-          </Card>
-        </Link>
-      ))}
+     {items?.length > 0 ? (
+  items.map((item, idx) => (
+    <Link
+      to={item?.link}
+      key={item?.link}
+      className="relative group block p-2 h-full w-full"
+      onMouseEnter={() => setHoveredIndex(idx)}
+      onMouseLeave={() => setHoveredIndex(null)}
+    >
+      <AnimatePresence>
+        {hoveredIndex === idx && (
+          <motion.span
+            className="absolute inset-0 h-full w-full bg-neutral-200 dark:bg-slate-800/[0.8] block rounded-3xl"
+            layoutId="hoverBackground"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1, transition: { duration: 0.15 } }}
+            exit={{ opacity: 0, transition: { duration: 0.15, delay: 0.2 } }}
+          />
+        )}
+      </AnimatePresence>
+      <Card thumbnail={item.thumbnail} gradeLevel={item.gradeLevel}>
+        <CardTitle>{item.title}</CardTitle>
+        <CardDescription>{item.description}</CardDescription>
+      </Card>
+    </Link>
+  ))
+) : (
+  <p className="text-center text-gray-500 col-span-full">No courses available.</p>
+)}
+
     </div>
   );
 };
@@ -70,9 +70,13 @@ export const HoverEffect = ({
 export const Card = ({
   className,
   children,
+  thumbnail,
+  gradeLevel,
 }: {
   className?: string;
   children: React.ReactNode;
+  thumbnail: string;
+  gradeLevel: number;
 }) => {
   return (
     <div
@@ -82,8 +86,11 @@ export const Card = ({
       )}
     >
       <div className="relative z-50">
-        <img src={intellectalogo} alt="intellecta logo" />
-        <div className="p-4">{children}</div>
+        <img src={thumbnail} alt="course thumbnail" className="w-full h-52 object-cover rounded-xl mb-4"/>
+        <div className="text-xs text-slate-600 dark:text-slate-400 mb-2 font-medium">
+          Grade Level: {gradeLevel}
+        </div>
+        <div className="p-1">{children}</div>
       </div>
     </div>
   );
