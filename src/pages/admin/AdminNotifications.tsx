@@ -10,7 +10,7 @@ const NotificationPanel = ({ onClose }: Props) => {
   const [createButton, setCreateButton] = useState(false);
   const [messageBox, setMessageBox] = useState(false);
   const [showSearchBox, setShowSearchBox] = useState(false);
-  const [message, setMessage] = useState("");
+  // const [message, setMessage] = useState({});
 
   return (
     <div className="absolute top-0 h-full w-full md:w-2/5 bg-white shadow-lg z-50 transition-all duration-300">

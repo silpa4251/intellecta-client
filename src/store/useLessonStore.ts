@@ -16,7 +16,7 @@ export const useLessonStore = create<LessonStore>((set, get) => ({
   initializeLessons: (courseId: string) => {
     const courseLessons = lessons.filter((item) => item.courseId === courseId);
     if (!get().lessonData[courseId]) {
-      set((state) => ({
+      set((state: any) => ({
         lessonData: {
           ...state.lessonData,
           [courseId]: courseLessons.map((lesson) => ({ ...lesson })),
@@ -28,7 +28,7 @@ export const useLessonStore = create<LessonStore>((set, get) => ({
   updateLesson: (courseId: string, lessonId: string, updates: Partial<Lesson>) => {
     set((state) => {
       const updatedLessons = (state.lessonData[courseId] || []).map((lesson) =>
-        lesson.id === lessonId ? { ...lesson, ...updates } : lesson
+        lesson._id === lessonId ? { ...lesson, ...updates } : lesson
       );
       return {
         lessonData: {
@@ -47,13 +47,13 @@ export const useLessonStore = create<LessonStore>((set, get) => ({
   },
 
   resetLessons: (courseId: string) => {
-    set(() => ({
-      lessonData: {
-        ...get().lessonData,
-        [courseId]: lessons
-          .filter((item) => item.courseId === courseId)
-          .map((lesson) => ({ ...lesson })),
-      },
-    }));
+    // set(() => ({
+    //   lessonData: {
+    //     ...get().lessonData,
+    //     [courseId]: lessons
+    //       .filter((item) => item.courseId === courseId)
+    //       .map((lesson) => ({ ...lesson })),
+    //   },
+    // }));
   },
 }));

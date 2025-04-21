@@ -1,18 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useParams, useNavigate, useLocation, Link } from "react-router-dom";
 import NavbarWelcome from "../../../components/Navbar/NavbarWelcome";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
 import SpinningLoader from "../../../components/Loaders/SpinningLoader";
 import { Lesson } from "../../../types";
 import ReactPlayer from "react-player";
 import { IoCheckmarkCircleOutline } from "react-icons/io5";
-import {
-  FaPlay,
-  FaPause,
-  FaVolumeUp,
-  FaVolumeMute,
-  FaExpand,
-} from "react-icons/fa";
+import { FaPlay, FaPause, FaVolumeUp, FaVolumeMute, FaExpand } from "react-icons/fa";
+import axios from "axios";
 import { useState, useRef, useEffect } from "react";
 import screenfull from "screenfull";
 
@@ -41,6 +36,7 @@ const LessonContent = () => {
   const [volume, setVolume] = useState(0.8);
   const [played, setPlayed] = useState(0);
   const [playedSeconds, setPlayedSeconds] = useState(0);
+  // const [loaded, setLoaded] = useState(0);
   const [duration, setDuration] = useState(0);
   const [playbackRate, setPlaybackRate] = useState(1);
   const playerRef = useRef<ReactPlayer>(null);
@@ -634,7 +630,8 @@ const LessonContent = () => {
             </div>
           </div>
         </div>
-      </div>}
+      </div>
+      }
     </>
   );
 };
