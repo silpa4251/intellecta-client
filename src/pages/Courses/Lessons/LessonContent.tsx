@@ -6,11 +6,6 @@ import SpinningLoader from "../../../components/Loaders/SpinningLoader";
 import { Lesson } from "../../../types";
 import ReactPlayer from "react-player";
 import { IoCheckmarkCircleOutline } from "react-icons/io5";
-<<<<<<< HEAD
-import { FaPlay, FaPause, FaVolumeUp, FaVolumeMute, FaExpand } from "react-icons/fa";
-import { useState, useRef } from "react";
-// import screenfull from "screenfull";
-=======
 import axios from "axios";
 import {
   FaPlay,
@@ -21,7 +16,6 @@ import {
 } from "react-icons/fa";
 import { useState, useRef, useEffect } from "react";
 import screenfull from "screenfull";
->>>>>>> c2fa8d6dc8e63197bc69a0f0f1586fb3a07f973f
 
 type Params = {
   lessonId: string;
