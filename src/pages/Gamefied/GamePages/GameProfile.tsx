@@ -82,14 +82,14 @@ const GameProfile = () => {
   return (
     <div className="flex flex-col items-center justify-between gap-10 py-5 md:mx-auto md:px-4 ">
       {user ? (
-        <div className="flex flex-col md:flex-row justify-between w-full max-w-5xl rounded-xl p-6">
-          <div className="space-y-4 ">
-            <div className="flex items-center text-white gap-4">
+        <div className="flex flex-col md:flex-row md:gap-20 justify-between w-full max-w-5xl rounded-xl p-6">
+          <div className="space-y-4">
+            <div className="flex items-center text-white gap-4 ">
               <img
                 src={user?.profilePic}
                 alt=""
-                className="h-20 w-20 bg-red-100 object-cover rounded-full"
-              />
+                className="h-20 w-20 bg-white object-cover rounded-full"
+                />
               <div>
                 <h2 className="text-gray-400 font-semibold text-lg">WELCOME</h2>
                 <h1 className="font-semibold text-3xl capitalize">
@@ -98,7 +98,7 @@ const GameProfile = () => {
               </div>
             </div>
             <div className="flex md:gap-8 gap-3 text-white">
-              <div className="md:p-6 p-3 rounded-xl brounded-xl border-2 border-gray-800 bg-[#070e1f]">
+              <div className="md:p-6 md:min-w-40 p-3 rounded-xl brounded-xl border-2 border-gray-800 bg-[#070e1f]">
                 <p className="text-gray-500 text-cs md:text-base">
                   TOTAL TIME SPEND
                 </p>
@@ -108,7 +108,7 @@ const GameProfile = () => {
                     0}
                 </h1>
               </div>
-              <div className="md:p-6 p-3 rounded-xl border-2 border-gray-800 bg-[#070e1f]">
+              <div className="md:p-6 md:min-w-40 p-3 rounded-xl border-2 border-gray-800 bg-[#070e1f]">
                 <p className="text-gray-500 text-sm md:text-base">
                   TOTAL GAMES PLAYED
                 </p>
