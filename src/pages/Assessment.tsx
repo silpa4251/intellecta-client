@@ -2,11 +2,10 @@ import { useState, useEffect } from "react";
 import WcNavbar from "../components/Navbar/NavbarWelcome";
 import { IoCheckmarkOutline } from "react-icons/io5";
 import { RxCross1 } from "react-icons/rx";
-import axiosInstance from "../utils/axiosInstance";
 import { toast } from "react-toastify";
-import axios from "axios";
 import SpinningLoader from "../components/Loaders/SpinningLoader";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 // Define an interface for the question structure
 interface AssessmentQuestion {
@@ -31,7 +30,7 @@ const Assessment = () => {
       try {
         setIsLoading(true);
         console.log("Fetching assessment questions");
-        const response = await axiosInstance.get(import.meta.env.VITE_ASSESSMENT_URL, { withCredentials: true});
+        const response = await axios.get(import.meta.env.VITE_ASSESSMENT_URL, { withCredentials: true});
         console.log('Assessment Questions Response:', response.data.questions);
 
         const transformedQuestions = response.data.questions.map((q: any) => ({
@@ -95,7 +94,7 @@ const Assessment = () => {
         }))
       };
 
-      const response = await axios.post("http://localhost:5001/api/assessment/evaluate",submissionData,{withCredentials: true});
+      const response = await axios.post("http://localhost:5001/api/ai-tutor/evaluate",submissionData,{withCredentials: true});
       setIsSubmitting(false);
       console.log('Assessment Evaluation Response:', response.data);
       toast.success('Assessment submitted successfully!');

@@ -7,7 +7,6 @@ import { useQuery } from "@tanstack/react-query";
 const fetchUser = async () => {
     const { data } = await axiosInstance.get(userEndPoints.USER.GET_PROFILE);
     return data.data.user; 
-    console.log("data", data.data.user);
 };
 
 const WelcomePage = () => {

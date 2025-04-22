@@ -3,44 +3,83 @@ import CourseSaveButton from "../../utils/ui/courseSaveButton";
 import {
   ImageUpIcon,
   BookOpenTextIcon,
-  Clock3Icon,
-  Languages,
   LucideFlagTriangleRight,
   UploadCloudIcon,
   Library,
 } from "lucide-react";
+import axios from "axios";
+
+type CourseDetails = {
+  thumbnail: string; // Preview URL for the image
+  title: string;
+  subject: string;
+  description: string;
+  gradeLevel: string;
+  difficultyLevel: string;
+  file: File | null; // Allow `File` or `null`
+};
 
 const AddCourse = () => {
+  const [courseId, setCourseId] = useState(null);
   const [activeTab, setActiveTab] = useState("overview");
-  const [courseDetails, setCourseDetails] = useState({
-    thumbNailImage: "",
-    heading: "What is the learning path",
-    category: "Empty",
-    language: "Empty",
-    duration: "Empty",
+  const [courseDetails, setCourseDetails] = useState<CourseDetails>({
+    thumbnail: "",
+    title: "Course Title",
+    subject: "",
     description: "",
+    gradeLevel: "",
+    difficultyLevel: "",
+    file: null,
   });
-  console.log(courseDetails);
+
+  const categories = ["Math", "Science", "English", "History", "Coding"];
+
+  console.log('sdfghjhgfdfgh',courseDetails);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleThumbnailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+  
+    // Store the raw file in state
+    setCourseDetails({
+      ...courseDetails,
+      thumbnail: URL.createObjectURL(file), // For preview
+      file, // Store the raw file
+    });
+  };
 
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setCourseDetails({
-        ...courseDetails,
-        thumbNailImage: reader.result as string,
-      });
-    };
-    reader.readAsDataURL(file);
+  const toLowercase = (value: string): string => {
+    return value.toLowerCase();
+  };
+
+  const saveCourse = async () => {
+    try {
+      const formData = new FormData();
+      formData.append('title', courseDetails.title);
+    formData.append('subject', toLowercase(courseDetails.subject));
+    formData.append('description', courseDetails.description);
+    formData.append('gradeLevel', courseDetails.gradeLevel);
+    formData.append('difficultyLevel', toLowercase(courseDetails.difficultyLevel));
+
+    if (courseDetails.file) {
+      formData.append('image', courseDetails.file);
+    }
+    console.log('first',formData)
+    const response = await axios.post("http://localhost:5005/api/courses", formData);
+    console.log("response",response);
+      setCourseId(response.data.data._id); // Store the courseId in state
+      alert("Course saved successfully!");
+    } catch (error) {
+      console.error("Error saving course:", error);
+      alert("Failed to save course. Please try again.");
+    }
   };
 
   return (
     <div className="bg-[#DFF3F0] min-h-screen flex justify-center items-start py-12 px-4">
-      <div className="bg-white w-full max-w-4xl rounded-2xl overflow-hidden shadow-md">
+      <div className="bg-white w-full min-h-screen max-w-4xl rounded-2xl shadow-md">
         {/* Tabs */}
         <div className="flex border-b border-gray-300">
           <Tab
@@ -67,9 +106,9 @@ const AddCourse = () => {
               {/* Banner Image */}
               <div className="relative mb-6">
                 <img
-                  src={courseDetails.thumbNailImage || "No Image Found"}
+                  src={courseDetails.thumbnail || "No Image Found"}
                   alt="Upload an Image"
-                  className="w-full rounded-lg h-52 object-cover bg-[#8cf8d7]"
+                  className="w-full rounded-lg h-48 object-cover bg-[#8cf8d7]"
                 />
                 <button
                   onClick={() => fileInputRef.current?.click()}
@@ -92,54 +131,44 @@ const AddCourse = () => {
               </div>
 
               {/* Course Title */}
-              <div className="flex items-center gap-3 mt-8 mb-4">
-                <input
-                  type="text"
-                  value={courseDetails.heading}
-                  onChange={(e) =>
-                    setCourseDetails({
-                      ...courseDetails,
-                      heading: e.target.value,
-                    })
+              <div className="mt-8 mb-4">
+                <DetailItem
+                  label="Course Title"
+                  value={courseDetails.title}
+                  onChange={(val) =>
+                    setCourseDetails({ ...courseDetails, title: val })
                   }
-                  className={`text-2xl font-semibold leading-snug w-full bg-transparent border-none focus:outline-none focus:ring-0 ${
-                    courseDetails.heading === "What is the learning path"
-                      ? "text-gray-400"
-                      : "text-black"
-                  }`}
                 />
               </div>
 
-              {/* Course Details */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-                <DetailItem
-                  label="Category"
-                  value={courseDetails.category}
-                  onChange={(val) =>
-                    setCourseDetails({ ...courseDetails, category: val })
+              <div className="mb-4">
+                <label className="block text-gray-700 mb-1 font-medium">
+                  Category
+                </label>
+                <select
+                  value={courseDetails.subject}
+                  onChange={(e) =>
+                    setCourseDetails({
+                      ...courseDetails,
+                      subject: e.target.value,
+                    })
                   }
-                />
-                <DetailItem
-                  label="Estimate Duration"
-                  value={courseDetails.duration}
-                  onChange={(val) =>
-                    setCourseDetails({ ...courseDetails, duration: val })
-                  }
-                />
-                <DetailItem
-                  label="Language"
-                  value={courseDetails.language}
-                  onChange={(val) =>
-                    setCourseDetails({ ...courseDetails, language: val })
-                  }
-                />
+                  className="w-full p-2 border rounded-md bg-white shadow-sm text-sm"
+                >
+                  <option value="">Select Category</option>
+                  {categories.map((cat) => (
+                    <option key={cat} value={cat}>
+                      {cat}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               {/* Description Input */}
               <div>
                 <textarea
                   placeholder="Type description here ..."
-                  className="w-full p-3 resize-none border-b-2 border-gray-500 outline-none text-sm h-20"
+                  className="w-full p-2 resize-none border-b-2 border-gray-500 outline-none text-sm h-20"
                   maxLength={400}
                   value={courseDetails.description}
                   onChange={(e) =>
@@ -149,13 +178,66 @@ const AddCourse = () => {
                     })
                   }
                 />
-                <div className="text-right text-sm text-gray-400 mt-1">
+                <div className="text-right text-sm text-gray-400">
                   {courseDetails.description.length}/400
                 </div>
-                <p className="text-xs text-gray-500 mt-2">
-                  Let your learner know a little about your learning path
-                </p>
               </div>
+
+              {/* Grade Level Dropdown */}
+              <div className="flex gap-4 mb-3">
+                <div className="w-1/2">
+                  <label className="block text-gray-700 mb-1 font-medium">
+                    Grade Level
+                  </label>
+                  <select
+                    value={courseDetails.gradeLevel}
+                    onChange={(e) =>
+                      setCourseDetails({
+                        ...courseDetails,
+                        gradeLevel: e.target.value,
+                      })
+                    }
+                    className="w-full p-2 border rounded-md bg-white shadow-sm text-sm"
+                  >
+                    <option value="">Select Grade</option>
+                    {[...Array(12)].map((_, i) => (
+                      <option key={i + 1} value={i + 1}>
+                        Grade {i + 1}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Difficulty Level Select */}
+                <div className="w-1/2">
+                  <label className="block text-gray-700 mb-1 font-medium">
+                    Difficulty Level
+                  </label>
+                  <select
+                    value={courseDetails.difficultyLevel}
+                    onChange={(e) =>
+                      setCourseDetails({
+                        ...courseDetails,
+                        difficultyLevel: e.target.value,
+                      })
+                    }
+                    className="w-full p-2 border rounded-md bg-white shadow-sm text-sm"
+                  >
+                    <option value="">Select Difficulty</option>
+                    <option value="Beginner">Beginner</option>
+                    <option value="Intermediate">Intermediate</option>
+                    <option value="Advanced">Advanced</option>
+                  </select>
+                </div>
+              </div>
+              <div className="flex justify-end">
+                  <button
+                    onClick={saveCourse}
+                    className="bg-green-500 text-white px-4 py-2 rounded-md"
+                  >
+                    Create
+                  </button>
+                </div>
             </>
           )}
 
@@ -166,32 +248,16 @@ const AddCourse = () => {
                   <BookOpenTextIcon />
                 </div>
                 <h2 className="text-3xl font-semibold leading-snug text-gray-700">
-                  General Knowledge about – <br />
-                  the world
+                  {courseDetails.title}
                 </h2>
-                <p>
-                  The vibrant colors of the sunset painted the sky with hues of{" "}
-                  <br />
-                  orange and pink, casting long shadows across the beach. Gentle{" "}
-                  <br />
-                  waves lapped at the shore, creating a soothing rhythm as the{" "}
-                  <br />
-                  day faded into twilight. A flock of birds flew overhead
-                </p>
+                <p>{courseDetails.description}</p>
                 <br />
                 <div className="flex justify-around">
-                  <div className="bg-gray-300 rounded-3xl w-fit px-3">
+                  {/* <div className="bg-gray-300 rounded-3xl w-fit px-3">
                     Course
-                  </div>
+                  </div> */}
                   <div className="bg-gray-300 rounded-3xl w-fit px-3">
-                    Catagory
-                  </div>
-                  <div className=" flex w-fit  text-gray-600">
-                    <Clock3Icon className="mr-2" />1 Weak
-                  </div>
-                  <div className=" flex w-fit  text-gray-600 px-3">
-                    <Languages className="mr-2" />
-                    Language
+                    {courseDetails.subject || "Subject"}
                   </div>
                 </div>
                 <br />
@@ -201,25 +267,25 @@ const AddCourse = () => {
                 <div className="flex justify-around items-center">
                   {/* Stage */}
                   <div className="flex flex-col items-center space-y-2">
-                    <div className="border-3 min-w-20 min-h-12 flex justify-center items-center rounded-xl">
+                    <button className="border-3 min-w-20 min-h-12 flex justify-center items-center rounded-xl">
                       <LucideFlagTriangleRight className="text-9xl" />
-                    </div>
+                    </button>
                     <h1>Stage</h1>
                   </div>
 
                   {/* Upload */}
                   <div className="flex flex-col items-center space-y-2">
-                    <div className="border-3 min-w-20 min-h-12 flex justify-center items-center rounded-xl">
+                    <button className="border-3 min-w-20 min-h-12 flex justify-center items-center rounded-xl">
                       <UploadCloudIcon className="text-9xl" />
-                    </div>
+                    </button>
                     <h1>Upload</h1>
                   </div>
 
                   {/* Library */}
                   <div className="flex flex-col items-center space-y-2">
-                    <div className="border-3 min-w-20 min-h-12 flex justify-center items-center rounded-xl">
+                    <button className="border-3 min-w-20 min-h-12 flex justify-center items-center rounded-xl">
                       <Library className="text-9xl" />
-                    </div>
+                    </button>
                     <h1>Library</h1>
                   </div>
                 </div>
@@ -236,7 +302,7 @@ const AddCourse = () => {
                   {/* Image Section - 3/8 */}
                   <div className="flex-[3] w-full overflow-hidden">
                     <img
-                      src={courseDetails.thumbNailImage}
+                      src={courseDetails.thumbnail}
                       alt="No Image found"
                       className="w-full h-full object-cover"
                     />
@@ -245,14 +311,14 @@ const AddCourse = () => {
                   {/* Text Section - 5/8 */}
                   <div className="flex-[5] text-gray-600  p-4">
                     <h1 className="text-xl font-semibold">
-                      {courseDetails.heading}
+                      {courseDetails.title}
                     </h1>
                     <p className="mt-2">
-                      Category: {courseDetails.category || "Add Category"}
+                      Subject: {courseDetails.subject || "Add Category"}
                       <br />
-                      Language: {courseDetails.language || "Add Language"}
+                      Grade: {courseDetails.gradeLevel || "Add Grade"}
                       <br />
-                      Duration: {courseDetails.duration || "Add Duration"}
+                      Level: {courseDetails.difficultyLevel || "Add Difficulty"}
                     </p>
                   </div>
                 </div>
@@ -310,6 +376,7 @@ const DetailItem = ({
     <input
       type="text"
       value={value}
+      placeholder="Enter something..."
       onChange={(e) => onChange(e.target.value)}
       className={`pl-2 border-none bg-transparent text-right focus:outline-none focus:ring-0 ${
         value === "" ? "text-black" : "text-grey-400"
@@ -319,3 +386,4 @@ const DetailItem = ({
 );
 
 export default AddCourse;
+

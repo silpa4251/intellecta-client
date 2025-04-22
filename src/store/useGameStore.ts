@@ -1,6 +1,6 @@
 import { create } from "zustand";
-import axios from "axios";
 import { toast } from "react-toastify";
+import axios from "axios";
 
 type Game = {
   _id: string;

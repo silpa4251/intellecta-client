@@ -2,18 +2,25 @@ import { useState } from "react";
 import styled from "styled-components";
 
 interface RotatingCardProps {
-  badge:string,
+  badge: string;
   badges: {
-    trophysrc:string
-  }
+    trophysrc: string;
+    desc: string;
+  };
 }
 
-const RotatingCard :React.FC<RotatingCardProps> = ({ badge, badges }) => {
-  const [showTitle, setShowTitle] = useState(false)
-  
+const RotatingCard: React.FC<RotatingCardProps> = ({ badge, badges }) => {
+  const [showTitle, setShowTitle] = useState(false);
+
   return (
     <StyledWrapper>
-      <div className="e-card playing cursor-pointer" onMouseOver={()=> {setShowTitle(true)}} onMouseLeave={()=> setShowTitle(false)}>
+      <div
+        className="e-card playing cursor-pointer"
+        onMouseOver={() => {
+          setShowTitle(true);
+        }}
+        onMouseLeave={() => setShowTitle(false)}
+      >
         <div className="wave" />
         <div className="wave" />
         <div className="wave" />
@@ -21,12 +28,25 @@ const RotatingCard :React.FC<RotatingCardProps> = ({ badge, badges }) => {
           <img
             src={badges?.trophysrc}
             alt={badge}
-            className="h-16 w-16 object-contain z-10"
-            />
-          <h2 className="text-white">{badge}</h2>
+            className="md:h-16 md:w-16 h-10 w-10 object-contain z-10"
+          />
+          <h2 className="text-white md:text-base text-sm">{badge}</h2>
         </div>
       </div>
-            {showTitle && <div className=" absolute z-50 "><p className=" p-1 mt-2 -ml-2 text-xs rounded-2xl bg-amber-400">{badges.desc}</p></div> }
+      <div
+        className={`
+    absolute z-50 transition-all duration-300 ease-in-out
+    ${
+      showTitle
+        ? "opacity-100 translate-y-0"
+        : "opacity-0 -translate-y-2 pointer-events-none"
+    }
+  `}
+      >
+        <p className="p-2 mt-2 -ml-2 text-xs rounded-2xl bg-amber-400">
+          {badges.desc}
+        </p>
+      </div>
     </StyledWrapper>
   );
 };
@@ -40,6 +60,12 @@ const StyledWrapper = styled.div`
     height: 100px;
     border-radius: 16px;
     overflow: hidden;
+  }
+  @media screen and (max-width: 768px) {
+    .e-card {
+      width: 80px;
+      height: 70px;
+    }
   }
 
   .wave {

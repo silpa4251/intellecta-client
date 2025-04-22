@@ -89,7 +89,7 @@ const LeaderboardPreview: React.FC<LeaderboardProps> = ({
                         new Date(data.lastPlayedDate).toLocaleDateString()}
                     </td>
                     <td className=" py-3 px-2 text-right align-middle">
-                      {data.totalScore}
+                      {data.totalScore && Math.floor(data.totalScore) || 0}
                     </td>
                   </tr>
                 ))
