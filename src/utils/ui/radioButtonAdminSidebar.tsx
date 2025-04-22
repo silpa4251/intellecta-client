@@ -75,7 +75,7 @@ const RadioButtonAdminSideBar = ({ onNotificationClick }: { onNotificationClick:
           </span>
         </div>
 
-        {/* Settings */}
+        {/* Settings
         <div
           onClick={() => navigate("/admin/settings")}
           className={`relative w-full h-14 p-4 border-solid border-black/10 group flex items-center justify-center text-black rounded-xl cursor-pointer
@@ -88,7 +88,7 @@ const RadioButtonAdminSideBar = ({ onNotificationClick }: { onNotificationClick:
           <span className="absolute left-full top-1/2 -translate-y-1/2 ml-2 opacity-0 group-hover:opacity-100 bg-gray-800 text-white text-xs rounded-md px-2 py-1 transition-opacity duration-300 whitespace-nowrap z-10">
             Settings
           </span>
-        </div>
+        </div> */}
       </article>
     </div>
   );

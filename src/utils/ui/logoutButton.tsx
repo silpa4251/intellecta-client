@@ -1,6 +1,9 @@
 import styled from 'styled-components';
 
-const LogOutButton = () => {
+
+
+
+const LogOutButton= () => {
   return (
     <StyledWrapper>
       <button className="Btn">
