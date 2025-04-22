@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom";
+import { Navigate, Outlet, useNavigate } from "react-router-dom";
 import LogOutButton from "../../utils/ui/logoutButton";
 import UserProfileHover from "../../utils/ui/userProfileHover";
 import RadioButtonAdminSideBar from "../../utils/ui/radioButtonAdminSidebar";
@@ -6,10 +6,27 @@ import intellectalogo from "../../assets/Intellecta-logo.svg";
 import { useLocation } from "react-router-dom";
 import { useState } from "react";
 import NotificationPanel from "./AdminNotifications";
+import axiosInstance from "../../utils/axiosInstance";
+import { useMutation } from "@tanstack/react-query";
 
 const AdminLayout = () => {
   const location = useLocation();
+  const isAdmin = localStorage.getItem("isAdmin");
   const [showNotification, setShowNotification] = useState(false);
+  const navigate = useNavigate()
+  
+  const {mutate : logoutMutation} = useMutation({
+    mutationFn: async()=> {
+        const res = await axiosInstance.post("http://localhost:5000/api/user/admin-logout")
+        return res.data
+    },
+    onSuccess: (data)=> {
+      console.log(data);
+      
+      localStorage.removeItem("isAdmin")
+      navigate("/admin_login")
+    }
+  })
 
   const currentPage = (() => {
     switch (location.pathname) {
@@ -36,6 +53,11 @@ const AdminLayout = () => {
     );
   }
 
+  if (!isAdmin) {
+    return <Navigate to="/admin_login" replace />;
+  }
+  
+
   return (
     <div className="flex justify-between h-screen bg-[#d8ede7]">
       {/* Sidebar */}
@@ -53,7 +75,10 @@ const AdminLayout = () => {
         {/* User Profile & Logout - Stick to Bottom on Desktop */}
         <div className="flex flex-col  space-y-2  mb-4 z-50">
           <UserProfileHover />
+          <button onClick={()=> logoutMutation()}>
+
           <LogOutButton />
+          </button>
         </div>
       </aside>
 
