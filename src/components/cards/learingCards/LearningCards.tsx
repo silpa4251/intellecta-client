@@ -1,8 +1,14 @@
 import { GiLaptop } from "react-icons/gi";
 import { motion } from "framer-motion";
 import { FaArrowRight } from "react-icons/fa";
+import React from "react";
 
-const LearningCards = () => {
+interface learningCardProp {
+  progress:number;
+  title:string;
+}
+
+const LearningCards:React.FC <learningCardProp> = ({progress, title}) => {
   
   return (
     <motion.div 
@@ -27,7 +33,7 @@ const LearningCards = () => {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
         > 
-          Introduction to Coding         
+          {title}   
         </motion.h1>
         
         <div className="w-48 h-6 rounded-full overflow-hidden bg-gray-100 p-1 border border-gray-200">
@@ -35,7 +41,7 @@ const LearningCards = () => {
             className=" h-full bg-gradient-to-r from-blue-400 to-blue-600 rounded-full"
             initial={{ width: "0%" }}
             // width is dianamic
-            animate={{ width: "50%" }}
+            animate={{ width: `${progress}%` }}
             transition={{ delay: 0.5, duration: 1, ease: "easeOut" }}
           >
           </motion.div>

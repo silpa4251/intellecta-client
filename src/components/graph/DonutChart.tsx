@@ -14,15 +14,15 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 const DonutChart: React.FC = () => {
   const data = {
-    labels: ['learing', 'gamming', 'others'],
+    labels: ['Studies', 'Gamming', 'Others'],
     datasets: [
       {
         label: 'Sales by Category',
         data: [300, 200, 100],
         backgroundColor: [
-          'rgba(255, 99, 132, 0.7)',    // Red
-          'rgba(54, 162, 235, 0.7)',    // Blue
-          'rgba(255, 206, 86, 0.7)'     // Yellow
+          'rgb(255, 99, 132)',    // Red
+          'rgb(54, 162, 235)',    // Blue
+          'rgb(255, 206, 86)'     // Yellow
         ],
         borderColor: [
           'rgba(255, 99, 132, 1)',
@@ -43,7 +43,7 @@ const DonutChart: React.FC = () => {
       },
       title: {
         display: true,
-        text: 'Your activity'
+        text: 'Time Tracker'
       }
     },
     cutout: '60%', // Makes it a donut

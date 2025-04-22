@@ -68,6 +68,7 @@ const Lessons = () => {
   }
 
   if (error) {
+    console.log("errorrrrr", error)
     return (
       <div className="min-h-screen flex items-center justify-center">
         <p>Error loading courses: {error.message}</p>
