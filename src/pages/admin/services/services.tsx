@@ -1,6 +1,5 @@
 //getting all users 
 
-
 import axiosInstance from "../../../utils/axiosInstance";
 
 
@@ -36,6 +35,11 @@ export const fetchStudents = async ({
     return response.data?.users || []; 
 }
 
+export const fetchCourses = async () =>{
+  const response = await axiosInstance.get("http://localhost:5005/api/courses")
+  console.log("adminfetchcourse", response.data.data);
+  return response.data.data;
+}
 
 export const fetchAdminDashboard = async ({
     
@@ -44,8 +48,6 @@ export const fetchAdminDashboard = async ({
   console.log(response.data)
   return response.data
 }
-
-
 
 
 interface NotificationPayload {

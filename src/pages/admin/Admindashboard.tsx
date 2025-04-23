@@ -1,9 +1,8 @@
 import DoughnutChart from "../../utils/ui/pieChart,";
 import RegistrationStatsCard from "../../utils/ui/registrationCharts";
 import { PopularModulesCard } from "../../utils/ui/popularModules";
-import { ActiveUsersCard } from "../../utils/ui/activeUsers";
 import { TopPerformingStudentsCard } from "../../utils/ui/topPerformingStudents";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { fetchAdminDashboard } from "./services/services";
 import AllStudentsLoader from "../../utils/ui/allStudentsLoader";
 import axiosInstance from "../../utils/axiosInstance";
