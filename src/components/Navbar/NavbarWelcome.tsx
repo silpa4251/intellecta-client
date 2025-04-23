@@ -47,6 +47,7 @@ const NavbarWelcome = () => {
     try {
       console.log("Logging out");
       await axiosInstance.post(userEndPoints.USER.LOGOUT);
+      localStorage.removeItem("isAuthenticated")
       toast.success("You are successfully logged out");
       navigate("/");
     } catch (error: any) {
