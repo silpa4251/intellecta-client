@@ -10,7 +10,9 @@ import { useState } from "react";
 
 
 const fetchAllCourses = async (page: number) => {
-  const response = await axios.get(`http://localhost:5005/api/courses?page=${page}&limit=6`); 
+  const response = await axios.get(`http://localhost:5005/api/courses?page=${page}&limit=6`);
+  console.log(response.data);
+   
   return response.data.data;
 };
 

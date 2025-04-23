@@ -21,10 +21,10 @@ const BarChart:React.FC = () => {
         label: 'Learning',
         data: [65, 59, 80, 81],
         backgroundColor: ['rgba(75, 192, 192, 0.6)',
-            'rgba(255, 99, 132, 0.6)',   // Red
-        'rgba(54, 162, 235, 0.6)',   // Blue
-        'rgba(255, 206, 86, 0.6)',   // Yellow
-        'rgba(75, 192, 192, 0.6)', 
+            'rgba(255, 99, 132, 1)',   // Red
+        'rgba(54, 162, 235, 1)',   // Blue
+        'rgba(255, 206, 86, 1)',   // Yellow
+        'rgba(75, 192, 192, 1)', 
         ],
         borderRadius: 6,
       }
