@@ -28,6 +28,7 @@ import Admindashboard from "./pages/admin/Admindashboard";
 import AdminStudents from "./pages/admin/AdminStudents";
 import AdminCoursesPage from "./pages/admin/AdminCourses";
 import AddCourse from "./pages/admin/AddCourse";
+import AdminCourseDetailsPage from "./pages/admin/AdminCourseDetails";
 
 // import LessonContent from './pages/Courses/Lessons/LessonContent';
 // import LessonQuiz from './pages/Courses/Lessons/LessonQuiz';
@@ -86,6 +87,7 @@ function App() {
             <Route path="students" element={<AdminStudents />} />
             <Route path="courses" element={<AdminCoursesPage />} />
             <Route path="addCourse" element={<AddCourse />} />
+            <Route path="courses/:courseId" element={<AdminCourseDetailsPage />} />
           </Route>
         </Route>
       </Routes>

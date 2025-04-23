@@ -1,4 +1,3 @@
-import React from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 
@@ -26,12 +25,14 @@ const StyledWrapper = styled.div`
     z-index: 1;
     color: #090909;
     padding: 0.7em 1.7em;
+    font-weight: bold;
     cursor: pointer;
-    font-size: 18px;
+    margin-top: 12px;
+    font-size: 14px;
     border-radius: 0.5em;
     background: #e8e8e8;
     border: 1px solid #e8e8e8;
-    box-shadow: 6px 6px 12px #c5c5c5, -6px -6px 12px #ffffff;
+    box-shadow: 6px 6px 12px #c5c5c5, 6px 6px 12px #ffffff;
   }
 
   .button2:active {
