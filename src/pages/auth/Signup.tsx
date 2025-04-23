@@ -65,7 +65,7 @@ const Signup = () => {
         { headers: { "Content-Type": "application/json" } }
       );
       console.log("Registration success:", response);
-
+      localStorage.setItem("isAuthenticated","true")
       toast.success("You're officially registered 🎉");
       navigate("/welcome");
     } catch (error: any) {
@@ -192,9 +192,7 @@ const Signup = () => {
                   const post = await axiosInstance.post("/user/google-login", credentialResponse);
                   const user = post.data.data;
                   console.log("post user", user);
-                  localStorage.setItem("loggedInUser", JSON.stringify(user));
-                  localStorage.setItem("secretToken", JSON.stringify(user.token));
-                  localStorage.setItem("role", "User");
+                  localStorage.setItem("isAuthenticated","true")
                   navigate("/welcome");
                 }}
                 onError={() => console.log("Login Failed")}

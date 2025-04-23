@@ -1,6 +1,6 @@
 import { useState } from "react";
 import NavbarWelcome from "../components/Navbar/NavbarWelcome";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axiosInstance from "../utils/axiosInstance";
 import SpinningLoader from "../components/Loaders/SpinningLoader";
 
@@ -16,6 +16,7 @@ interface NotificationType {
 
 const Notification = () => {
   const [selectTab, setSelectTab] = useState("all");
+const queryClient = useQueryClient()
   const { data, isLoading } = useQuery({
     queryKey: ["notification"],
     queryFn: async () => {
@@ -23,19 +24,33 @@ const Notification = () => {
         "http://localhost:5008/api/notification/get",
         { withCredentials: true }
       );
-      console.log(res.data);
       return res.data.data;
     },
   });
-  console.log(data);
+
+  const {mutate: markAsRead } = useMutation({
+    mutationFn: async (notificationId:string)=> {
+      const res = await axiosInstance.patch(`http://localhost:5008/api/notification/mark-as-read`, notificationId)
+      return res.data
+    },
+    onSuccess: ()=> {
+      queryClient.invalidateQueries({queryKey: ["notification"]})
+    }
+  })
+
+  const notificationType = [
+    { type: "announcement", icon: "📢" },
+    { type: "info", icon: "ℹ️" },
+    { type: "warning", icon: "⚠️" },
+  ];
 
   return (
     <>
       <NavbarWelcome />
       <div className="mx-36 mt-10">
         <h2 className="text-3xl font-medium">Notification</h2>
-        <div className="flex items-center border-b border-b-gray-300  justify-between mt-3">
-          <div className="flex gap-10 ">
+        <div className="flex items-center border-b border-b-gray-300 justify-between mt-3">
+          <div className="flex gap-10">
             <h4
               onClick={() => setSelectTab("all")}
               className={`${
@@ -67,23 +82,44 @@ const Notification = () => {
               Group Notifications
             </h4>
           </div>
-          <div>
-            <button className="text-red-500 cursor-pointer">clear all</button>
-          </div>
         </div>
+
         <div className="mt-3">
-          {isLoading ? <div className="flex justify-center items mt-44"><SpinningLoader/></div> : 
-          data
-            ?.filter((notification: NotificationType) => notification.targetType === selectTab)
-            .map((noti: NotificationType) => (
-              <div
-                key={noti.createdAt.toString()}
-                className="flex justify-between space-y-2"
-              >
-                <h5>{noti.title}</h5>
-                <small>{new Date(noti.createdAt).toLocaleDateString()}</small>
-              </div>
-            ))}
+          {isLoading ? (
+            <div className="flex justify-center items mt-44">
+              <SpinningLoader />
+            </div>
+          ) : (
+            data
+              ?.filter(
+                (notification: NotificationType) =>
+                  selectTab === "all" || notification.targetType === selectTab
+              )
+              .map((noti: NotificationType) => {
+                const typeObj = notificationType.find(
+                  (nt) => nt.type === noti.type
+                );
+                return (
+                  <div
+                    key={noti.createdAt.toString()}
+                    className="flex justify-between py-4 border-b border-gray-200"
+                  >
+                    <div className="w-full">
+                      <div className="flex items-center gap-2">
+                        {typeObj && <span className={`text-lg  ${typeObj.type === "announcement" && "-rotate-12"}`}>{typeObj.icon}</span>}
+                        <h5 className="font-semibold text-lg">{noti.title}</h5>
+                      </div>
+                      <div className="flex justify-between mt-1">
+                        <p className="text-sm text-gray-700">{noti.message}</p>
+                        <small className="text-gray-500">
+                          {new Date(noti.createdAt).toLocaleDateString()}
+                        </small>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })
+          )}
         </div>
       </div>
     </>

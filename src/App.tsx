@@ -42,6 +42,7 @@ import Notification from "./pages/Notification";
 import AdminLogin from "./pages/admin/AdminLogin";
 import ProtectedAdminRoute from "./routes/AdminRoutes";
 import ProtectedUserRoute from "./routes/UserRoutes";
+import EditCourseForm from "./pages/admin/EditCourseForm";
 
 function App() {
   return (
@@ -86,6 +87,7 @@ function App() {
             <Route path="students" element={<AdminStudents />} />
             <Route path="courses" element={<AdminCoursesPage />} />
             <Route path="addCourse" element={<AddCourse />} />
+            <Route path="editcourse" element={<EditCourseForm />} />
           </Route>
         </Route>
       </Routes>
