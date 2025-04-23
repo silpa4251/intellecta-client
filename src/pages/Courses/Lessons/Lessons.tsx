@@ -80,16 +80,6 @@ const Lessons = () => {
   };
 
 
-<<<<<<< HEAD
-  if (error) {
-    console.log("errorrrrr", error)
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p>Error loading courses: {error.message}</p>
-      </div>
-    );
-  }
-=======
   // if (error) {
   //   return (
   //     <div className="min-h-screen flex items-center justify-center px-4">
@@ -99,7 +89,6 @@ const Lessons = () => {
   //     </div>
   //   );
   // }
->>>>>>> 0d2df07d5a0951218feca959164f7ef93c7d92f5
 
   // if (!data) {
   //   return null;

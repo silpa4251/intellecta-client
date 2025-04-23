@@ -6,6 +6,7 @@ import { TopPerformingStudentsCard } from "../../utils/ui/topPerformingStudents"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchAdminDashboard } from "./services/services";
 import AllStudentsLoader from "../../utils/ui/allStudentsLoader";
+import axiosInstance from "../../utils/axiosInstance";
 
 interface CountData {
   date: string;
@@ -36,11 +37,19 @@ const AdminDashboard = () => {
     isError,
     error,
   } = useQuery<DashboardResponse>({
-    queryKey: ["students"],
+    queryKey: ["dashboard"],
     queryFn: fetchAdminDashboard,
   });
 
-  console.log(dashboardData);
+  const { data: topPerfomers} = useQuery({
+    queryKey:["topPerfomers"],
+    queryFn: async ()=> {
+      const res = await axiosInstance.get("http://localhost:5006/api/admin/users/topPerformers")
+      console.log(res.data);
+      return res.data.data
+    }
+  })
+
 
   if (isLoading) {
     return (
@@ -57,6 +66,7 @@ const AdminDashboard = () => {
       </div>
     );
   }
+  
 
   return (
     <div className="max-h-[80vh] overflow-auto p-4 scrollbar-hide">
@@ -89,7 +99,7 @@ const AdminDashboard = () => {
           <PopularModulesCard />
         </div>
         <div className="bg-white rounded-xl shadow-md p-5 overflow-auto h-[40vh] w-full col-span-6 scrollbar-hide">
-          <TopPerformingStudentsCard />
+          <TopPerformingStudentsCard topPerfomers={topPerfomers}/>
         </div>
       </div>
     </div>

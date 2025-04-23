@@ -19,16 +19,20 @@ export interface Student {
 const AdminStudents = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [ageFilter, setAgeFilter] = useState("");
-
+  
   const {
     data: students,
     isLoading,
     isError,
     error,
-  } = useQuery<Student[]>({
+  } = useQuery({
     queryKey: ["students"],
     queryFn: fetchStudents,
   });
+
+  const handleDelete = (id: number) => {
+    console.log("Delete student with ID:", id);
+  };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
@@ -41,7 +45,7 @@ const AdminStudents = () => {
   const filteredStudents = useMemo(() => {
     if (!students) return [];
 
-    return students.filter((student) => {
+    return students.filter((student:Student) => {
       const inSearch =
         student.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         student.email.toLowerCase().includes(searchTerm.toLowerCase());
@@ -116,40 +120,56 @@ const AdminStudents = () => {
               </tr>
             </thead>
             <tbody>
-              {students && students?.map((student, index) => (
-                <tr
-                  key={student._id}
-                  className={`transition-colors duration-200 ${
-                    index % 2 === 0
-                      ? "bg-[#BBD2CB] text-[#4F4F4F]"
-                      : "bg-white text-[#4F4F4F]"
-                  }`}
-                >
-                  <td className="p-4">
-                    <img
-                      src={student.profilePic}
-                      alt={student.name}
-                      className="w-10 h-10 rounded-full object-cover"
-                    />
-                  </td>
-                  <td className="p-4">{student.name}</td>
-                  <td className="p-4">{student.email}</td>
-                  <td className="p-4">{student.age}</td>
-                  <td className="p-4">{student.phone}</td>
-                  <td className="p-4">active</td>
-                  <td className="p-4 text-center">
-                    <button className="text-red-500 hover:text-red-700 transition font-medium">
-                      <DeleteButton />
-                    </button>
-                  </td>
-                </tr>
-              ))}
-              {filteredStudents.length === 0 && (
-                <tr>
-                  <td colSpan={7} className="text-center py-6 text-gray-500">
-                    No students found.
-                  </td>
-                </tr>
+              {isLoading ? (
+                <div className="flex justify-center items-center h-[75vh] w-screen">
+                  <AllStudentsLoader />
+                </div>
+              ) : (
+                students?.length > 0 &&
+                students?.map((student: Student, index: number) => (
+                  <tr
+                    key={student._id + index}
+                    className={`transition-colors duration-200 ${
+                      index % 2 === 0
+                        ? "bg-[#BBD2CB] text-[#4F4F4F] "
+                        : "bg-[#ffffff] text-[#4F4F4F] "
+                    }`}
+                  >
+                    <td className="p-4">
+                      <img
+                        src={student.profilePic}
+                        alt={student.name}
+                        className="w-10 h-10 rounded-full object-cover"
+                      />
+                    </td>
+                    <td className="p-4">{student.name}</td>
+                    <td className="p-4">{student.email}</td>
+                    <td className="p-4">{student.age}</td>
+                    <td className="p-4">{student.phone}</td>
+                    <td className="p-4">
+                      <span
+                      //   className={`px-2 py-1 rounded-full text-xs font-medium
+                      //     ${
+                      //     student.status === "Active"
+                      //       ? "bg-green-100 text-green-600"
+                      //       : "bg-red-100 text-red-600"
+                      //   }
+                      //   `
+                      // }
+                      >
+                        active
+                      </span>
+                    </td>
+                    <td className="p-4 text-center">
+                      <button
+                        // onClick={() => handleDelete(student._id)}
+                        className="text-red-500 hover:text-red-700 transition font-medium"
+                      >
+                        <DeleteButton />
+                      </button>
+                    </td>
+                  </tr>
+                ))
               )}
             </tbody>
           </table>

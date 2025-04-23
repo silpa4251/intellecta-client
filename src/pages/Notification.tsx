@@ -2,6 +2,7 @@ import { useState } from "react";
 import NavbarWelcome from "../components/Navbar/NavbarWelcome";
 import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "../utils/axiosInstance";
+import SpinningLoader from "../components/Loaders/SpinningLoader";
 
 interface NotificationType {
   createdAt: Date;
@@ -15,7 +16,7 @@ interface NotificationType {
 
 const Notification = () => {
   const [selectTab, setSelectTab] = useState("all");
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["notification"],
     queryFn: async () => {
       const res = await axiosInstance.get(
@@ -71,7 +72,8 @@ const Notification = () => {
           </div>
         </div>
         <div className="mt-3">
-          {data
+          {isLoading ? <div className="flex justify-center items mt-44"><SpinningLoader/></div> : 
+          data
             ?.filter((notification: NotificationType) => notification.targetType === selectTab)
             .map((noti: NotificationType) => (
               <div
