@@ -1,14 +1,18 @@
 import styled from 'styled-components';
 import { User } from "lucide-react";
 
-const UserProfileHover = () => {
+interface LogOutButtonProps {
+  name: string;
+}
+
+const UserProfileHover: React.FC<LogOutButtonProps>  = ({ name }) => {
   return (
     <StyledWrapper>
       <button className="Btn">
         <div className="sign">
           <User size={18} color="white" />
         </div>
-        <div className="text">Name</div>
+        <div className="text">{name}</div>
       </button>
     </StyledWrapper>
   );

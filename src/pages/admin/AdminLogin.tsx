@@ -5,6 +5,7 @@ import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import axiosInstance from "../../utils/axiosInstance";
 
 interface AdminFormType {
   email: string;
@@ -23,7 +24,7 @@ const AdminLogin = () => {
     mutationFn: async (values: AdminFormType) => {
       console.log(values);
       
-      const res = await axios.post(
+      const res = await axiosInstance.post(
         "http://localhost:5000/api/user/admin-login",
         values
       );
@@ -31,6 +32,7 @@ const AdminLogin = () => {
     },
     onSuccess: () => {
       navigate("/admin");
+      localStorage.setItem("isAdmin", "true")
       toast.success("Welcome back!");
     },
     onError: (error: any) => {
@@ -39,11 +41,6 @@ const AdminLogin = () => {
       
     },
   });
-
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setAdminForm((prev) => ({ ...prev, [name]: value }));
-  };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();

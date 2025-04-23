@@ -1,10 +1,44 @@
+import { useQuery } from "@tanstack/react-query";
 import LearningCards from "../../../components/cards/learingCards/LearningCards";
 import Card from "../../../components/cards/uiCard/Card";
 import BarChart from "../../../components/graph/BarChart";
 import DonutChart from "../../../components/graph/DonutChart";
 import LineChart from "../../../components/graph/LineChart";
+import axios from "axios";
+// import { useState } from "react";
+
+
 
 const DashboardComp = () => {
+  // const [progress , setProgress] = useState(0)
+  const { data, isLoading, error } = useQuery({
+    queryKey: [""],
+    queryFn: async () => {
+      const response = await axios.get(
+        "http://localhost:5005/api/progress/allusercourse/aa",
+        {
+          withCredentials: true, // Include cookies
+        }
+      );
+      return response.data.data;
+    },
+  });
+  console.log("respponse data", data);
+  if (isLoading) {
+    return (
+      <div className="h-[500px] flex justify-center items-center">
+        <h1>Loading..</h1>
+      </div>
+    );
+  }
+  if (error) {
+    console.log("error", error);
+    return (
+      <div className="h-[500px] flex justify-center items-center">
+        {error.message}
+      </div>
+    );
+  }
   return (
     <div className="w-full h-full mt-5">
       {/* ===================================== */}
@@ -13,11 +47,11 @@ const DashboardComp = () => {
           <h1>Overview</h1>
         </div>
         <div className="flex justify-evenly  items-center text-white font-bold flex-wrap w-full">
-          <Card mainHead={"Course Attempted"} value={10} />
-          <Card mainHead={"Course Pending"} value={10} />
-          <Card mainHead={"Course Completed"} value={10} />
-          <Card mainHead={"Course Badge"} value={10} />
-          <Card mainHead={"Quize Attempted"} value={10} />
+          <Card mainHead={"Course Attempted"} value={data.length} />
+          <Card mainHead={"Course Pending"} value={data.length} />
+          <Card mainHead={"Course Completed"} value={0} />
+          <Card mainHead={"Course Badge"} value={0} />
+          <Card mainHead={"Quize Attempted"} value={0} />
         </div>
         <div>{/* empty now */}</div>
       </div>
@@ -29,11 +63,12 @@ const DashboardComp = () => {
             <h1 className="text-lg font-semibold ">Continue Learning</h1>
           </div>
           <div className="flex flex-col gap-2 mt-3 ">
-            {/* cards here */}
-            <LearningCards />
-            <LearningCards />
-            <LearningCards />
-            <LearningCards />
+            {/* card course */}
+            {
+              data?.map((item:any,index:number)=>(
+                <LearningCards key={index+1} progress={item.progressPercent} title={item.courseId.title} />
+              ))
+            }
           </div>
           <div className="w-full h-96 bg-white rounded-xl mt-5 shadow-2xl">
             {/* donut graph */}
@@ -51,7 +86,7 @@ const DashboardComp = () => {
             </div>
             {/* line graph */}
             <div className="md:h-[30rem] md:w-[50rem] ">
-            <LineChart />
+              <LineChart />
             </div>
           </div>
         </div>

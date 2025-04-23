@@ -41,10 +41,9 @@ const SignIn = () => {
 
   const onSubmit = async (values: LoginFormData) => {
     try {
-      console.log("submitting", values);
-      const response = await axiosInstance.post(userEndPoints.USER.LOGIN, values);
-      console.log("Login success:", response);
+      await axiosInstance.post(userEndPoints.USER.LOGIN, values);
       toast.success("Login Successfull 🎉");
+      localStorage.setItem("isAuthenticated","true")
       navigate("/home");
     } catch (error: any) {
       console.error("Error during registration:", error);

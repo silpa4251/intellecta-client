@@ -45,11 +45,10 @@ const LessonQuiz = () => {
   const steps = quiz?.length || 0;
 
   const { mutate: postLessonQuiz, isPending } = useMutation({
-    mutationKey: ["fetchlessonquiz"],
     mutationFn: async (courseId: string) => {
       const res = await axiosInstance.post(
         `http://localhost:5005/api/courses/generate-quiz`,
-        {courseId} 
+        {courseId}
       );
       return res.data;
     },

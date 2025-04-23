@@ -1,20 +1,64 @@
-import React from 'react';
-import styled from 'styled-components';
+import { useQuery } from "@tanstack/react-query";
+import { useMemo, useState } from "react";
+import styled from "styled-components";
+import { fetchStudents } from "../../pages/admin/services/services";
 
-const SearchUser = () => {
+interface Props {
+  onSelect: (studentId: string, name?: string, email?: string) => void;
+}
+
+interface Student {
+  _id: string;
+  name: string;
+  email: string;
+  // Add more fields as needed
+}
+
+const SearchUser = ({ onSelect }: Props) => {
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const { data: students, isLoading } = useQuery<Student[]>({
+    queryKey: ["students"],
+    queryFn: fetchStudents,
+  });
+
+  const filtered = useMemo(() => {
+    if (!students) return [];
+    return students.filter(
+      (s) =>
+        s.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        s.email.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, [searchTerm, students]);
+
   return (
     <StyledWrapper>
       <div className="group">
-        <svg viewBox="0 0 24 24" aria-hidden="true" className="icon">
-          <g>
-            <path d="M21.53 20.47l-3.66-3.66C19.195 15.24 20 13.214 20 11c0-4.97-4.03-9-9-9s-9 4.03-9 9 4.03 9 9 9c2.215 0 4.24-.804 5.808-2.13l3.66 3.66c.147.146.34.22.53.22s.385-.073.53-.22c.295-.293.295-.767.002-1.06zM3.5 11c0-4.135 3.365-7.5 7.5-7.5s7.5 3.365 7.5 7.5-3.365 7.5-7.5 7.5-7.5-3.365-7.5-7.5z" />
-          </g>
+        <svg viewBox="0 0 24 24" className="icon" aria-hidden="true">
+          <path d="M21.53 20.47l-3.66-3.66C19.195 15.24..." />
         </svg>
-        <input className="input" type="search" placeholder="Search" />
+        <input
+          className="input"
+          type="search"
+          placeholder="Search Students 🔍"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
       </div>
+      {searchTerm && (
+        <ul className="results">
+          {isLoading && <li>Loading...</li>}
+          {filtered.map((s) => (
+            <li key={s._id} onClick={() => onSelect(s._id, s.name, s.email)} className="rounded bg-[#029376] mt-4 py-2 flex justify-center text-white">
+              {s.name}
+            </li>
+          ))}
+          {filtered.length === 0 && <li>No match found</li>}
+        </ul>
+      )}
     </StyledWrapper>
   );
-}
+};
 
 const StyledWrapper = styled.div`
   .group {
@@ -30,8 +74,7 @@ const StyledWrapper = styled.div`
     height: 40px;
     line-height: 28px;
     padding: 0 1rem;
-    padding-left: 2.5rem;
-    border: 2px solid transparent;
+    border: 2px solid;
     border-radius: 8px;
     outline: none;
     background-color: #f3f3f4;
@@ -57,6 +100,7 @@ const StyledWrapper = styled.div`
     fill: #9e9ea7;
     width: 1rem;
     height: 1rem;
-  }`;
+  }
+`;
 
 export default SearchUser;
