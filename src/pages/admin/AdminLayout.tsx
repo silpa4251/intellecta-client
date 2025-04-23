@@ -4,10 +4,31 @@ import UserProfileHover from "../../utils/ui/userProfileHover";
 import RadioButtonAdminSideBar from "../../utils/ui/radioButtonAdminSidebar";
 import intellectalogo from "../../assets/Intellecta-logo.svg";
 import { useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import NotificationPanel from "./AdminNotifications";
 import axiosInstance from "../../utils/axiosInstance";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { fetchStudents, getCurentAdmin } from "./services/services";
+import AllStudentsLoader from "../../utils/ui/allStudentsLoader";
+
+export interface Student {
+  _id: string;
+  name: string;
+  email: string;
+  phone: string;
+  age: number;
+  profilePic?: string;
+  role: "student";
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface AdminData {
+  _id: string;
+  name: string;
+  email: string;
+  data: object;
+}
 
 const AdminLayout = () => {
   const location = useLocation();
@@ -28,6 +49,37 @@ const AdminLayout = () => {
     }
   })
 
+  const {
+    data: students,
+    isLoading,
+    isError,
+    error,
+  } = useQuery<Student[]>({
+    queryKey: ["students"],
+    queryFn: fetchStudents,
+  });
+
+  const { data: currentLoginedAdmin } = useQuery<{
+    success: boolean;
+    message: string;
+    data: {
+      user: AdminData;
+    };
+  }>({
+    queryKey: ["adminData"],
+    queryFn: getCurentAdmin,
+  });
+  
+
+        const name = currentLoginedAdmin?.data?.user?.name || "";
+        console.log("currentLoginedAdmin", name)
+
+  useEffect(() => {
+    if (students) {
+      console.log("Fetched students count:", students?.length  );
+    }
+  }, [students]);
+  
   const currentPage = (() => {
     switch (location.pathname) {
       case "/admin":
@@ -74,7 +126,7 @@ const AdminLayout = () => {
 
         {/* User Profile & Logout - Stick to Bottom on Desktop */}
         <div className="flex flex-col  space-y-2  mb-4 z-50">
-          <UserProfileHover />
+          <UserProfileHover name={name}/>
           <button onClick={()=> logoutMutation()}>
 
           <LogOutButton />
@@ -93,9 +145,11 @@ const AdminLayout = () => {
             <p className="text-sm">Jun 1 - Aug 31, 2024</p>
           </div>
           <div className="text-right">
-            <h2 className="text-3xl font-bold">7,001</h2>
-            <p className="text-sm">Students</p>
-          </div>
+  <h2 className="text-3xl font-bold">
+    {isLoading ? "Loading..." : students?.length}
+  </h2>
+  <p className="text-sm">Students</p>
+</div>
         </header>
 
         {/* Main Content */}

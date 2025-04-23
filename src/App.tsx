@@ -29,6 +29,12 @@ import AdminStudents from "./pages/admin/AdminStudents";
 import AdminCoursesPage from "./pages/admin/AdminCourses";
 import AddCourse from "./pages/admin/AddCourse";
 
+// import LessonContent from './pages/Courses/Lessons/LessonContent';
+// import LessonQuiz from './pages/Courses/Lessons/LessonQuiz';
+// import NumberNinja from './pages/Gamefied/Games/NumberNinja/NumberNija';
+// import Notification from './pages/Notification';
+
+// import AdminLogin from './pages/admin/AdminLogin';
 import LessonContent from "./pages/Courses/Lessons/LessonContent";
 import LessonQuiz from "./pages/Courses/Lessons/LessonQuiz";
 import NumberNinja from "./pages/Gamefied/Games/NumberNinja/NumberNija";
