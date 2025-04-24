@@ -1,9 +1,7 @@
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { MdDashboard } from "react-icons/md";
 import { FaUserGraduate } from "react-icons/fa";
-import { BiMessageAltDetail } from "react-icons/bi";
 import { BookCopyIcon,BellPlusIcon } from "lucide-react";
-import { FiSettings  } from "react-icons/fi";
 
 const RadioButtonAdminSideBar = ({ onNotificationClick }: { onNotificationClick: () => void }) => {
   const location = useLocation();
@@ -40,25 +38,9 @@ const RadioButtonAdminSideBar = ({ onNotificationClick }: { onNotificationClick:
               ${path.includes("/admin/students") ? "scale-125 text-[#578c82]" : "group-hover:scale-125 group-hover:text-[#578c82]"}`}
           />
           <span className="absolute left-full top-1/2 -translate-y-1/2 ml-2 opacity-0 group-hover:opacity-100 bg-gray-800 text-white text-xs rounded-md px-2 py-1 transition-opacity duration-300 whitespace-nowrap z-10">
-            Students
+          Students
           </span>
         </div>
-
-        {/* Messages */}
-        <div
-  onClick={onNotificationClick} // 🔁 Changed from navigate(...)
-  className={`relative w-full h-14 p-4 border-solid border-black/10 group flex items-center justify-center text-black rounded-xl cursor-pointer
-    ${path.includes("/admin/notification") ? "shadow-lg border text-[#578c82]" : ""}`}
->
-  <BellPlusIcon
-    className={`text-2xl transition-all duration-300
-      ${path.includes("/admin/notification") ? "scale-125 text-[#578c82]" : "group-hover:scale-125 group-hover:text-[#578c82]"}`}
-  />
-  <span className="absolute left-full top-1/2 -translate-y-1/2 ml-2 opacity-0 group-hover:opacity-100 bg-gray-800 text-white text-xs rounded-md px-2 py-1 transition-opacity duration-300 whitespace-nowrap z-10">
-    Notifications
-  </span>
-</div>
-
 
         {/* Courses */}
         <div
@@ -74,6 +56,22 @@ const RadioButtonAdminSideBar = ({ onNotificationClick }: { onNotificationClick:
           Courses
           </span>
         </div>
+
+        {/* Messages */}
+        <div
+          onClick={onNotificationClick} // 🔁 Changed from navigate(...)
+          className={`relative w-full h-14 p-4 border-solid border-black/10 group flex items-center justify-center text-black rounded-xl cursor-pointer
+          ${path.includes("/admin/notification") ? "shadow-lg border text-[#578c82]" : ""}`}
+        >
+          <BellPlusIcon
+          className={`text-2xl transition-all duration-300
+          ${path.includes("/admin/notification") ? "scale-125 text-[#578c82]" : "group-hover:scale-125 group-hover:text-[#578c82]"}`}
+          />
+          <span className="absolute left-full top-1/2 -translate-y-1/2 ml-2 opacity-0 group-hover:opacity-100 bg-gray-800 text-white text-xs rounded-md px-2 py-1 transition-opacity duration-300 whitespace-nowrap z-10">
+          Notifications
+          </span>
+        </div>
+
 
         {/* Settings
         <div

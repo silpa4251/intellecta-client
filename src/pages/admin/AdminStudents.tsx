@@ -1,7 +1,7 @@
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import DeleteButton from "../../utils/ui/deleteButton";
-import { fetchStudents } from "./services/services";
-import { useQuery } from "@tanstack/react-query";
+import { deleteuser, fetchStudents } from "./services/services";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import AllStudentsLoader from "../../utils/ui/allStudentsLoader";
 
 export interface Student {
@@ -17,48 +17,46 @@ export interface Student {
 }
 
 const AdminStudents = () => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [ageFilter, setAgeFilter] = useState("");
+  const [searchInput, setSearchInput] = useState("");
+  const [search, setSearch] = useState("");
+  const [catagory, setCatagory] = useState("");
+  const [page, setPage] = useState(1);
+  const isBlock = undefined;
 
+  const queryClient = useQueryClient();
   const {
     data: students,
     isLoading,
     isError,
     error,
-  } = useQuery<Student[]>({
-    queryKey: ["students"],
-    queryFn: fetchStudents,
+  } = useQuery({
+    queryKey: ["students", { page, search, catagory, isBlock }],
+    queryFn: () => fetchStudents({ page, search, catagory, isBlock }),
+    placeholderData: [],
   });
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value);
+  const handleDelete = (userId: string) => {
+    mutation.mutate(userId);
+  };
+
+  const mutation = useMutation({
+    mutationFn: deleteuser,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["students"] });
+    },
+    onError: (error: any) => {
+      console.error("Failed to delete user", error);
+      alert("Failed to delete user.");
+    },
+  });
+
+  const handleSearchClick = () => {
+    setSearch(searchInput);
   };
 
   const handleAgeFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setAgeFilter(e.target.value);
+    setCatagory(e.target.value);
   };
-
-  const filteredStudents = useMemo(() => {
-    if (!students) return [];
-
-    return students.filter((student) => {
-      const inSearch =
-        student.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        student.email.toLowerCase().includes(searchTerm.toLowerCase());
-
-      const inAgeGroup = (() => {
-        if (!ageFilter) return true;
-
-        const age = student.age;
-        if (ageFilter === "5-8") return age >= 5 && age <= 8;
-        if (ageFilter === "9-12") return age >= 9 && age <= 12;
-        if (ageFilter === "13-18") return age >= 13 && age <= 18;
-        return true;
-      })();
-
-      return inSearch && inAgeGroup;
-    });
-  }, [students, searchTerm, ageFilter]);
 
   if (isLoading) {
     return (
@@ -78,25 +76,33 @@ const AdminStudents = () => {
 
   return (
     <div className="p-6">
-      {/* Filter & Search */}
+      {/* Search and Filter */}
       <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-6">
-        <input
-          type="text"
-          placeholder="Search by name or email"
-          value={searchTerm}
-          onChange={handleSearchChange}
-          className="border border-gray-300 p-2 rounded-md w-full md:w-1/2"
-        />
+        <div className="flex w-full md:w-1/2 gap-2">
+          <input
+            type="text"
+            placeholder="Search by name or email"
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+            className="border border-gray-300 p-2 rounded-md w-full"
+          />
+          <button
+            onClick={handleSearchClick}
+            className="bg-[#789A94] text-white px-4 rounded-md hover:bg-[#5d817a] transition"
+          >
+            Search
+          </button>
+        </div>
 
         <select
-          value={ageFilter}
+          value={catagory}
           onChange={handleAgeFilterChange}
           className="border border-gray-300 p-2 rounded-md w-full md:w-[200px]"
         >
-          <option value="" className="hover:bg-[#787878]">All Age Groups</option>
-          <option value="5-8" className="hover:bg-[#787878]">Age 5-8</option>
-          <option value="9-12" className="hover:bg-[#787878]">Age 9-12</option>
-          <option value="13-18" className="hover:bg-[#787878]">Age 13-18</option>
+          <option value="">All Age Groups</option>
+          <option value="5-8">Age 5-8</option>
+          <option value="9-12">Age 9-12</option>
+          <option value="13-18">Age 13-18</option>
         </select>
       </div>
 
@@ -116,7 +122,7 @@ const AdminStudents = () => {
               </tr>
             </thead>
             <tbody>
-              {students && students?.map((student, index) => (
+              {students && students.map((student: Student, index: number) => (
                 <tr
                   key={student._id}
                   className={`transition-colors duration-200 ${
@@ -138,13 +144,16 @@ const AdminStudents = () => {
                   <td className="p-4">{student.phone}</td>
                   <td className="p-4">active</td>
                   <td className="p-4 text-center">
-                    <button className="text-red-500 hover:text-red-700 transition font-medium">
+                    <button
+                      className="text-red-500 hover:text-red-700 transition font-medium"
+                      onClick={() => handleDelete(student._id)}
+                    >
                       <DeleteButton />
                     </button>
                   </td>
                 </tr>
               ))}
-              {filteredStudents.length === 0 && (
+              {students?.length === 0 && (
                 <tr>
                   <td colSpan={7} className="text-center py-6 text-gray-500">
                     No students found.

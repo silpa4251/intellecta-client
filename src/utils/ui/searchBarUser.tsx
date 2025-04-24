@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import React, { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import styled from "styled-components";
 import { fetchStudents } from "../../pages/admin/services/services";
 
@@ -40,7 +40,7 @@ const SearchUser = ({ onSelect }: Props) => {
         <input
           className="input"
           type="search"
-          placeholder="Search student"
+          placeholder="Search Students 🔍"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
@@ -49,7 +49,7 @@ const SearchUser = ({ onSelect }: Props) => {
         <ul className="results">
           {isLoading && <li>Loading...</li>}
           {filtered.map((s) => (
-            <li key={s._id} onClick={() => onSelect(s._id, s.name, s.email)} className="rounded bg-[#029376] mt-2 flex justify-center text-white">
+            <li key={s._id} onClick={() => onSelect(s._id, s.name, s.email)} className="rounded bg-[#029376] mt-4 py-2 flex justify-center text-white">
               {s.name}
             </li>
           ))}
@@ -74,8 +74,7 @@ const StyledWrapper = styled.div`
     height: 40px;
     line-height: 28px;
     padding: 0 1rem;
-    padding-left: 2.5rem;
-    border: 2px solid transparent;
+    border: 2px solid;
     border-radius: 8px;
     outline: none;
     background-color: #f3f3f4;

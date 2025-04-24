@@ -8,26 +8,36 @@ import {
     CartesianGrid,
   } from "recharts";
   
-  const moduleData = [
-    { name: "Math AI Tutor", usage: 120 },
-    { name: "Science Bot", usage: 95 },
-    { name: "English Assistant", usage: 80 },
-    { name: "History Genie", usage: 60 },
-    { name: "Coding Helper", usage: 45 },
-  ];
+  import { useEffect, useState } from "react";
+  import axios from "axios";
   
   export function PopularModulesCard() {
+    const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const fetchTopModules = async () => {
+      try {
+        const response = await axios.get("/api/progress/top");
+        setData(response.data.data); 
+      } catch (error) {
+        console.error("Failed to fetch top modules:", error);
+      }
+    };
+
+    fetchTopModules();
+  }, []);
+
     return (
       <div className="bg-white rounded-2xl shadow-md p-6 w-full col-span-6">
         <h2 className="text-2xl font-semibold mb-4">Popular Modules</h2>
         <div className="h-64">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={moduleData}>
+            <BarChart data={data}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
+              <XAxis dataKey="title" />
               <YAxis />
               <Tooltip />
-              <Bar dataKey="usage" fill="#10B981" />
+              <Bar dataKey="userCount" fill="#10B981" />
             </BarChart>
           </ResponsiveContainer>
         </div>
