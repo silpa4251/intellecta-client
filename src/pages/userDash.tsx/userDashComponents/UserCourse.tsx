@@ -1,5 +1,5 @@
 import React from 'react'
-import CourseCard from '../../../components/cards/courseCard/CourseCard'
+// import CourseCard from '../../../components/cards/courseCard/CourseCard'
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import LearningCards from '../../../components/cards/learingCards/LearningCards';
@@ -34,7 +34,7 @@ const UserCourse:React.FC = () => {
     );
   } 
   return (
-    <div className='w-full  mt-10 flex flex-wrap gap-5 justify-evenly'>
+    <div className='w-full  mt-10 flex flex-wrap gap-5 justify-around items-center'>
       {
               data?.map((item:any,index:number)=>(
                 <LearningCards key={index+1} progress={item.progressPercent} title={item.courseId.title} />
