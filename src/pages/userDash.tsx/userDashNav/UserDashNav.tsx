@@ -4,7 +4,7 @@ import IntellectaLogo from "../../../assets/userDashAssets/intelLogo.png"
 import { 
   LucideLayoutDashboard, 
   FileStack, 
-  BrainCircuit, 
+  // BrainCircuit, 
   Library, 
   Gift, 
   UserCircle 
@@ -45,16 +45,16 @@ const UserDashNav = ({ setString ,string }: UserDashNavProps) => {
       name: "Resources",
       link: "/resources"
     },
-    {
-      icon: <Gift size={20} />,
-      name: "Rewards",
-      link: "/rewards"
-    },
-    {
-      icon: <UserCircle size={20} />,
-      name: "Profile",
-      link: "/profile"
-    }
+    // {
+    //   icon: <Gift size={20} />,
+    //   name: "Rewards",
+    //   link: "/rewards"
+    // },
+    // {
+    //   icon: <UserCircle size={20} />,
+    //   name: "Profile",
+    //   link: "/profile"
+    // }
   ];
 
   return (
@@ -92,7 +92,7 @@ const UserDashNav = ({ setString ,string }: UserDashNavProps) => {
           navigate("profile",{ replace: true });
         }
       }}
-      className={`flex items-center gap-4 pl-3 py-2.5 text-black hover:bg-[#79c6ec] hover:rounded-lg transition-colors ${
+      className={`flex items-center gap-4 pl-3 py-2.5 text-black hover:bg-[#79c6ec] hover:rounded-lg transition-colors cursor-pointer ${
         string === item.name && !isOpen && "border-r-6 border-[#66a5c5]"
       } ${string === item.name && isOpen && " bg-[#66a5c5] rounded-lg "}`}
     >
