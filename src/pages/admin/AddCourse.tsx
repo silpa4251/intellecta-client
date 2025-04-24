@@ -8,13 +8,13 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 type CourseDetails = {
-  thumbnail: string; // Preview URL for the image
+  thumbnail: string; 
   title: string;
   subject: string;
   description: string;
   gradeLevel: string;
   difficultyLevel: string;
-  file: File | null; // Allow `File` or `null`
+  file: File | null;
 };
 
 type LessonDetails = {
@@ -32,7 +32,7 @@ const AddCourse = () => {
   const [activeTab, setActiveTab] = useState("overview");
   const [courseDetails, setCourseDetails] = useState<CourseDetails>({
     thumbnail: "",
-    title: "Course Title",
+    title: "",
     subject: "",
     description: "",
     gradeLevel: "",
@@ -156,7 +156,7 @@ const AddCourse = () => {
       setActiveTab("upload"); // Navigate to "Upload Course" tab
     } catch (error) {
       console.error("Error saving lesson:", error);
-      toast.error(`Failed to save lesson: ${error.response?.data?.message || error.message}`);
+      toast.error("Failed to save lesson");
     }
   };
 
@@ -341,7 +341,7 @@ const AddCourse = () => {
           )}
 
           {activeTab === "add" && (
-            <div className="flex-grow flex flex-col">
+            <div className="flex-grow flex flex-col max-h-[600px] scrollbar-hide overflow-y-auto">
               <h2 className="text-2xl font-semibold text-gray-700 mb-4">Add Lesson</h2>
               <div className="flex flex-col gap-4">
                 {/* Lesson Title */}
@@ -558,7 +558,7 @@ const DetailItem = ({
       value={value}
       placeholder="Enter something..."
       onChange={(e) => onChange(e.target.value)}
-      className={`pl-2 border-none bg-transparent text-right focus:outline-none focus:ring-0 ${
+      className={`pl-2 border-none bg-transparent text-left focus:outline-none focus:ring-0 ${
         value === "" ? "text-black" : "text-grey-400"
       }`}
     />

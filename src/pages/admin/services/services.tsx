@@ -1,7 +1,33 @@
 //getting all users 
 
+import axios from "axios";
 import axiosInstance from "../../../utils/axiosInstance";
 
+export interface Lesson {
+  _id?: string;
+  title: string;
+  url:string;
+  content:string;
+  order:number;
+  notes:string;
+  // Add other lesson properties if needed (e.g., duration, content)
+}
+
+export interface Course {
+  _id: string;
+  title: string;
+  subject: string;
+  description: string;
+  gradeLevel: number;
+  thumbnail?: string;
+  difficultyLevel: string
+
+}
+
+interface CourseDetailsResponse {
+  course: Course;
+  lessons: Lesson[]|[];
+}
 
 
 type FetchStudentsParams = {
@@ -37,7 +63,6 @@ export const fetchStudents = async ({
 
 export const fetchCourses = async () =>{
   const response = await axiosInstance.get("http://localhost:5005/api/courses")
-  console.log("adminfetchcourse", response.data.data);
   return response.data.data;
 }
 
@@ -72,6 +97,12 @@ export const getCurentAdmin = async () => {
   return response.data
 } 
 
+
+export const fetchCourseDetails = async (courseId: string): Promise<CourseDetailsResponse> => {
+  const response = await axios.get(`http://localhost:5005/api/courses/${courseId}`);
+  console.log("details....", response.data.data);
+  return response.data.data ||[];
+};
 export const deleteuser = async (userId: String) => {
   console.log("deleteuser:", userId)
   const response = await axiosInstance.post("http://localhost:5000/api/user/delete-user", userId)
