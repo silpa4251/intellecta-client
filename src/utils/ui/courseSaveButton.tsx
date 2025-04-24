@@ -1,10 +1,14 @@
-import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const CourseSaveButton = () => {
+  const navigate = useNavigate();
+  const applyFuncton = ()=>{
+    navigate(-1)
+  }
   return (
     <StyledWrapper>
-      <button> Save and Back
+      <button onClick={applyFuncton}> Save and Back
       </button>
     </StyledWrapper>
   );
