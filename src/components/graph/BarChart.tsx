@@ -10,17 +10,52 @@ import {
   Legend
 } from 'chart.js';
 import React from 'react';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
+// import { color } from 'framer-motion';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const BarChart:React.FC = () => {
-  const data = {
-    labels: ['coding', 'coding', 'coding', 'coding'],
+  const {data, isLoading, error} = useQuery({
+    queryKey: [""],
+    queryFn: async () => {
+      const response = await axios.get(
+        "http://localhost:5005/api/progress/allusercourse/aa",
+        {
+          withCredentials: true, // Include cookies
+        }
+      );
+      return response.data.data;
+    },
+  })
+  console.log("respponse data", data);
+  if (isLoading) {
+    return (
+      <div className="h-[500px] flex justify-center items-center">
+        <h1>Loading..</h1>
+      </div>
+    );
+  }
+  if (error) {
+    console.log("error", error);
+    return (
+      <div className="h-[500px] flex justify-center items-center">
+        {error.message + "hello"} 
+      </div>
+    );
+  }
+
+  const labelsText = data.map((item:any) => item.courseId.title)
+  const values = data.map((item:any)=> item.progressPercent)
+
+  const barData = {
+    labels: labelsText,
     datasets: [
       {
-        label: 'Learning',
-        data: [65, 59, 80, 81],
-        backgroundColor: ['rgba(75, 192, 192, 0.6)',
+        label: 'Lessons',
+        data: values,
+        backgroundColor: ['rgba(75, 192, 192, 1)',
             'rgba(255, 99, 132, 1)',   // Red
         'rgba(54, 162, 235, 1)',   // Blue
         'rgba(255, 206, 86, 1)',   // Yellow
@@ -34,12 +69,59 @@ const BarChart:React.FC = () => {
   const options = {
     responsive: true,
     plugins: {
-      legend: { position: 'top' as const },
-      title: { display: true, text: '' }
-    }
+      legend: { 
+        position: 'top' as const 
+      },
+      title: { 
+        display: true, 
+        text: '' 
+      },
+    },
+    scales: {
+      x: {
+        type: 'category' as const, // <-- Add type
+        ticks: {
+          color: '#1f2937',
+          font: {
+            size: 13,
+            weight: '500',
+            family: 'Inter',
+          },
+          padding: 8,
+          maxRotation: 0,
+          minRotation: 0,
+          autoSkip: true,
+          maxTicksLimit: 6,
+        },
+      },
+      y: {
+        type: 'linear' as const, // <-- Add type
+        ticks: {
+          color: '#1f2937',
+          font: {
+            size: 13,
+            weight: '500',
+            family: 'Inter',
+          },
+          padding: 8,
+          callback: (value: number) => `${value}%`,
+        },
+        title: {
+          display: true,
+          text: 'Progress (%)',
+          color: '#1f2937',
+          font: {
+            size: 14,
+            weight: 'bold',
+          },
+        },
+      },
+    },
   };
+  
+  
 
-  return <Bar data={data} options={options} />;
+  return <Bar className='w-full' data={barData} options={options} />;
 };
 
 export default BarChart;
