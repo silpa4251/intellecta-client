@@ -180,7 +180,7 @@ const LessonContent = () => {
       return response.data.data;
     },
     onSuccess: async (_data) => {
-      alert("Lesson marked as complete!");
+      toast.success("Lesson marked as complete!");
       setIsLessonCompleted(true);
       queryClient.invalidateQueries({ queryKey: ["courseProgress", courseId] });
       queryClient.setQueryData(
@@ -199,7 +199,7 @@ const LessonContent = () => {
     },
     onError: (error) => {
       console.error("Error marking lesson as complete:", error);
-      alert("Failed to mark lesson as complete. Please try again.");
+      toast.error("Failed to mark lesson as complete. Please try again.");
     },
   });
 

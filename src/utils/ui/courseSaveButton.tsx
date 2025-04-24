@@ -4,7 +4,7 @@ import styled from 'styled-components';
 const CourseSaveButton = () => {
   return (
     <StyledWrapper>
-      <button> Button
+      <button> Save and Back
       </button>
     </StyledWrapper>
   );

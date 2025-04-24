@@ -5,46 +5,10 @@ const SearchInput = () => {
   return (
     <StyledWrapper>
       <div className="wave-group">
-        <input required type="text" className="input" />
-        <span className="bar" />
-        <label className="label">
-          <span
-            className="label-char"
-            style={{ "--index": 0 } as React.CSSProperties}
-          >
-            S
-          </span>
-          <span
-            className="label-char"
-            style={{ "--index": 1 } as React.CSSProperties}
-          >
-            E
-          </span>
-          <span
-            className="label-char"
-            style={{ "--index": 2 } as React.CSSProperties}
-          >
-            A
-          </span>
-          <span
-            className="label-char"
-            style={{ "--index": 3 } as React.CSSProperties}
-          >
-            R
-          </span>
-          <span
-            className="label-char"
-            style={{ "--index": 4 } as React.CSSProperties}
-          >
-            C
-          </span>
-          <span
-            className="label-char"
-            style={{ "--index": 5 } as React.CSSProperties}
-          >
-            H
-          </span>
-        </label>
+        <input 
+        required type="text" 
+        className="input" 
+        placeholder="Search Courses"/>
       </div>
     </StyledWrapper>
   );

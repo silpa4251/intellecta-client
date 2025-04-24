@@ -3,11 +3,9 @@ import CourseSaveButton from "../../utils/ui/courseSaveButton";
 import {
   ImageUpIcon,
   BookOpenTextIcon,
-  LucideFlagTriangleRight,
-  UploadCloudIcon,
-  Library,
 } from "lucide-react";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 type CourseDetails = {
   thumbnail: string; // Preview URL for the image
@@ -19,8 +17,18 @@ type CourseDetails = {
   file: File | null; // Allow `File` or `null`
 };
 
+type LessonDetails = {
+  title: string;
+  type: "video" | "quiz" | "exercise" | "article" | "";
+  content: string;
+  resources: string[];
+  notes: string;
+  order: number;
+  file: File | null;
+};
+
 const AddCourse = () => {
-  const [courseId, setCourseId] = useState(null);
+  const [courseId, setCourseId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState("overview");
   const [courseDetails, setCourseDetails] = useState<CourseDetails>({
     thumbnail: "",
@@ -32,21 +40,40 @@ const AddCourse = () => {
     file: null,
   });
 
-  const categories = ["Math", "Science", "English", "History", "Coding"];
+  const [lessonDetails, setLessonDetails] = useState<LessonDetails>({
+    title: "",
+    type: "",
+    content: "",
+    resources: [],
+    notes: "",
+    order: 1,
+    file: null,
+  });
 
-  console.log('sdfghjhgfdfgh',courseDetails);
+  const categories = ["Math", "Science", "English", "History", "Coding"];
+  const lessonTypes = ["video", "quiz", "exercise", "article"];
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const lessonFileInputRef = useRef<HTMLInputElement>(null);
 
   const handleThumbnailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-  
-    // Store the raw file in state
+
     setCourseDetails({
       ...courseDetails,
-      thumbnail: URL.createObjectURL(file), // For preview
-      file, // Store the raw file
+      thumbnail: URL.createObjectURL(file),
+      file,
+    });
+  };
+
+  const handleLessonFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setLessonDetails({
+      ...lessonDetails,
+      file,
     });
   };
 
@@ -57,24 +84,96 @@ const AddCourse = () => {
   const saveCourse = async () => {
     try {
       const formData = new FormData();
-      formData.append('title', courseDetails.title);
-    formData.append('subject', toLowercase(courseDetails.subject));
-    formData.append('description', courseDetails.description);
-    formData.append('gradeLevel', courseDetails.gradeLevel);
-    formData.append('difficultyLevel', toLowercase(courseDetails.difficultyLevel));
+      formData.append("title", courseDetails.title);
+      formData.append("subject", toLowercase(courseDetails.subject));
+      formData.append("description", courseDetails.description);
+      formData.append("gradeLevel", courseDetails.gradeLevel);
+      formData.append("difficultyLevel", toLowercase(courseDetails.difficultyLevel));
 
-    if (courseDetails.file) {
-      formData.append('image', courseDetails.file);
-    }
-    console.log('first',formData)
-    const response = await axios.post("http://localhost:5005/api/courses", formData);
-    console.log("response",response);
+      if (courseDetails.file) {
+        formData.append("image", courseDetails.file);
+      }
+
+      console.log("Saving course with formData:", formData);
+      const response = await axios.post("http://localhost:5005/api/courses", formData);
+      console.log("Course creation response:", response);
       setCourseId(response.data.data._id); // Store the courseId in state
-      alert("Course saved successfully!");
+      toast.success("Course saved successfully!");
+      setActiveTab("add"); // Navigate to "Add Content" tab
     } catch (error) {
       console.error("Error saving course:", error);
-      alert("Failed to save course. Please try again.");
+      toast.error("Failed to save course. Please try again.");
     }
+  };
+
+  console.log("lessons", lessonDetails);
+  const saveLesson = async () => {
+    if (!courseId) {
+      toast.error("Please save the course first in the Overview tab.");
+      return;
+    }
+
+    try {
+      const formData = new FormData();
+      formData.append("courseId", courseId);
+      formData.append("title", lessonDetails.title);
+      formData.append("type", lessonDetails.type);
+      formData.append("content", lessonDetails.content);
+      lessonDetails.resources.forEach((resource, index) => {
+        formData.append(`resources[${index}]`, resource);
+      });
+      formData.append("notes", lessonDetails.notes);
+      formData.append("order", lessonDetails.order.toString());
+
+      if (lessonDetails.file) {
+        formData.append("video", lessonDetails.file); // Changed to "file" to match backend
+      }
+
+      // Log FormData for debugging
+      for (const [key, value] of formData.entries()) {
+        console.log(`${key}:`, value);
+      }
+
+      const response = await axios.post("http://localhost:5005/api/lessons", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      toast.success("Lesson added successfully!");
+      // Reset lesson form
+      setLessonDetails({
+        title: "",
+        type: "",
+        content: "",
+        resources: [],
+        notes: "",
+        order: lessonDetails.order + 1,
+        file: null,
+      });
+      if (lessonFileInputRef.current) {
+        lessonFileInputRef.current.value = "";
+      }
+      setActiveTab("upload"); // Navigate to "Upload Course" tab
+    } catch (error) {
+      console.error("Error saving lesson:", error);
+      toast.error(`Failed to save lesson: ${error.response?.data?.message || error.message}`);
+    }
+  };
+
+  const handleAddResource = () => {
+    setLessonDetails({
+      ...lessonDetails,
+      resources: [...lessonDetails.resources, ""],
+    });
+  };
+
+  const handleResourceChange = (index: number, value: string) => {
+    const updatedResources = [...lessonDetails.resources];
+    updatedResources[index] = value;
+    setLessonDetails({
+      ...lessonDetails,
+      resources: updatedResources,
+    });
   };
 
   return (
@@ -231,63 +330,146 @@ const AddCourse = () => {
                 </div>
               </div>
               <div className="flex justify-end">
-                  <button
-                    onClick={saveCourse}
-                    className="bg-green-500 text-white px-4 py-2 rounded-md"
-                  >
-                    Create
-                  </button>
-                </div>
+                <button
+                  onClick={saveCourse}
+                  className="bg-green-500 text-white px-4 py-2 rounded-md"
+                >
+                  Create
+                </button>
+              </div>
             </>
           )}
 
           {activeTab === "add" && (
-            <div className="flex-grow flex items-center justify-center text-gray-400">
-              <div>
-                <div className=" bg-teal-500 text-white p-4 rounded-2xl w-14">
-                  <BookOpenTextIcon />
+            <div className="flex-grow flex flex-col">
+              <h2 className="text-2xl font-semibold text-gray-700 mb-4">Add Lesson</h2>
+              <div className="flex flex-col gap-4">
+                {/* Lesson Title */}
+                <div>
+                  <label className="block text-gray-700 mb-1 font-medium">Lesson Title</label>
+                  <input
+                    type="text"
+                    value={lessonDetails.title}
+                    onChange={(e) =>
+                      setLessonDetails({ ...lessonDetails, title: e.target.value })
+                    }
+                    className="w-full p-2 border rounded-md bg-white shadow-sm text-sm"
+                    placeholder="Enter lesson title"
+                  />
                 </div>
-                <h2 className="text-3xl font-semibold leading-snug text-gray-700">
-                  {courseDetails.title}
-                </h2>
-                <p>{courseDetails.description}</p>
-                <br />
-                <div className="flex justify-around">
-                  {/* <div className="bg-gray-300 rounded-3xl w-fit px-3">
-                    Course
-                  </div> */}
-                  <div className="bg-gray-300 rounded-3xl w-fit px-3">
-                    {courseDetails.subject || "Subject"}
-                  </div>
+
+                {/* Lesson Type */}
+                <div>
+                  <label className="block text-gray-700 mb-1 font-medium">Lesson Type</label>
+                  <select
+                    value={lessonDetails.type}
+                    onChange={(e) =>
+                      setLessonDetails({
+                        ...lessonDetails,
+                        type: e.target.value as LessonDetails["type"],
+                      })
+                    }
+                    className="w-full p-2 border rounded-md bg-white shadow-sm text-sm"
+                  >
+                    <option value="">Select Type</option>
+                    {lessonTypes.map((type) => (
+                      <option key={type} value={type}>
+                        {type.charAt(0).toUpperCase() + type.slice(1)}
+                      </option>
+                    ))}
+                  </select>
                 </div>
-                <br />
-                <br />
-                <div className=" border-b-2 w-full" />
-                <br />
-                <div className="flex justify-around items-center">
-                  {/* Stage */}
-                  <div className="flex flex-col items-center space-y-2">
-                    <button className="border-3 min-w-20 min-h-12 flex justify-center items-center rounded-xl">
-                      <LucideFlagTriangleRight className="text-9xl" />
-                    </button>
-                    <h1>Stage</h1>
-                  </div>
 
-                  {/* Upload */}
-                  <div className="flex flex-col items-center space-y-2">
-                    <button className="border-3 min-w-20 min-h-12 flex justify-center items-center rounded-xl">
-                      <UploadCloudIcon className="text-9xl" />
-                    </button>
-                    <h1>Upload</h1>
+                {/* Video Upload (only for video type) */}
+                {lessonDetails.type === "video" && (
+                  <div>
+                    <label className="block text-gray-700 mb-1 font-medium">
+                      Upload Video
+                    </label>
+                    <input
+                      type="file"
+                      accept="video/*"
+                      ref={lessonFileInputRef}
+                      onChange={handleLessonFileChange}
+                      className="w-full p-2 border rounded-md bg-white shadow-sm text-sm"
+                    />
                   </div>
+                )}
 
-                  {/* Library */}
-                  <div className="flex flex-col items-center space-y-2">
-                    <button className="border-3 min-w-20 min-h-12 flex justify-center items-center rounded-xl">
-                      <Library className="text-9xl" />
-                    </button>
-                    <h1>Library</h1>
-                  </div>
+                {/* Content */}
+                <div>
+                  <label className="block text-gray-700 mb-1 font-medium">Content</label>
+                  <textarea
+                    value={lessonDetails.content}
+                    onChange={(e) =>
+                      setLessonDetails({ ...lessonDetails, content: e.target.value })
+                    }
+                    className="w-full p-2 border rounded-md bg-white shadow-sm text-sm"
+                    placeholder="Enter lesson content"
+                    rows={4}
+                  />
+                </div>
+
+                {/* Resources */}
+                <div>
+                  <label className="block text-gray-700 mb-1 font-medium">Resources</label>
+                  {lessonDetails.resources.map((resource, index) => (
+                    <input
+                      key={index}
+                      type="text"
+                      value={resource}
+                      onChange={(e) => handleResourceChange(index, e.target.value)}
+                      className="w-full p-2 border rounded-md bg-white shadow-sm text-sm mb-2"
+                      placeholder="Enter resource URL"
+                    />
+                  ))}
+                  <button
+                    onClick={handleAddResource}
+                    className="text-green-500 underline"
+                  >
+                    + Add Resource
+                  </button>
+                </div>
+
+                {/* Notes */}
+                <div>
+                  <label className="block text-gray-700 mb-1 font-medium">Notes</label>
+                  <textarea
+                    value={lessonDetails.notes}
+                    onChange={(e) =>
+                      setLessonDetails({ ...lessonDetails, notes: e.target.value })
+                    }
+                    className="w-full p-2 border rounded-md bg-white shadow-sm text-sm"
+                    placeholder="Enter additional notes"
+                    rows={3}
+                  />
+                </div>
+
+                {/* Order */}
+                <div>
+                  <label className="block text-gray-700 mb-1 font-medium">Order</label>
+                  <input
+                    type="number"
+                    value={lessonDetails.order}
+                    onChange={(e) =>
+                      setLessonDetails({
+                        ...lessonDetails,
+                        order: parseInt(e.target.value) || 1,
+                      })
+                    }
+                    className="w-full p-2 border rounded-md bg-white shadow-sm text-sm"
+                    min="1"
+                  />
+                </div>
+
+                {/* Save Button */}
+                <div className="flex justify-end">
+                  <button
+                    onClick={saveLesson}
+                    className="bg-green-500 text-white px-4 py-2 rounded-md"
+                  >
+                    Add Lesson
+                  </button>
                 </div>
               </div>
             </div>
@@ -309,10 +491,8 @@ const AddCourse = () => {
                   </div>
 
                   {/* Text Section - 5/8 */}
-                  <div className="flex-[5] text-gray-600  p-4">
-                    <h1 className="text-xl font-semibold">
-                      {courseDetails.title}
-                    </h1>
+                  <div className="flex-[5] text-gray-600 p-4">
+                    <h1 className="text-xl font-semibold">{courseDetails.title}</h1>
                     <p className="mt-2">
                       Subject: {courseDetails.subject || "Add Category"}
                       <br />
@@ -386,4 +566,3 @@ const DetailItem = ({
 );
 
 export default AddCourse;
-
