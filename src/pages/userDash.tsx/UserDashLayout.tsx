@@ -14,8 +14,8 @@ const UserDashLayout = () => {
       <UserDashNav setString={setString} string={string} />
       {/* outlet component */}
       <div className=" w-full md:px-10 py-5  ">
-        <div className="w-ful rounded py-3 px-5 bg-gradient-to-b from-[#081A37] to-[#3A6073] ">
-          <h1 className="text-white font-bold ">{string}</h1>
+        <div className="w-ful rounded py-3 px-5 bg-white ">
+          <h1 className="text-black font-bold ">{string}</h1>
         </div>
         {/* actual outlet */}
         <div className=" w-full ">

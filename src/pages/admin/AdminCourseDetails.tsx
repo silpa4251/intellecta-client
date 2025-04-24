@@ -4,6 +4,7 @@ import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import { ArrowLeft, Edit, Trash2 } from "lucide-react";
 import { useState } from "react";
+import { fetchCourseDetails } from "./services/services";
 
 interface Lesson {
   _id: string;
@@ -25,11 +26,6 @@ interface CourseDetailsResponse {
   lessons: Lesson[]|[];
 }
 
-const fetchCourseDetails = async (courseId: string): Promise<CourseDetailsResponse> => {
-  const response = await axios.get(`http://localhost:5005/api/courses/${courseId}`);
-  console.log("details....", response.data.data);
-  return response.data.data ||[];
-};
 
 const AdminCourseDetailsPage = () => {
   const { courseId } = useParams<{ courseId: string }>();

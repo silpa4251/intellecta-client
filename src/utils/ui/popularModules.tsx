@@ -17,7 +17,7 @@ import {
   useEffect(() => {
     const fetchTopModules = async () => {
       try {
-        const response = await axios.get("/api/progress/top");
+        const response = await axios.get("http://localhost:5005/api/progress/top");
         setData(response.data.data); 
       } catch (error) {
         console.error("Failed to fetch top modules:", error);
