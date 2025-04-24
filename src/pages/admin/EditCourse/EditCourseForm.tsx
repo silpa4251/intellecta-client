@@ -1,22 +1,26 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 import { fetchCourseDetails, Lesson } from "../services/services";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import LessonForm from "./LessonForm";
 import AllStudentsLoader from "../../../utils/ui/allStudentsLoader";
 import axiosInstance from "../../../utils/axiosInstance";
+import { IoChevronBackOutline } from "react-icons/io5";
 
 const EditCourseForm = () => {
   const { courseId } = useParams();
-  const { data, isLoading, isError, error } = useQuery({
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const queryClient = useQueryClient();
+  const { data, isLoading } = useQuery({
     queryKey: ["editcourse", courseId],
     queryFn: () => fetchCourseDetails(courseId || ""),
     enabled: !!courseId,
   });
 
   const [courseLessons, setCourseLessons] = useState<Lesson[]>([]);
+  const [deletedLessonIds, setDeletedLessonIds] = useState<string[]>([]);
+  const [videoFile, setVideoFile] = useState<File | null>(null); // Video file state
   const [course, setCourse] = useState({
     _id: "",
     title: "",
@@ -75,6 +79,7 @@ const EditCourseForm = () => {
       ...updatedLessons[index],
       [e.target.name]: e.target.value,
     };
+
     setCourseLessons(updatedLessons);
   };
 
@@ -84,40 +89,101 @@ const EditCourseForm = () => {
 
   const handleSave = async () => {
     try {
-      await axiosInstance.put(`http://localhost:5005/api/courses/editCourse/${course._id}`, course);
-      if (courseLessons) {
+      await axiosInstance.put(
+        `http://localhost:5005/api/courses/editCourse/${course._id}`,
+        course
+      );
+      toast.success("course updated successfully!");
+
+      if (courseLessons?.length) {
         await Promise.all(
-          courseLessons.map((lesson) =>
-            axiosInstance.put(`http://localhost:5005/api/lessons/editLesson/${lesson._id}`, lesson)
-          )
+          courseLessons.map(async (lesson) => {
+            const formData = new FormData();
+
+            if (videoFile) {
+              formData.append("video", videoFile);
+            }
+
+            if (lesson._id) {
+              formData.append("lessonData", JSON.stringify(lesson));
+              await axiosInstance.put(
+                `http://localhost:5005/api/lessons/editLesson/${lesson._id}`,
+                formData,
+                { headers: { "Content-Type": "multipart/form-data" } }
+              );
+            } else {
+              const {
+                title = "",
+                content = "",
+                resources = [],
+                notes = [],
+                order = 0,
+              } = lesson;
+
+              formData.append("title", title);
+              formData.append("content", content);
+              formData.append("type", "video");
+              formData.append("order", order.toString());
+              formData.append("resources", JSON.stringify(resources));
+              formData.append("notes", JSON.stringify(notes));
+              formData.append("courseId", courseId || "");
+
+              await axiosInstance.post(
+                `http://localhost:5005/api/lessons`,
+                formData,
+                { headers: { "Content-Type": "multipart/form-data" } }
+              );
+              toast.success("lessons updated successfully!");
+            }
+          })
         );
       }
-      toast.success("Course and lessons updated successfully!");
+
+      if (deletedLessonIds.length > 0) {
+        await Promise.all(
+          deletedLessonIds.map((id) =>
+            axiosInstance.delete(`http://localhost:5005/api/lessons/${id}`)
+          )
+        );
+        toast.success("lessons deleted successfully!");
+      }
+      scrollRef.current?.scrollTo({ top: 0, behavior: "smooth" });
+      queryClient.invalidateQueries({ queryKey: ["editcourse"] });
     } catch (err) {
-      console.error(err);
+      console.error("Save error:", err);
       toast.error("Failed to save changes");
     }
   };
 
   const addLesson = () => {
-    setCourseLessons((prev) => [
-      ...prev,
-      {
+    setCourseLessons((prevLessons) => {
+      const newLesson = {
         title: "",
         url: "",
         content: "",
+        type: "",
         notes: "",
-        order: prev.length + 1,
-      },
-    ]);
-    setLessonVisibility((prev) => [...prev, true]);
+        resources: [],
+        order: prevLessons.length + 1,
+      };
+
+      const updatedLessons = [...prevLessons, newLesson];
+      setLessonVisibility(
+        updatedLessons.map((_, index) => index === updatedLessons.length - 1)
+      );
+
+      return updatedLessons;
+    });
   };
-  
 
   const removeLesson = (index: number) => {
-    if (!courseLessons?.length || !lessonVisibility) {
-      return;
+    if (!courseLessons?.length || !lessonVisibility) return;
+
+    const lessonToRemove = courseLessons[index];
+    if (lessonToRemove._id) {
+      setDeletedLessonIds((prev) => [...prev, lessonToRemove._id as string]);
     }
+
     const updatedLessons = courseLessons.filter((_, i) => i !== index);
     const updatedVisibility = lessonVisibility.filter((_, i) => i !== index);
     setCourseLessons(updatedLessons);
@@ -132,64 +198,68 @@ const EditCourseForm = () => {
 
   return (
     <>
+      {!isLoading && (
+        <Link to="/admin/courses">
+          <button className="absolute ml-44 z-10 cursor-pointer mt-5 text-4xl text-slate-600 hover:text-slate-800">
+            <IoChevronBackOutline />
+          </button>
+        </Link>
+      )}
+
       {isLoading ? (
         <div className="flex justify-center items-center h-[75vh]">
           <AllStudentsLoader />
         </div>
       ) : (
-        <div className="relative flex items-ceter justify-center min-h-screen  p-4 mb-10">
-          <div className="w-full max-w-5xl max-h-[80vh] overflow-y-auto rounded-3xl border border-gray-700 bg-white/10 backdrop-blur-xl p-8 shadow-2xl scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-transparent">
-            <h2 className="text-4xl font-bold text-center text-cyan-900 mb-8 uppercase tracking-widest">
+        <div className="relative flex items-center justify-center min-h-screen p-4 mb-10">
+          <div
+            ref={scrollRef}
+            className="w-full max-w-5xl max-h-[80vh] scrollbar-hide overflow-y-auto rounded-3xl border border-slate-200 bg-white/80 backdrop-blur-md p-8 shadow-xl scrollbar-thin scrollbar-thumb-slate-400 scrollbar-track-transparent"
+          >
+            <h2 className="text-3xl font-extrabold text-center text-indigo-800 mb-8 uppercase tracking-wide">
               Edit Course
             </h2>
 
             {/* Course Info */}
-            <div className="space-y-3 border border-cyan-500 bg-cyan-700 rounded-xl p-6 mb-6 ">
-              <div>
-                <label className="block text-sm font-semibold text-cyan-200 mb-1">
-                  Course Title
-                </label>
-                <input
-                  type="text"
-                  name="title"
-                  value={course.title}
-                  onChange={handleCourseChange}
-                  placeholder="Enter course title"
-                  className="w-full rounded-xl bg-black/40 border border-cyan-500 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-cyan-400 text-white placeholder-gray-400"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold text-cyan-200 mb-1">
-                  Subject
-                </label>
-                <input
-                  type="text"
-                  name="subject"
-                  value={course.subject}
-                  onChange={handleCourseChange}
-                  placeholder="Enter subject"
-                  className="w-full rounded-xl bg-black/40 border border-cyan-500 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-cyan-400 text-white placeholder-gray-400"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold text-cyan-200 mb-1">
-                  Description
-                </label>
-                <input
-                  type="text"
-                  name="description"
-                  value={course.description}
-                  onChange={handleCourseChange}
-                  placeholder="Enter description"
-                  className="w-full rounded-xl bg-black/40 border border-cyan-500 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-cyan-400 text-white placeholder-gray-400"
-                />
-              </div>
+            <div className="space-y-4 border border-indigo-300 bg-indigo-100 rounded-2xl p-6 mb-6">
+              {[
+                {
+                  label: "Course Title",
+                  name: "title",
+                  type: "text",
+                  value: course.title,
+                },
+                {
+                  label: "Subject",
+                  name: "subject",
+                  type: "text",
+                  value: course.subject,
+                },
+                {
+                  label: "Description",
+                  name: "description",
+                  type: "text",
+                  value: course.description,
+                },
+              ].map(({ label, name, type, value }) => (
+                <div key={name}>
+                  <label className="block text-sm font-semibold text-indigo-800 mb-1">
+                    {label}
+                  </label>
+                  <input
+                    type={type}
+                    name={name}
+                    value={value}
+                    onChange={handleCourseChange}
+                    placeholder={`Enter ${label.toLowerCase()}`}
+                    className="w-full rounded-xl bg-white border border-indigo-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-800 placeholder-slate-400"
+                  />
+                </div>
+              ))}
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-semibold text-cyan-200 mb-1">
+                  <label className="block text-sm font-semibold text-indigo-800 mb-1">
                     Grade Level
                   </label>
                   <input
@@ -197,19 +267,19 @@ const EditCourseForm = () => {
                     name="gradeLevel"
                     value={course.gradeLevel}
                     onChange={handleCourseChange}
-                    className="w-full rounded-xl bg-black/40 border border-cyan-500 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-cyan-400 text-white placeholder-gray-400"
+                    className="w-full rounded-xl bg-white border border-indigo-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-800"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-cyan-200 mb-1">
+                  <label className="block text-sm font-semibold text-indigo-800 mb-1">
                     Difficulty
                   </label>
                   <select
                     name="difficultyLevel"
                     value={course.difficultyLevel}
                     onChange={handleCourseChange}
-                    className="w-full rounded-xl bg-black/40 border border-cyan-500 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-cyan-400 text-white"
+                    className="w-full rounded-xl bg-white border border-indigo-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-800"
                   >
                     <option value="beginner">Beginner</option>
                     <option value="intermediate">Intermediate</option>
@@ -218,7 +288,7 @@ const EditCourseForm = () => {
                 </div>
 
                 <div className="col-span-full">
-                  <label className="block text-sm font-semibold text-cyan-200 mb-1">
+                  <label className="block text-sm font-semibold text-indigo-800 mb-1">
                     Thumbnail
                   </label>
                   <input
@@ -226,23 +296,25 @@ const EditCourseForm = () => {
                     name="thumbnail"
                     accept="image/*"
                     onChange={handleImageChange}
-                    className="w-full rounded-xl bg-black/40 border border-cyan-500 px-4 py-2 text-white"
+                    className="w-full rounded-xl bg-white border border-indigo-300 px-4 py-2 text-slate-800"
                   />
                   {course.thumbnail && (
                     <div className="mt-4">
-                      <h4 className="text-cyan-200 font-medium">
+                      <h4 className="text-indigo-700 font-medium mb-2">
                         Thumbnail Preview
                       </h4>
                       <img
                         src={course.thumbnail}
                         alt="Course Thumbnail"
-                        className="w-32 h-32 object-cover rounded-xl border border-cyan-500 mt-2"
+                        className="w-32 h-32 object-cover rounded-xl border border-indigo-400"
                       />
                     </div>
                   )}
                 </div>
               </div>
             </div>
+
+            {/* Lessons Form */}
             <LessonForm
               removeLesson={removeLesson}
               courseLessons={courseLessons}
@@ -250,14 +322,15 @@ const EditCourseForm = () => {
               lessonVisibility={lessonVisibility}
               toggleLessonVisibility={toggleLessonVisibility}
               addLesson={addLesson}
+              setVideoFile={setVideoFile}
             />
 
             <div className="text-center">
               <button
                 onClick={handleSave}
-                className="mt-5  bg-cyan-500 hover:bg-cyan-600 text-white px-8 py-3 rounded-xl text-lg font-semibold transition-all duration-300"
+                className={`mt-6 ${deletedLessonIds.length > 0 ? "bg-red-500 hover:bg-red-600" : " bg-indigo-600"} cursor-pointer hover:bg-indigo-700 text-white px-8 py-3 rounded-xl text-lg font-semibold transition-all duration-300`}
               >
-                Save Changes
+                {deletedLessonIds.length > 0 ? "Remove Lesson" : "Save Changes"}
               </button>
             </div>
           </div>

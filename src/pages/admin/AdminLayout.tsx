@@ -68,10 +68,12 @@ const AdminLayout = () => {
   });
 
   // Fetch students
-  const { data: students, isLoading: isStudentsLoading } = useQuery<Student[]>({
-    queryKey: ["students"],
-    queryFn: fetchStudents,
+  const params = { page: 1, limit: 10, search: "john", catagory: "math", isBlock: false };
+  const { data:students, isLoading:isStudentsLoading } = useQuery({
+    queryKey: ["students", params],
+    queryFn: () => fetchStudents(params),
   });
+  
 
   // Fetch courses
   const { data: courseData, isLoading: isCoursesLoading } = useQuery<CourseResponse>({
