@@ -6,6 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import LessonForm from "./LessonForm";
 import AllStudentsLoader from "../../../utils/ui/allStudentsLoader";
+import axiosInstance from "../../../utils/axiosInstance";
 
 const EditCourseForm = () => {
   const { courseId } = useParams();
@@ -83,11 +84,11 @@ const EditCourseForm = () => {
 
   const handleSave = async () => {
     try {
-      await axios.put(`/api/course/editCourse/${course._id}`, course);
+      await axiosInstance.put(`http://localhost:5005/api/courses/editCourse/${course._id}`, course);
       if (courseLessons) {
         await Promise.all(
           courseLessons.map((lesson) =>
-            axios.put(`/api/lesson/${lesson._id}`, lesson)
+            axiosInstance.put(`http://localhost:5005/api/lessons/editLesson/${lesson._id}`, lesson)
           )
         );
       }
