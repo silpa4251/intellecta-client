@@ -40,6 +40,7 @@ const DoughnutChart = ({ studentsCountData }: Props) => {
 
   return (
     <div className="w-80 h-80">
+      <p className='text-center mb-2'>Age group</p>
       <Doughnut data={dynamicData} />
     </div>
   );

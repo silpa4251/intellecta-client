@@ -1,4 +1,5 @@
 import React from "react";
+import AllStudentsLoader from "./allStudentsLoader";
 
 type PropType = {
   topPerfomers: {
@@ -7,9 +8,10 @@ type PropType = {
       name: string;
     };
   }[];
+  topStudentsLoading:boolean
 };
 
-export const TopPerformingStudentsCard: React.FC<PropType> = ({topPerfomers}) => {
+export const TopPerformingStudentsCard: React.FC<PropType> = ({topPerfomers, topStudentsLoading}) => {
 
   return (
     <div className="bg-white rounded-2xl shadow-lg p-6 w-full col-span-6">
@@ -26,8 +28,10 @@ export const TopPerformingStudentsCard: React.FC<PropType> = ({topPerfomers}) =>
       </div>
 
       <ul className="divide-y divide-gray-100">
-        {topPerfomers &&
-          topPerfomers.map((student, index) => (
+        {topStudentsLoading ? <div className="flex justify-center items-center h-[75vh]">
+        <AllStudentsLoader />
+      </div>: 
+          topPerfomers?.map((student, index) => (
             <li
               key={student?.user?.name}
               className="flex justify-between items-center py-3"

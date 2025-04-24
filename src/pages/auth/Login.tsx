@@ -134,7 +134,7 @@ const SignIn = () => {
                 onSuccess={async (credentialResponse) => {
                   const post = await axiosInstance.post("/user/google-login", credentialResponse);
                   const user = post.data.data;
-                  console.log("post user", user);
+                  localStorage.setItem("isAuthenticated","true")
                   navigate("/home");
                 }}
                 onError={() => console.log("Login Failed")}
