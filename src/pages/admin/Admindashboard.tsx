@@ -40,7 +40,7 @@ const AdminDashboard = () => {
     queryFn: fetchAdminDashboard,
   });
 
-  const { data: topPerfomers} = useQuery({
+  const { data: topPerfomers, isLoading: topStudentsLoading} = useQuery({
     queryKey:["topPerfomers"],
     queryFn: async ()=> {
       const res = await axiosInstance.get("http://localhost:5006/api/admin/users/topPerformers")
@@ -75,7 +75,7 @@ const AdminDashboard = () => {
           <div className="flex justify-between">
             <h1 className="font-medium text-2xl">Total Students</h1>
           </div>
-          <div className="flex justify-center items-center mt-10">
+          <div className="flex justify-center items-center mt-5">
             {dashboardData?.studentsCountData && (
               <DoughnutChart
                 studentsCountData={dashboardData.studentsCountData}
@@ -98,7 +98,7 @@ const AdminDashboard = () => {
           <PopularModulesCard />
         </div>
         <div className="bg-white rounded-xl shadow-md p-5 overflow-auto h-[40vh] w-full col-span-6 scrollbar-hide">
-          <TopPerformingStudentsCard topPerfomers={topPerfomers}/>
+          <TopPerformingStudentsCard topPerfomers={topPerfomers} topStudentsLoading={topStudentsLoading}/>
         </div>
       </div>
     </div>

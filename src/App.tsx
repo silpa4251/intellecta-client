@@ -43,6 +43,7 @@ import Notification from "./pages/Notification";
 import AdminLogin from "./pages/admin/AdminLogin";
 import ProtectedAdminRoute from "./routes/AdminRoutes";
 import ProtectedUserRoute from "./routes/UserRoutes";
+import EditCourseForm from "./pages/admin/EditCourse/EditCourseForm";
 
 function App() {
   return (
@@ -50,10 +51,10 @@ function App() {
       <ChatBot />
       <Routes>
         <Route path="/" element={<Landing />} />
-        <Route path="/welcome" element={<WelcomePage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Signup />} />
         <Route element={<ProtectedUserRoute />}>
+        <Route path="/welcome" element={<WelcomePage />} />
           <Route path="/home" element={<Home />} />
           <Route path="/courses" element={<Programs />} />
           <Route path="/profile" element={<ProfilePage />} />
@@ -87,6 +88,7 @@ function App() {
             <Route path="students" element={<AdminStudents />} />
             <Route path="courses" element={<AdminCoursesPage />} />
             <Route path="addCourse" element={<AddCourse />} />
+            <Route path="courses/:courseId/edit" element={<EditCourseForm />} />
             <Route path="courses/:courseId" element={<AdminCourseDetailsPage />} />
           </Route>
         </Route>
