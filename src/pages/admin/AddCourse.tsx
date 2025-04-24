@@ -6,6 +6,8 @@ import {
 } from "lucide-react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+
 
 type CourseDetails = {
   thumbnail: string; 
@@ -28,6 +30,7 @@ type LessonDetails = {
 };
 
 const AddCourse = () => {
+  const navigate = useNavigate();
   const [courseId, setCourseId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState("overview");
   const [courseDetails, setCourseDetails] = useState<CourseDetails>({
