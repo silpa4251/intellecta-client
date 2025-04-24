@@ -1,14 +1,21 @@
 // import React from 'react';
 import styled from "styled-components";
+import { SearchIcon } from "lucide-react";
+
 
 const SearchInput = () => {
   return (
     <StyledWrapper>
-      <div className="wave-group">
+      <div className="wave-group flex">
         <input 
-        required type="text" 
-        className="input" 
-        placeholder="Search Courses"/>
+          required 
+          type="text" 
+          className="input" 
+          placeholder="Search Courses"
+        />
+        <button className="search-btn ">
+          <SearchIcon />
+        </button>
       </div>
     </StyledWrapper>
   );
