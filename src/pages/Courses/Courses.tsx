@@ -58,6 +58,8 @@ const Courses = () => {
       `http://localhost:5005/api/courses/subject/${category}`,
       { withCredentials: true }
     );
+    console.log("checking...",response.data);
+    
     return response.data.data || [];
   };
 

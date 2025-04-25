@@ -8,6 +8,8 @@ export interface Lesson {
   title: string;
   url:string;
   content:string;
+  type:string;
+  resources:string[];
   order:number;
   notes:string;
   // Add other lesson properties if needed (e.g., duration, content)
@@ -39,27 +41,14 @@ type FetchStudentsParams = {
   isBlock?: boolean;
 };
 
-export const fetchStudents = async ({
+export const fetchStudents = async (params: FetchStudentsParams = {}) => {
+  const response = await axiosInstance.get("http://localhost:5000/api/user/allUsers", {
+    params,
+  });
 
-  page = 1,
-  limit = 10,
-  search,
-  catagory,
-  isBlock,
-  }:FetchStudentsParams = {}) => {
-    const params: any = {
-      page,
-      limit,
-    };
+  return response.data?.users || [];
+};
 
-    if (search) params.search = search;
-    if (catagory) params.catagory = catagory;
-    if (isBlock !== undefined) params.isBlock = isBlock;
-
-    const response = await axiosInstance.get("http://localhost:5000/api/user/allUsers", {params});
-    // console.log(response.data)
-    return response.data?.users || []; 
-}
 
 export const fetchCourses = async () =>{
   const response = await axiosInstance.get("http://localhost:5005/api/courses")
