@@ -3,7 +3,7 @@ import { useState } from "react";
 import SearchUser from "../../utils/ui/searchBarUser";
 import { useMutation } from "@tanstack/react-query";
 import { sendNotification } from "./services/services";
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 
 interface Props {
   onClose: () => void;
@@ -14,7 +14,10 @@ type Mode = "none" | "all" | "individual" | "5-8" | "9-12" | "13-18";
 const NotificationPanel = ({ onClose }: Props) => {
   const [createButton, setCreateButton] = useState(false);
   const [mode, setMode] = useState<Mode>("none");
-  const [selectedUser, setSelectedUser] = useState<{ name: string; email: string } | null>(null);
+  const [selectedUser, setSelectedUser] = useState<{
+    name: string;
+    email: string;
+  } | null>(null);
 
   const [notificationData, setNotificationData] = useState({
     title: "",
@@ -92,7 +95,8 @@ const NotificationPanel = ({ onClose }: Props) => {
   );
 
   const handleSendNotification = () => {
-    const { title, message, type, recipientId, targetAgeGroup } = notificationData;
+    const { title, message, type, recipientId, targetAgeGroup } =
+      notificationData;
 
     if (!title || !message || !type) {
       alert("Please fill in all the fields.");
@@ -144,8 +148,8 @@ const NotificationPanel = ({ onClose }: Props) => {
   });
 
   return (
-    <div className="absolute top-0 left-0 h-[100vh] w-full md:w-2/5 bg-gradient-to-b from-gray-50 to-white shadow-2xl z-50 transition-all duration-500 overflow-auto scrollbar-thin scrollbar-thumb-indigo-300 scrollbar-track-gray-100">
-      <div className="flex justify-between items-center p-6 border-b border-gray-200">
+<div className="fixed top-[350px] scrollbar-hide min-h-[500px] left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full md:w-2/5 bg-gradient-to-b from-gray-50 to-white shadow-2xl z-50 transition-all duration-500 overflow-auto scrollbar-thin scrollbar-thumb-indigo-300 scrollbar-track-gray-100 max-h-[90vh] rounded-2xl">
+<div className="flex justify-between items-center p-6 border-b border-gray-200 ">
         <h2 className="text-2xl font-bold text-gray-800">Send Notifications</h2>
         <button
           onClick={onClose}
@@ -173,14 +177,19 @@ const NotificationPanel = ({ onClose }: Props) => {
               setSelectedUser(null);
             }}
           >
-            {createButton ? "Cancel" : <><LucidePlusCircle size={20} /> Create</>}
+            {createButton ? (
+              "Cancel"
+            ) : (
+              <>
+                <LucidePlusCircle size={20} /> Create
+              </>
+            )}
           </button>
         </div>
 
         {createButton && (
           <div className="mt-6 space-y-8">
             <div className="flex flex-col items-center gap-3">
-              
               <div className="flex justify-center gap-4">
                 {["all", "individual"].map((m) => (
                   <button
@@ -218,7 +227,11 @@ const NotificationPanel = ({ onClose }: Props) => {
             {mode === "individual" && (
               <div className="flex flex-col items-center gap-4 mt-6">
                 <SearchUser
-                  onSelect={(studentId: string, studentName?: string, studentEmail?: string) => {
+                  onSelect={(
+                    studentId: string,
+                    studentName?: string,
+                    studentEmail?: string
+                  ) => {
                     setNotificationData((prev) => ({
                       ...prev,
                       recipientId: studentId,
@@ -231,7 +244,8 @@ const NotificationPanel = ({ onClose }: Props) => {
                 />
                 {selectedUser && (
                   <p className="text-sm text-gray-600 bg-gray-100 p-3 rounded-lg">
-                    Sending to: <strong>{selectedUser.name}</strong> ({selectedUser.email})
+                    Sending to: <strong>{selectedUser.name}</strong> (
+                    {selectedUser.email})
                   </p>
                 )}
                 {notificationData.recipientId && renderInputFields()}
@@ -239,7 +253,8 @@ const NotificationPanel = ({ onClose }: Props) => {
             )}
 
             {/* Group Modes */}
-            {(mode === "all" || ["5-8", "9-12", "13-18"].includes(mode)) && renderInputFields()}
+            {(mode === "all" || ["5-8", "9-12", "13-18"].includes(mode)) &&
+              renderInputFields()}
           </div>
         )}
       </div>
